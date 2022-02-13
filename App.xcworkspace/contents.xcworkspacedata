@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:Application/Rayon/Rayon.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Application/mRayon/mRayon.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Foundation/RayonModule">
+   </FileRef>
+   <FileRef
+      location = "group:Foundation/MachineStatus">
+   </FileRef>
+   <FileRef
+      location = "group:Foundation/MachineStatusView">
+   </FileRef>
+   <FileRef
+      location = "group:External/CodeMirrorUI">
+   </FileRef>
+   <FileRef
+      location = "group:Foundation/Colorful">
+   </FileRef>
+   <FileRef
+      location = "group:Foundation/Keychain">
+   </FileRef>
+   <FileRef
+      location = "group:Foundation/PropertyWrapper">
+   </FileRef>
+   <FileRef
+      location = "group:External/NSRemoteShell">
+   </FileRef>
+   <FileRef
+      location = "group:Foundation/SymbolPicker">
+   </FileRef>
+   <FileRef
+      location = "group:External/XTerminalUI">
+   </FileRef>
+   <FileRef
+      location = "group:Foundation/XMLCoder">
+   </FileRef>
+</Workspace>
