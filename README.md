@@ -2,6 +2,8 @@
 
 A server monitor tool for linux based machines using remote proc file system with script execution. Available for macOS 12+.
 
+[![Download From App Store](./Resources/AppStore/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg)](https://apps.apple.com/app/rayon-remote/id1609781496)
+
 ## Preview
 
 ![Preview](./Resources/Preview.png)
