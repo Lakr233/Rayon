@@ -8,6 +8,7 @@
 import Combine
 import Foundation
 import NSRemoteShell
+import XMLCoder
 
 private let outputSeparator = "[*******]"
 
@@ -44,6 +45,10 @@ private enum ScriptCollection: String, CaseIterable {
         """
          /bin/cat /proc/net/dev && /bin/sleep 1 && echo '[*******]' && /bin/cat /proc/net/dev
         """
+    case obtainGraphicsInfo =
+        """
+         nvidia-smi -q -x | tr -d "[\t\n]" || echo "no nvidia gpu available"
+        """
 }
 
 private func downloadResultFrom(shell: NSRemoteShell, command: ScriptCollection) -> String {
@@ -66,13 +71,15 @@ class ServerStatus: ObservableObject, Equatable {
     @Published var memory: MemoryInfo = .init()
     @Published var system: SystemInfo = .init()
     @Published var network: NetworkInfo = .init()
+    @Published var graphics: GraphicsInfo = .init()
 
     static func == (lhs: ServerStatus, rhs: ServerStatus) -> Bool {
         lhs.processor == rhs.processor &&
             lhs.fileSystem == rhs.fileSystem &&
             lhs.memory == rhs.memory &&
             lhs.system == rhs.system &&
-            lhs.network == rhs.network
+            lhs.network == rhs.network &&
+            lhs.graphics == rhs.graphics
     }
 
     func requestInfoAndWait(with remote: NSRemoteShell) {
@@ -132,6 +139,14 @@ class ServerStatus: ObservableObject, Equatable {
             let info = NetworkInfo(withRemote: remote) ?? .init()
             mainActor { [weak self] in
                 self?.network = info
+            }
+        }
+        group.enter()
+        queue.async { [weak self] in
+            defer { group.leave() }
+            let info = GraphicsInfo(withRemote: remote) ?? .init()
+            mainActor { [weak self] in
+                self?.graphics = info
             }
         }
         group.wait()
@@ -816,6 +831,104 @@ class ServerStatus: ObservableObject, Equatable {
             """
         }
     }
+    
+    /// 服务器 GPU 信息
+    struct GraphicsInfo: Codable, Equatable, Identifiable, DynamicNodeEncoding {
+        var id = UUID()
+        
+        public let version: String // CUDA version, like '11.2'
+        public let units: [SingleGraphicsInfo]
+        
+        enum CodingKeys: String, CodingKey {
+            case version = "cuda_version"
+            case units = "gpu"
+        }
+        
+        static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+            switch key {
+            case GraphicsInfo.CodingKeys.version: return .both
+            default: return .element
+            }
+        }
+        
+        init() {
+            version = "unknown"
+            units = []
+        }
+        
+        init?(withRemote shell: NSRemoteShell) {
+            let downloadResult = downloadResultFrom(shell: shell, command: .obtainGraphicsInfo)
+            self = (try? XMLDecoder().decode(GraphicsInfo.self, from: Data(downloadResult.utf8))) ?? .init()
+            // if gpu is not supported by Nvidia, init with empty ({ version: "unknown", units: [] })
+        }
+    }
+
+    /// 单块 GPU 信息
+    struct SingleGraphicsInfo: Codable, Equatable, Identifiable {
+        var id = UUID()
+        
+        public let uuid: String // GPU uuid from Nvidia
+        public let name: String // GPU name, like '2080 Ti'
+        public let memory: Memory
+
+        struct Memory: Codable {
+            let total: Float
+            let used: Float
+            let free: Float
+            
+            init() {
+                total = 0
+                used = 0
+                free = 0
+            }
+            
+            init(total: Float, used: Float, free: Float) {
+                self.total = total
+                self.used = used
+                self.free = free
+            }
+            
+            init(from decoder: Decoder) throws {
+                // 11019 MiB -> 11019
+                func s2f(status: String) -> Float {
+                    let tmp = status.components(separatedBy: " ")[0]
+                    let num = Float(tmp) ?? 0
+                    return num
+                }
+                // decode
+                let container = try! decoder.container(keyedBy: CodingKeys.self)
+                let t = try! container.decode(String.self, forKey: .total)
+                let u = try! container.decode(String.self, forKey: .used)
+                let f = try! container.decode(String.self, forKey: .used)
+                self.init(total: s2f(status: t), used: s2f(status: u), free: s2f(status: f))
+            }
+        }
+
+        enum CodingKeys: String, CodingKey {
+            case uuid
+            case name = "product_name"
+            case memory = "fb_memory_usage"
+        }
+        
+        init() {
+            uuid = ""
+            name = "unknown"
+            memory = Memory()
+        }
+        
+        static func == (lhs: SingleGraphicsInfo, rhs: SingleGraphicsInfo) -> Bool {
+            lhs.id == rhs.id
+        }
+        
+        public func description() -> String {
+            """
+            uuid: \(uuid) name: \(name)
+            used: \(memory.used) free: \(memory.free) \total: \(memory.total)
+            """
+        }
+    }
+
+
 
     struct SystemLoadInternal: Codable, Equatable, Hashable, Identifiable {
         var id = UUID()

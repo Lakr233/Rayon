@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0786E9ED27BC9B5F00FA36F1 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 0786E9EC27BC9B5F00FA36F1 /* XMLCoder */; };
+		0786E9EF27BC9B6800FA36F1 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 0786E9EE27BC9B6800FA36F1 /* XMLCoder */; };
 		5027F24E27B80FD000F422BB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5027F24D27B80FD000F422BB /* Info.plist */; };
 		5027F25027B80FDB00F422BB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5027F24F27B80FDB00F422BB /* Info.plist */; };
 		5027F25227B81C0100F422BB /* ThanksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5027F25127B81C0100F422BB /* ThanksView.swift */; };
@@ -202,6 +204,7 @@
 			files = (
 				50BBA4FF27B6DA2800CE7BB1 /* CodeMirrorUI in Frameworks */,
 				509F7F5C27B2B4F700F28752 /* XTerminalUI in Frameworks */,
+				0786E9ED27BC9B5F00FA36F1 /* XMLCoder in Frameworks */,
 				50BBA54D27B8000400CE7BB1 /* Colorful in Frameworks */,
 				509F7F5227B2B4E900F28752 /* NSRemoteShell in Frameworks */,
 				50C5CCDF27B946C300570BA7 /* Keychain in Frameworks */,
@@ -215,6 +218,7 @@
 			files = (
 				50BBA50127B6DA3000CE7BB1 /* CodeMirrorUI in Frameworks */,
 				509F7F6827B2B51000F28752 /* XTerminalUI in Frameworks */,
+				0786E9EF27BC9B6800FA36F1 /* XMLCoder in Frameworks */,
 				50BBA54F27B8000900CE7BB1 /* Colorful in Frameworks */,
 				509F7F5E27B2B50100F28752 /* NSRemoteShell in Frameworks */,
 				50C5CCE127B946C800570BA7 /* Keychain in Frameworks */,
@@ -451,6 +455,7 @@
 				50BBA4FE27B6DA2800CE7BB1 /* CodeMirrorUI */,
 				50BBA54C27B8000400CE7BB1 /* Colorful */,
 				50C5CCDE27B946C300570BA7 /* Keychain */,
+				0786E9EC27BC9B5F00FA36F1 /* XMLCoder */,
 			);
 			productName = "Rayon (iOS)";
 			productReference = 509F7F3427B2AF7F00F28752 /* Rayon.app */;
@@ -476,6 +481,7 @@
 				50BBA50027B6DA3000CE7BB1 /* CodeMirrorUI */,
 				50BBA54E27B8000900CE7BB1 /* Colorful */,
 				50C5CCE027B946C800570BA7 /* Keychain */,
+				0786E9EE27BC9B6800FA36F1 /* XMLCoder */,
 			);
 			productName = "Rayon (macOS)";
 			productReference = 509F7F3C27B2AF7F00F28752 /* Rayon.app */;
@@ -949,6 +955,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0786E9EC27BC9B5F00FA36F1 /* XMLCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = XMLCoder;
+		};
+		0786E9EE27BC9B6800FA36F1 /* XMLCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = XMLCoder;
+		};
 		5068AB2A27B59B8A00564D1D /* PropertyWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PropertyWrapper;

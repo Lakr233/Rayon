@@ -9,4 +9,4 @@
 #import <libssh2_sftp.h>
 #import <libssh2_publickey.h>
 
-#define BUFFER_SIZE 4096
+#define BUFFER_SIZE 65536

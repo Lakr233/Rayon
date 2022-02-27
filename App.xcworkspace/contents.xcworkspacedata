@@ -8,6 +8,9 @@
       location = "group:External/CodeMirrorUI">
    </FileRef>
    <FileRef
+      location = "group:External/XMLCoder">
+   </FileRef>
+   <FileRef
       location = "group:Foundation/Colorful">
    </FileRef>
    <FileRef
