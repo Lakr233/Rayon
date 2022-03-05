@@ -143,7 +143,7 @@ struct IdentitiesView: View {
             .sheet(isPresented: $openCreateSheet) {
                 editSelection = nil
             } content: {
-                CreateIdentitiesView(selection: $editSelection)
+                EditIdentitiesView(selection: $editSelection)
             }
     }
 
@@ -153,13 +153,7 @@ struct IdentitiesView: View {
         ) { confirmed in
             guard confirmed else { return }
             for selection in selection {
-                let index = store
-                    .identityGroup
-                    .identities
-                    .firstIndex { $0.id == selection }
-                if let index = index {
-                    store.identityGroup.identities.remove(at: index)
-                }
+                store.identityGroup.delete(selection)
             }
             selection = []
         }

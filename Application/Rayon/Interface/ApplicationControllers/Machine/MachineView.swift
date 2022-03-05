@@ -21,13 +21,7 @@ struct MachineView: View {
         contentView
             .contextMenu {
                 Button {
-                    let index = store
-                        .machineGroup
-                        .machines
-                        .firstIndex { $0.id == machine }
-                    if let index = index {
-                        store.machineGroup.machines.remove(at: index)
-                    }
+                    store.machineGroup.delete(machine)
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }

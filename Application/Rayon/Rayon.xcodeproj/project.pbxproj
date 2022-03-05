@@ -66,7 +66,7 @@
 		50BBE75427D21FCB00063BA9 /* RayonStore+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BBE75327D21FCB00063BA9 /* RayonStore+Session.swift */; };
 		50BBE75527D220C700063BA9 /* RDSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BBE75227D21FA700063BA9 /* RDSession.swift */; };
 		50DDB33E27B4009800C471C0 /* IdentityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DDB33C27B4009800C471C0 /* IdentityPickerView.swift */; };
-		50F64E5A27B3CB35008D52FB /* CreateIdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F64E5827B3CB35008D52FB /* CreateIdentitiesView.swift */; };
+		50F64E5A27B3CB35008D52FB /* EditIdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F64E5827B3CB35008D52FB /* EditIdentitiesView.swift */; };
 		50F64E5F27B3D922008D52FB /* MachineCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F64E5D27B3D922008D52FB /* MachineCreateView.swift */; };
 		50FC9AED27B66ED1005D9755 /* HostWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FC9AEB27B66ED1005D9755 /* HostWindow.swift */; };
 /* End PBXBuildFile section */
@@ -140,7 +140,7 @@
 		50BBE75227D21FA700063BA9 /* RDSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDSession.swift; sourceTree = "<group>"; };
 		50BBE75327D21FCB00063BA9 /* RayonStore+Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RayonStore+Session.swift"; sourceTree = "<group>"; };
 		50DDB33C27B4009800C471C0 /* IdentityPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPickerView.swift; sourceTree = "<group>"; };
-		50F64E5827B3CB35008D52FB /* CreateIdentitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateIdentitiesView.swift; sourceTree = "<group>"; };
+		50F64E5827B3CB35008D52FB /* EditIdentitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIdentitiesView.swift; sourceTree = "<group>"; };
 		50F64E5D27B3D922008D52FB /* MachineCreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineCreateView.swift; sourceTree = "<group>"; };
 		50FC9AEB27B66ED1005D9755 /* HostWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -363,7 +363,7 @@
 			children = (
 				509F7FAB27B309D200F28752 /* IdentitiesView.swift */,
 				50DDB33C27B4009800C471C0 /* IdentityPickerView.swift */,
-				50F64E5827B3CB35008D52FB /* CreateIdentitiesView.swift */,
+				50F64E5827B3CB35008D52FB /* EditIdentitiesView.swift */,
 			);
 			path = Identity;
 			sourceTree = "<group>";
@@ -490,7 +490,7 @@
 				50A8A6A627B843A2004F6DDC /* BatchExecMainView.swift in Sources */,
 				50A8A69B27B833FE004F6DDC /* BatchSnippetExecView.swift in Sources */,
 				509F7FA027B303DF00F28752 /* PresentError.swift in Sources */,
-				50F64E5A27B3CB35008D52FB /* CreateIdentitiesView.swift in Sources */,
+				50F64E5A27B3CB35008D52FB /* EditIdentitiesView.swift in Sources */,
 				509F7F9027B2E14900F28752 /* MachineGroupView.swift in Sources */,
 				50BBE75427D21FCB00063BA9 /* RayonStore+Session.swift in Sources */,
 				509F7F9527B2E3EE00F28752 /* StarLinkView.swift in Sources */,
@@ -668,7 +668,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.rayon.debug;
 				PRODUCT_NAME = Rayon;
 				SDKROOT = macosx;
@@ -700,7 +700,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n;
 				PRODUCT_NAME = Rayon;
 				PROVISIONING_PROFILE_SPECIFIER = "";

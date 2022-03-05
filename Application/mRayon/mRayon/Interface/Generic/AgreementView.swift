@@ -12,9 +12,9 @@ struct AgreementView: View {
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
-        NavigationView {
-            contentView
-        }
+//        NavigationView {
+        contentView
+//        }
 //        .navigationViewStyle(StackNavigationViewStyle())
     }
 
@@ -26,6 +26,26 @@ struct AgreementView: View {
                     .textSelection(.enabled)
                     .font(.system(.caption, design: .monospaced))
                 Divider().hidden()
+
+                HStack {
+                    Spacer()
+                    Button {
+                        UIBridge.requiresConfirmation(
+                            message: "I fully understand the license agreements and agree with it."
+                        ) { yes in
+                            if yes {
+                                RayonStore.shared.licenseAgreed = true
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+                    } label: {
+                        Text("Agree License")
+                            .bold()
+                            .frame(width: 250)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    Spacer()
+                }
             }
             .padding()
         }
@@ -35,24 +55,6 @@ struct AgreementView: View {
         )
 //        .navigationTitle("Agreement")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem {
-                Button {
-                    UIBridge.requiresConfirmation(
-                        message: "I fully understand the license agreements and agree with it."
-                    ) { yes in
-                        if yes {
-                            RayonStore.shared.licenseAgreed = true
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                    }
-                } label: {
-                    Text("Agree License")
-                        .bold()
-                }
-                .buttonStyle(.borderedProminent)
-            }
-        }
     }
 
     func loadLicense() -> String {

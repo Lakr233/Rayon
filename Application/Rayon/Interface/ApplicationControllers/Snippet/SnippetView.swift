@@ -20,13 +20,7 @@ struct SnippetView: View {
         contentView
             .contextMenu {
                 Button {
-                    let index = store
-                        .snippetGroup
-                        .snippets
-                        .firstIndex { $0.id == snippet }
-                    if let index = index {
-                        store.snippetGroup.snippets.remove(at: index)
-                    }
+                    store.snippetGroup.delete(snippet)
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }
@@ -138,7 +132,7 @@ struct SnippetFloatingPanelView: View {
             if let index = index {
                 var read = store.snippetGroup.snippets[index]
                 read.id = .init()
-                store.snippetGroup.snippets.append(read)
+                store.snippetGroup.insert(read)
             }
         }
     }
@@ -152,13 +146,7 @@ struct SnippetFloatingPanelView: View {
             message: "You are about to delete this item"
         ) { confirmed in
             guard confirmed else { return }
-            let index = store
-                .snippetGroup
-                .snippets
-                .firstIndex { $0.id == snippet }
-            if let index = index {
-                store.snippetGroup.snippets.remove(at: index)
-            }
+            store.snippetGroup.delete(snippet)
         }
     }
 }

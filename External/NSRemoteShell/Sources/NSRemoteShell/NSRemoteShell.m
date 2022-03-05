@@ -33,6 +33,7 @@
 
 @property(nonatomic, nonnull, strong) NSMutableArray<NSRemoteChannel*> *associatedChannel;
 @property(nonatomic, nonnull, strong) NSMutableArray *requestInvokations;
+@property(nonatomic, nonnull, strong) NSLock *requestLoopLock;
 
 @property(nonatomic) unsigned keepAliveAttampt;
 @property(nonatomic, nullable, strong) NSDate *keepAliveLastSuccessAttampt;
@@ -59,6 +60,7 @@
         _associatedChannel = [[NSMutableArray alloc] init];
 
         _requestInvokations = [[NSMutableArray alloc] init];
+        _requestLoopLock = [[NSLock alloc] init];
         
         [[TSEventLoop sharedLoop] delegatingRemoteWith:self];
     }
@@ -95,6 +97,9 @@
 // MARK: - EVENT LOOP
 
 - (void)handleRequestsIfNeeded {
+    if (![self.requestLoopLock tryLock]) {
+        return;
+    }
     @synchronized (self.requestInvokations) {
         for (dispatch_block_t invocation in self.requestInvokations) {
             if (invocation) { invocation(); }
@@ -112,6 +117,7 @@
         }
         [self uncheckedConcurrencyDispatchSourceMakeDecision];
     }
+    [self.requestLoopLock unlock];
 }
 
 - (void)explicitRequestStatusPickup {

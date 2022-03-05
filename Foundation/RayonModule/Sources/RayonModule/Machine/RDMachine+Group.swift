@@ -12,7 +12,7 @@ public struct RDMachineGroup: Codable, Identifiable, Equatable {
 
     public var id = UUID()
 
-    public var machines: [AssociatedType] = []
+    public private(set) var machines: [AssociatedType] = []
     public var sections: [String] {
         [String](Set<String>(
             machines.map(\.group)
@@ -28,6 +28,9 @@ public struct RDMachineGroup: Codable, Identifiable, Equatable {
     }
 
     public mutating func insert(_ value: AssociatedType) {
+        guard value.isNotPlaceholder() else {
+            return
+        }
         if let index = machines.firstIndex(where: { $0.id == value.id }) {
             machines[index] = value
         } else {
@@ -48,7 +51,7 @@ public struct RDMachineGroup: Codable, Identifiable, Equatable {
             if let index = machines.firstIndex(where: { $0.id == newValue.id }) {
                 machines[index] = newValue
             } else {
-                machines.append(newValue)
+                debugPrint("setting subscript found nil when sending value, did you forget to call insert?")
             }
         }
     }

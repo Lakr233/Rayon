@@ -33,7 +33,7 @@ struct IdentityPickerSheetView: View {
             shouldDismiss = true
         }
         .sheet(isPresented: $openCreateSheet, onDismiss: nil) {
-            CreateIdentitiesView(selection: .constant(nil)) {
+            EditIdentitiesView(selection: .constant(nil)) {
                 currentSelection = $0
             }
         }

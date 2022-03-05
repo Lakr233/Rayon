@@ -92,7 +92,7 @@ struct MachineActionView: View {
             if let index = index {
                 var machine = store.machineGroup.machines[index]
                 machine.id = UUID()
-                store.machineGroup.machines.append(machine)
+                store.machineGroup.insert(machine)
             }
         }
     }
@@ -102,13 +102,7 @@ struct MachineActionView: View {
             message: "You are about to delete this item"
         ) { confirmed in
             guard confirmed else { return }
-            let index = store
-                .machineGroup
-                .machines
-                .firstIndex { $0.id == machine }
-            if let index = index {
-                store.machineGroup.machines.remove(at: index)
-            }
+            store.machineGroup.delete(machine)
             store.cleanRecentIfNeeded()
         }
     }

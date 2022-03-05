@@ -120,8 +120,10 @@ public enum ServerStatusViews {
         }
     }
 
-    static func memoryFmt(KBytes: Float) -> String {
-        bytesFmt(bytes: Int(exactly: KBytes * 1000) ?? 0)
+    // reading from /proc/meminfo is using kB
+    // MemTotal:        2034836 kB
+    static func memoryFmt(kBytes: Float) -> String {
+        bytesFmt(bytes: Int(exactly: kBytes * 1000) ?? 0)
     }
 
     static func bytesFmt(bytes: Int) -> String {

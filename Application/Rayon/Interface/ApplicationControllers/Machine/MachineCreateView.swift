@@ -27,21 +27,6 @@ struct MachineCreateView: View {
     var body: some View {
         remoteAddressView
             .requiresSheetFrame()
-            .toolbar {
-                ToolbarItem {
-                    Button {
-                        UIBridge.requiresConfirmation(
-                            message: "The document that is attempting to open is from third part community, we are not reasonable for anything related to this document."
-                        ) { confirmed in
-                            if confirmed {
-                                UIBridge.open(url: URL(string: "https://docs.digitalocean.com/support/ssh-troubleshooting")!)
-                            }
-                        }
-                    } label: {
-                        Label("SSH Troubleshoot", systemImage: "questionmark")
-                    }
-                }
-            }
             .animation(.interactiveSpring(), value: serverLocation)
             .animation(.interactiveSpring(), value: serverPort)
             .background(
@@ -132,15 +117,8 @@ struct MachineCreateView: View {
                     beginConnectButton()
                 } label: {
                     Text("Begin Connection")
-                        .foregroundColor(.white)
-                        .padding(10)
-                        .background(
-                            Rectangle()
-                                .foregroundColor(.orange)
-                                .roundedCorner()
-                        )
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(.borderedProminent)
                 .disabled(serverLocation.count == 0)
                 .disabled(UInt16(serverPort) == nil)
 
@@ -149,15 +127,8 @@ struct MachineCreateView: View {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
                         Text("Cancel")
-                            .foregroundColor(.accentColor)
-                            .padding(10)
-                            .background(
-                                Rectangle()
-                                    .foregroundColor(Color.accentColor.opacity(0.1))
-                                    .roundedCorner()
-                            )
                     }
-                    .buttonStyle(PlainButtonStyle())
+                    .buttonStyle(.bordered)
                 }
                 Spacer()
             }

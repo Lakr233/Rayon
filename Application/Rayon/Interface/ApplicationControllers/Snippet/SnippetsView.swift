@@ -171,13 +171,7 @@ struct SnippetsView: View {
         ) { confirmed in
             guard confirmed else { return }
             for selection in selection {
-                let index = store
-                    .snippetGroup
-                    .snippets
-                    .firstIndex { $0.id == selection }
-                if let index = index {
-                    store.snippetGroup.snippets.remove(at: index)
-                }
+                store.snippetGroup.delete(selection)
             }
             selection = []
         }

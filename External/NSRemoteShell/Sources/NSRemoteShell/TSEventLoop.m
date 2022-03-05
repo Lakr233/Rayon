@@ -94,18 +94,14 @@
 }
 
 - (void)processUncheckedLoopDispatch {
-    dispatch_group_t group = dispatch_group_create();
     for (NSRemoteShell *delegatedObject in self.delegatedObjects.allObjects) {
         if (!delegatedObject) {
             continue;
         }
-        dispatch_group_enter(group);
         dispatch_async(self.concurrentQueue, ^{
             [delegatedObject handleRequestsIfNeeded];
-            dispatch_group_leave(group);
         });
     }
-    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 }
 
 @end

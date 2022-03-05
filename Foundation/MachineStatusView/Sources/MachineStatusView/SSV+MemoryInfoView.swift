@@ -21,7 +21,7 @@ public extension ServerStatusViews {
                     Text("RAM")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                     Spacer()
-                    Text(memoryFmt(KBytes: info.memory.memTotal))
+                    Text(memoryFmt(kBytes: info.memory.memTotal))
                         .font(.system(size: 10, weight: .regular, design: .monospaced))
                 }
                 Divider()
@@ -34,8 +34,7 @@ public extension ServerStatusViews {
                     .font(.system(size: 8, weight: .regular, design: .monospaced))
                     ColorizedProgressView(
                         colors: [
-                            // MemFree+Active+Inactive
-                            .init(color: .yellow, weight: info.memory.memTotal - info.memory.memFree),
+                            .init(color: .yellow, weight: info.memory.memTotal - info.memory.memFree - info.memory.memCached),
                             .init(color: .orange, weight: info.memory.memCached),
                             .init(color: .green, weight: info.memory.memFree),
                         ]
@@ -84,7 +83,7 @@ public extension ServerStatusViews {
         }
 
         func shortDescription() -> String {
-            "USED: \(memoryFmt(KBytes: info.memory.memTotal - info.memory.memFree)) CACHE \(memoryFmt(KBytes: info.memory.memCached)) FREE \(memoryFmt(KBytes: info.memory.memFree)) SWAP \(memoryFmt(KBytes: info.memory.swapTotal))"
+            "USED: \(memoryFmt(kBytes: info.memory.memTotal - info.memory.memFree)) CACHE \(memoryFmt(kBytes: info.memory.memCached)) FREE \(memoryFmt(kBytes: info.memory.memFree)) SWAP \(memoryFmt(kBytes: info.memory.swapTotal))"
         }
 
         func percentDescription() -> String {

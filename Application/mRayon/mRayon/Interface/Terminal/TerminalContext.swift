@@ -199,6 +199,17 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
             return
         }
 
+        mainActor {
+            guard self.remoteType == .machine else {
+                return
+            }
+            var read = RayonStore.shared.machineGroup[self.machine.id]
+            if read.isNotPlaceholder() {
+                read.lastBanner = self.shell.remoteBanner ?? "No Banner"
+                RayonStore.shared.machineGroup[self.machine.id] = read
+            }
+        }
+
         termInterface.write("[*] Creating Connection\r\n\r\n")
 
         mainActor(delay: 1) {

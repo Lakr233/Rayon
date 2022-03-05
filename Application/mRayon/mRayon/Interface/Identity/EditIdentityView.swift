@@ -232,7 +232,7 @@ struct EditIdentityView: View {
             UIBridge.presentError(with: "Unable to get key from pasteboard")
             return
         }
-        if str.contains("ssh-rsa") {
+        if str.contains("ssh-") {
             publicKey = str
         } else {
             UIBridge.requiresConfirmation(
@@ -279,7 +279,7 @@ struct EditIdentityView: View {
             attachment: [:]
         )
 
-        RayonStore.shared.identityGroup[id] = newIdentity
+        RayonStore.shared.identityGroup.insert(newIdentity)
 
         presentationMode.wrappedValue.dismiss()
     }

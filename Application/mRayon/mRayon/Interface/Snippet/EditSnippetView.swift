@@ -161,7 +161,7 @@ struct EditSnippetView: View {
             newSnippet.setSFAvatar(sfSymbol: avatar)
         }
 
-        RayonStore.shared.snippetGroup[id] = newSnippet
+        RayonStore.shared.snippetGroup.insert(newSnippet)
 
         presentationMode.wrappedValue.dismiss()
     }

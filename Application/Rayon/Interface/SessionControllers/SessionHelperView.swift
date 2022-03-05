@@ -28,7 +28,7 @@ struct SessionPlaceholderView: View {
         .background(StarLinkView().ignoresSafeArea())
         .background(
             ColorfulView(
-                colors: [Color.orange, Color.yellow],
+                colors: [Color.accentColor],
                 colorCount: 4
             )
             .ignoresSafeArea()
