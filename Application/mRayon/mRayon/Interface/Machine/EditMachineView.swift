@@ -43,7 +43,7 @@ struct EditMachineView: View {
                     .textInputAutocapitalization(.never)
                     .onChange(of: remoteAddress) { newValue in
                         let get = newValue.replacingOccurrences(of: "。", with: ".")
-                        if remoteAddress != get {  remoteAddress = get }
+                        if remoteAddress != get { remoteAddress = get }
                     }
                 TextField("Host Port", text: $remotePort)
                     .disableAutocorrection(true)
@@ -114,6 +114,9 @@ struct EditMachineView: View {
                 }
                 if comment.isEmpty {
                     comment = "Created at: " + Date().formatted()
+                }
+                if remotePort.isEmpty {
+                    remotePort = "22"
                 }
             }
         }

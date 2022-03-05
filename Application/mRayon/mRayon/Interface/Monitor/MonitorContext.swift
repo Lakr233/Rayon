@@ -74,6 +74,13 @@ class MonitorContext: ObservableObject, Identifiable, Equatable {
             }
             // pull down data
             if shell.isConnected, shell.isAuthenicated {
+                mainActor {
+                    var read = RayonStore.shared.machineGroup[self.machine.id]
+                    if read.isNotPlaceholder() {
+                        read.lastBanner = self.shell.remoteBanner ?? "No Banner"
+                        RayonStore.shared.machineGroup[self.machine.id] = read
+                    }
+                }
                 status.requestInfoAndWait(with: shell)
             }
             mainActor { self.isLoading = false }

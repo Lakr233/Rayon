@@ -22,7 +22,7 @@ class SnippetExecuteContext: ObservableObject {
     @Published var completed: [RDMachine] = []
     @Published var hasError: Bool = false
     @Published var completedProgress: Float = 0
-    @Published var totalProgress: Float = 2147483648 // will update
+    @Published var totalProgress: Float = 2_147_483_648 // will update
 
     static let queue = DispatchQueue(label: "wiki.qaq.snippet.exec", attributes: .concurrent)
 

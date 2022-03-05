@@ -54,7 +54,10 @@ class XTerminalCore: XTerminal {
         configuration.userContentController = contentController
         configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
         associatedWebDelegate.userContentController = contentController
-        associatedWebView = TransparentWebView(frame: .zero, configuration: configuration)
+        associatedWebView = TransparentWebView(
+            frame: CGRect(x: 0, y: 0, width: 500, height: 500),
+            configuration: configuration
+        )
         associatedWebView.uiDelegate = associatedWebDelegate
         associatedWebView.navigationDelegate = associatedWebDelegate
         #if os(macOS)
