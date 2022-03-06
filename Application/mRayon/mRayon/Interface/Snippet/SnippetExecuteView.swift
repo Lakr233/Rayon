@@ -17,6 +17,9 @@ struct SnippetExecuteView: View {
     @State var widthInstructor: CGSize = .init()
 
     var terminalWidth: CGFloat {
+        if context.machineGroup.count == 1 {
+            return CGFloat(widthInstructor.width)
+        }
         if widthInstructor.width < 300 {
             return 250
         }
@@ -76,7 +79,6 @@ struct SnippetExecuteView: View {
                         ForEach(0 ..< context.machineGroup.count, id: \.self) { idx in
                             makeView(for: idx)
                         }
-                        Divider().hidden()
                     }
                 }
                 .onChange(of: r.size) { newValue in

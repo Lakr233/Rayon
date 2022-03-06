@@ -13,13 +13,14 @@ public struct RDIdentityGroup: Codable, Identifiable {
 
     public var id = UUID()
 
-    public var identities: [AssociatedType] = []
+    public private(set) var identities: [AssociatedType] = []
 
     public var count: Int {
         identities.count
     }
 
     public mutating func insert(_ value: AssociatedType) {
+        guard !value.username.isEmpty else { return }
         if let index = identities.firstIndex(where: { $0.id == value.id }) {
             identities[index] = value
         } else {
@@ -36,7 +37,7 @@ public struct RDIdentityGroup: Codable, Identifiable {
             if let index = identities.firstIndex(where: { $0.id == newValue.id }) {
                 identities[index] = newValue
             } else {
-                identities.append(newValue)
+                debugPrint("setting subscript found nil when sending value, did you forget to call insert?")
             }
         }
     }

@@ -12,7 +12,7 @@ public struct RDSnippetGroup: Codable, Identifiable, Equatable {
 
     public var id = UUID()
 
-    public var snippets: [AssociatedType] = []
+    public private(set) var snippets: [AssociatedType] = []
     public var sections: [String] {
         [String](Set<String>(
             snippets.map(\.group)
@@ -28,6 +28,7 @@ public struct RDSnippetGroup: Codable, Identifiable, Equatable {
     }
 
     public mutating func insert(_ value: AssociatedType) {
+        guard !value.name.isEmpty else { return }
         if let index = snippets.firstIndex(where: { $0.id == value.id }) {
             snippets[index] = value
         } else {
@@ -48,7 +49,7 @@ public struct RDSnippetGroup: Codable, Identifiable, Equatable {
             if let index = snippets.firstIndex(where: { $0.id == newValue.id }) {
                 snippets[index] = newValue
             } else {
-                snippets.append(newValue)
+                debugPrint("setting subscript found nil when sending value, did you forget to call insert?")
             }
         }
     }

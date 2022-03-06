@@ -21,6 +21,8 @@ public class RayonStore: ObservableObject {
             ) as? Bool ?? false
         storeRecent = UDStoreRecent
         saveTemporarySession = UDSaveTemporarySession
+        timeout = UDTimeout
+        if timeout <= 0 { timeout = 5 }
 
         if let read = readEncryptedDefault(
             from: .identityGroupEncrypted,
@@ -53,13 +55,6 @@ public class RayonStore: ObservableObject {
             recentRecord = read
         }
         if let read = readEncryptedDefault(
-            from: .timeout,
-            timeout.self
-        ) {
-            timeout = read
-        }
-        if timeout <= 0 { timeout = 5 }
-        if let read = readEncryptedDefault(
             from: .openInterfaceAutomatically,
             openInterfaceAutomatically.self
         ) {
@@ -86,12 +81,11 @@ public class RayonStore: ObservableObject {
         }
     }
 
+    @UserDefaultsWrapper(key: "wiki.qaq.rayon.timeout", defaultValue: 5)
+    private var UDTimeout: Int
     @Published public var timeout: Int = 0 {
         didSet {
-            storeEncryptedDefault(
-                to: .timeout,
-                with: timeout
-            )
+            UDTimeout = timeout
         }
     }
 

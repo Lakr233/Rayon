@@ -201,13 +201,7 @@ struct MachineGroupView: View {
         ) { confirmed in
             guard confirmed else { return }
             for selection in selection {
-                let index = store
-                    .machineGroup
-                    .machines
-                    .firstIndex { $0.id == selection }
-                if let index = index {
-                    store.machineGroup.machines.remove(at: index)
-                }
+                store.machineGroup.delete(selection)
                 store.cleanRecentIfNeeded()
             }
             selection = []

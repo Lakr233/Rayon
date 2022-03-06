@@ -232,7 +232,7 @@ struct EditIdentityView: View {
             UIBridge.presentError(with: "Unable to get key from pasteboard")
             return
         }
-        if str.contains("ssh-rsa") {
+        if str.contains("ssh-") {
             publicKey = str
         } else {
             UIBridge.requiresConfirmation(

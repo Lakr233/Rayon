@@ -21,7 +21,6 @@ public extension RayonStore {
         case recentRecordEncrypted
         case machineRedacted
         case licenseAgreed
-        case timeout
         case openInterfaceAutomatically
     }
 

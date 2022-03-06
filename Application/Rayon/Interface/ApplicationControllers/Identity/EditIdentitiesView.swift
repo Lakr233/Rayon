@@ -1,5 +1,5 @@
 //
-//  CreateIdentitiesView.swift
+//  EditIdentitiesView.swift
 //  Rayon
 //
 //  Created by Lakr Aream on 2022/2/9.
@@ -8,7 +8,7 @@
 import RayonModule
 import SwiftUI
 
-struct CreateIdentitiesView: View {
+struct EditIdentitiesView: View {
     @Binding var selection: RDIdentity.ID?
 
     @State var username: String = ""
@@ -83,21 +83,38 @@ struct CreateIdentitiesView: View {
 
     var sheetBody: some View {
         VStack(alignment: .leading, spacing: 10) {
-            AlignedLabel("Username", icon: "person.fill")
-            TextField("Username", text: $username)
-                .disableAutocorrection(true)
+            Group {
+                AlignedLabel("Username", icon: "person.fill")
+                TextField("Username", text: $username)
+                    .disableAutocorrection(true)
+                Text("Username is identical to the parameter used during ssh login.")
+                    .font(.system(.footnote, design: .rounded))
+                    .opacity(0.5)
+            }
 
-            AlignedLabel("Password", icon: "lock.fill")
-            SecureField("Password (Optional)", text: $password)
-                .disableAutocorrection(true)
+            Group {
+                AlignedLabel("Password", icon: "lock.fill")
+                SecureField("Password (Optional)", text: $password)
+                    .disableAutocorrection(true)
+                Text("Password will be used to decrypt private key if the key is set.")
+                    .font(.system(.footnote, design: .rounded))
+                    .opacity(0.5)
+            }
 
-            AlignedLabel("Key Pair", icon: "key.fill")
-            publicKeyView
-            privateKeyView
+            Group {
+                AlignedLabel("Key Pair", icon: "key.fill")
+                publicKeyView
+                privateKeyView
+                Text("By providing the key, we will try to authenticate your session use keys first.")
+                    .font(.system(.footnote, design: .rounded))
+                    .opacity(0.5)
+            }
 
-            AlignedLabel("Comment", icon: "text.bubble")
-            TextField("Comment (Optional)", text: $comment)
-                .disableAutocorrection(true)
+            Group {
+                AlignedLabel("Comment", icon: "text.bubble")
+                TextField("Comment (Optional)", text: $comment)
+                    .disableAutocorrection(true)
+            }
         }
         .frame(width: 400)
     }
@@ -119,7 +136,7 @@ struct CreateIdentitiesView: View {
                         UIBridge.presentError(with: "Failed to open file")
                         return
                     }
-                    if str.contains("ssh-rsa") {
+                    if str.contains("ssh-") {
                         publicKey = str
                     } else {
                         UIBridge.requiresConfirmation(

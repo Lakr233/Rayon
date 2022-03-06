@@ -87,20 +87,23 @@ public struct RDIdentity: Codable, Identifiable, Equatable {
     }
 
     public func callAuthenticationWith(remote: NSRemoteShell) {
+        if remote.isAuthenicated { return }
         if privateKey.count > 0 || publicKey.count > 0 {
             remote.authenticate(with: username, andPublicKey: publicKey, andPrivateKey: privateKey, andPassword: password)
-        } else {
+        }
+        if remote.isConnected, !remote.isAuthenicated {
             remote.authenticate(with: username, andPassword: password)
         }
-        if remote.isAuthenicated {
-            let date = Date()
-            let fmt = DateFormatter()
-            fmt.dateStyle = .full
-            fmt.timeStyle = .full
-            debugPrint("Identity \(id) was used to authentic session at \(fmt.string(from: date))")
-            mainActor {
-                RayonStore.shared.identityGroup[id].lastRecentUsed = date
-            }
+        guard remote.isAuthenicated else {
+            return
+        }
+        let date = Date()
+        let fmt = DateFormatter()
+        fmt.dateStyle = .full
+        fmt.timeStyle = .full
+        debugPrint("Identity \(id) was used to authentic session at \(fmt.string(from: date))")
+        mainActor {
+            RayonStore.shared.identityGroup[id].lastRecentUsed = date
         }
     }
 }

@@ -10,7 +10,7 @@
 #import <libssh2_publickey.h>
 
 /*
- the buffer size define the size that should read from a socket a time
+ the buffer size define the size that should read from a socket at a time
  is required to be larger then socket opt size
  
  the default size of it is set by system and can be find by
@@ -24,12 +24,14 @@
 #define BUFFER_SIZE 131072
 
 /*
- the interval for sending keep alive
+ the interval for sending keep alive packet, count in second
+ [NSRemoteShell uncheckedConcurrencyKeepAliveCheck] will skip
+ if last success attempt was within the interval
  */
 #define KEEPALIVE_INTERVAL 1
 
 /*
- indicate how many times should we ignore
- before cutting down the connection
+ represent how many failure sending keep alive packet shall we ignore
+ before cutting down the connection on client (our) side
  */
 #define KEEPALIVE_ERROR_TOLERANCE_MAX_RETRY 8

@@ -68,6 +68,13 @@ extension MenubarStatusItem {
         let image = frames[currentImageIndex]
         mainActor { [self] in
             statusItem.button?.image = image
+
+            // check if already deleted
+            let check = RayonStore.shared.machineGroup[machine.id]
+            guard check.isNotPlaceholder() else {
+                closeThisItem()
+                return
+            }
         }
     }
 
