@@ -1,0 +1,273 @@
+/* No comment provided by engineer. */
+":" = "：";
+
+/* No comment provided by engineer. */
+"[deleted]" = "";
+
+/* No comment provided by engineer. */
+"> Private Key: %@" = "> 私钥：%@";
+
+/* No comment provided by engineer. */
+"> Public Key: %@" = "> 公钥： %@";
+
+/* No comment provided by engineer. */
+"Accepted Connection: Secure Shell" = "已建立连接：SSH";
+
+/* No comment provided by engineer. */
+"Activity:" = "活动会话：";
+
+/* No comment provided by engineer. */
+"Add" = "添加";
+
+/* No comment provided by engineer. */
+"along with his friends: [@__oquery](https://twitter.com/__oquery) [@zlind0](https://github.com/zlind0) [@unixzii](https://twitter.com/unixzii) [@82flex](https://twitter.com/82flex) [@xnth97](https://twitter.com/xnth97)" = "和他的朋友： [@__oquery](https://twitter.com/__oquery) [@zlind0](https://github.com/zlind0) [@unixzii](https://twitter.com/unixzii) [@82flex](https://twitter.com/82flex) [@xnth97](https://twitter.com/xnth97)";
+
+/* No comment provided by engineer. */
+"Authenticate with: %@" = "使用 %@ 进行身份认证";
+
+/* No comment provided by engineer. */
+"Auto" = "自动";
+
+/* No comment provided by engineer. */
+"Banner:" = "横幅：";
+
+/* No comment provided by engineer. */
+"Batch Startup" = "开始批量处理";
+
+/* No comment provided by engineer. */
+"Begin Connection" = "开始链接";
+
+/* No comment provided by engineer. */
+"Browse..." = "浏览...";
+
+/* No comment provided by engineer. */
+"By entering your server address, we will guide you through the server creation process." = "输入服务器地址后，我们会指引您建立服务器";
+
+/* No comment provided by engineer. */
+"By providing the key, we will try to authenticate your session use keys first." = "如果提供了密钥，我们将首选使用该密钥来进行会话的身份验证";
+
+/* No comment provided by engineer. */
+"Cancel" = "取消";
+
+/* No comment provided by engineer. */
+"Clear Recent" = "清除最近会话";
+
+/* No comment provided by engineer. */
+"Close Connection" = "关闭连接";
+
+/* No comment provided by engineer. */
+"Close Session" = "关闭会话";
+
+/* No comment provided by engineer. */
+"Close Tab" = "关闭页面";
+
+/* No comment provided by engineer. */
+"Comment" = "评论";
+
+/* No comment provided by engineer. */
+"Comment (Optional)" = "备注（可选）";
+
+/* No comment provided by engineer. */
+"Comment:" = "备注：";
+
+/* No comment provided by engineer. */
+"Comment: %@" = "备注：%@";
+
+/* No comment provided by engineer. */
+"Comment: Not Available" = "备注：不可用";
+
+/* No comment provided by engineer. */
+"Copy Command" = "复制命令";
+
+/* No comment provided by engineer. */
+"Create New Identity" = "创建新登陆身份";
+
+/* No comment provided by engineer. */
+"Create Server" = "添加服务器";
+
+/* No comment provided by engineer. */
+"Create Without Connection" = "在不连接的情况下创建服务器";
+
+/* No comment provided by engineer. */
+"Default" = "默认";
+
+/* No comment provided by engineer. */
+"Default (Optional)" = "默认（可选）";
+
+/* No comment provided by engineer. */
+"Delete" = "删除";
+
+/* No comment provided by engineer. */
+"Delete Record" = "删除记录";
+
+/* No comment provided by engineer. */
+"Did you mean \"%@\"?" = "您可能";
+
+/* No comment provided by engineer. */
+"Dismiss" = "放弃";
+
+/* No comment provided by engineer. */
+"Done" = "完成";
+
+/* No comment provided by engineer. */
+"Duplicate" = "复制";
+
+/* No comment provided by engineer. */
+"Edit" = "编辑";
+
+/* No comment provided by engineer. */
+"Editing with RayonID: %@" = "使用 RayonID 编辑： %@";
+
+/* No comment provided by engineer. */
+"Execution Completed" = "完成";
+
+/* No comment provided by engineer. */
+"Group" = "编组";
+
+/* No comment provided by engineer. */
+"Host Address" = "主机地址";
+
+/* No comment provided by engineer. */
+"I fully understand the license agreements and agree with it." = "我已充分理解并接受用户许可协议";
+
+/* No comment provided by engineer. */
+"Identities - %lld available" = "登陆身份 - %lld 个可用";
+
+/* No comment provided by engineer. */
+"Identity" = "身份标识";
+
+/* No comment provided by engineer. */
+"In place editing is supported on some fields~" = "一些字段可以再此处编辑";
+
+/* No comment provided by engineer. */
+"Last Used" = "上次使用";
+
+/* No comment provided by engineer. */
+"Learn More" = "更多";
+
+/* No comment provided by engineer. */
+"License Agreement" = "用户许可协议";
+
+/* No comment provided by engineer. */
+"License Info" = "授权信息";
+
+/* No comment provided by engineer. */
+"Machines - %lld available" = "主机： - %lld 个可用";
+
+/* No comment provided by engineer. */
+"Made with love by [@Lakr233](https://twitter.com/Lakr233)" = "[@Lakr233](https://twitter.com/Lakr233) 用爱创造";
+
+/* No comment provided by engineer. */
+"Name" = "名称";
+
+/* No comment provided by engineer. */
+"Name (Optional)" = "名称（可选）";
+
+/* No comment provided by engineer. */
+"Never" = "从不";
+
+/* No comment provided by engineer. */
+"New Channel" = "创建新会话";
+
+/* No comment provided by engineer. */
+"No Comment" = "无备注";
+
+/* No comment provided by engineer. */
+"No Comment (Optional)" = "备注（可选）";
+
+/* No comment provided by engineer. */
+"No Identity Available" = "无可用登陆身份";
+
+/* No comment provided by engineer. */
+"No Recent" = "没有最近会话";
+
+/* No comment provided by engineer. */
+"No Server Available" = "无可用服务器";
+
+/* No comment provided by engineer. */
+"No Session" = "无当前会话";
+
+/* No comment provided by engineer. */
+"No Snippet Available" = "当前无可用模版";
+
+/* No comment provided by engineer. */
+"Operation is in progress: %lld remain" = "操作预计将在 %lld 后完成";
+
+/* No comment provided by engineer. */
+"Overview" = "概览";
+
+/* No comment provided by engineer. */
+"Password (Optional)" = "密码（可选）";
+
+/* No comment provided by engineer. */
+"Password will be used to decrypt private key if the key is set." = "如果设置了私钥，密码将被用于私钥的解密";
+
+/* No comment provided by engineer. */
+"Pick Avatar" = "选取头像";
+
+/* No comment provided by engineer. */
+"Port" = "端口";
+
+/* No comment provided by engineer. */
+"Quick Connect" = "快速链接";
+
+/* No comment provided by engineer. */
+"Rayon is a lobby boy that helps you to manage your servers." = "Rayon 是您管理服务器的小帮手";
+
+/* No comment provided by engineer. */
+"Redact Machines" = "编辑现有主机";
+
+/* No comment provided by engineer. */
+"Remove" = "移除";
+
+/* No comment provided by engineer. */
+"Server" = "服务器";
+
+/* No comment provided by engineer. */
+"Server Address" = "服务器地址";
+
+/* No comment provided by engineer. */
+"Server Name" = "服务器名称";
+
+/* No comment provided by engineer. */
+"Session Info" = "会话信息";
+
+/* No comment provided by engineer. */
+"Snippet" = "代码模版";
+
+/* No comment provided by engineer. */
+"Snippet Name" = "模版名称";
+
+/* No comment provided by engineer. */
+"Snippets - %lld available" = "模版 - %lld 个可用";
+
+/* No comment provided by engineer. */
+"Source code available at: [GitHub](https://github.com/Lakr233/Rayon)" = "可以在 [GitHub](https://github.com/Lakr233/Rayon) 获取源代码";
+
+/* No comment provided by engineer. */
+"SSH Troubleshoot" = "SSH 排错";
+
+/* No comment provided by engineer. */
+"Stop All" = "停止所有";
+
+/* No comment provided by engineer. */
+"Store Session" = "存储绘画";
+
+/* No comment provided by engineer. */
+"Toggle Sidebar" = "折叠侧边栏";
+
+/* No comment provided by engineer. */
+"Unknown Error Occurred" = "发生了未知错误";
+
+/* No comment provided by engineer. */
+"Use Keys" = "使用密钥";
+
+/* No comment provided by engineer. */
+"Username" = "用户名";
+
+/* No comment provided by engineer. */
+"Username is identical to the parameter used during ssh login." = "用户名与 ssh 登陆参数相同";
+
+/* No comment provided by engineer. */
+"Welcome" = "欢迎";
+
