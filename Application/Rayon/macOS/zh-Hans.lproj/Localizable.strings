@@ -35,7 +35,7 @@
 "Batch Startup" = "开始批量处理";
 
 /* No comment provided by engineer. */
-"Begin Connection" = "开始链接";
+"Begin Connection" = "开始连接";
 
 /* No comment provided by engineer. */
 "Browse..." = "浏览...";
@@ -209,7 +209,7 @@
 "Port" = "端口";
 
 /* No comment provided by engineer. */
-"Quick Connect" = "快速链接";
+"Quick Connect" = "快速连接";
 
 /* No comment provided by engineer. */
 "Rayon is a lobby boy that helps you to manage your servers." = "Rayon 是您管理服务器的小帮手";
@@ -271,3 +271,4 @@
 /* No comment provided by engineer. */
 "Welcome" = "欢迎";
 
+"Select Machine" = "选取主机";

@@ -69,7 +69,7 @@
 		50F64E5A27B3CB35008D52FB /* EditIdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F64E5827B3CB35008D52FB /* EditIdentitiesView.swift */; };
 		50F64E5F27B3D922008D52FB /* MachineCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F64E5D27B3D922008D52FB /* MachineCreateView.swift */; };
 		50FC9AED27B66ED1005D9755 /* HostWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FC9AEB27B66ED1005D9755 /* HostWindow.swift */; };
-		B6B7BF6F27D5CF8200DB3582 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B6B7BF6D27D5CF8200DB3582 /* Localizable.strings */; };
+		B6B7BF7627D5D9A000DB3582 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B6B7BF7427D5D9A000DB3582 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -144,7 +144,7 @@
 		50F64E5827B3CB35008D52FB /* EditIdentitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIdentitiesView.swift; sourceTree = "<group>"; };
 		50F64E5D27B3D922008D52FB /* MachineCreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineCreateView.swift; sourceTree = "<group>"; };
 		50FC9AEB27B66ED1005D9755 /* HostWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostWindow.swift; sourceTree = "<group>"; };
-		B6B7BF6E27D5CF8200DB3582 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		B6B7BF7527D5D9A000DB3582 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,7 +271,7 @@
 			children = (
 				509F7F3F27B2AF7F00F28752 /* macOS.entitlements */,
 				5027F24F27B80FDB00F422BB /* Info.plist */,
-				B6B7BF6D27D5CF8200DB3582 /* Localizable.strings */,
+				B6B7BF7427D5D9A000DB3582 /* Localizable.strings */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -468,7 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5082A1D027D0E0F300C71C0F /* LICENSE in Resources */,
-				B6B7BF6F27D5CF8200DB3582 /* Localizable.strings in Resources */,
+				B6B7BF7627D5D9A000DB3582 /* Localizable.strings in Resources */,
 				509F7F4727B2AF7F00F28752 /* Assets.xcassets in Resources */,
 				5082A1CF27D0E0F300C71C0F /* EULA in Resources */,
 			);
@@ -539,10 +539,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		B6B7BF6D27D5CF8200DB3582 /* Localizable.strings */ = {
+		B6B7BF7427D5D9A000DB3582 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				B6B7BF6E27D5CF8200DB3582 /* zh-Hans */,
+				B6B7BF7527D5D9A000DB3582 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
