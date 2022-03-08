@@ -212,7 +212,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
 
         termInterface.write("[*] Creating Connection\r\n\r\n")
 
-        mainActor(delay: 1) {
+        mainActor(delay: 0.5) {
             guard RayonStore.shared.openInterfaceAutomatically else { return }
             let host = UIHostingController(
                 rootView: DefaultPresent(context: self)

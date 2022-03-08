@@ -141,6 +141,7 @@ struct TerminalView: View {
 
          https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
          */
+        guard key.count == 1 else { return }
         let char = Character(key)
         guard let asciiValue = char.asciiValue,
               let asciiInt = Int(exactly: asciiValue) // 65 = "A" 1 = "CTRL+A"
