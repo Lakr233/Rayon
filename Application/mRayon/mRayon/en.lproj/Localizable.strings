@@ -1,0 +1,264 @@
+/* No comment provided by engineer. */
+"[deleted]" = "[已删除]";
+
+/* No comment provided by engineer. */
+"%lld identity/identities available, long press for option." = "%lld 个身份可用，长按进行选取";
+
+/* No comment provided by engineer. */
+"%lld machine(s) available, long press for option." = "%lld 主机可用，长按获取选项";
+
+/* No comment provided by engineer. */
+"%lld Selected" = "已选取 %lld";
+
+/* No comment provided by engineer. */
+"%lld snippet/snippets available, long press for option." = "%lld 代码模版可用，长按已获取选项";
+
+/* No comment provided by engineer. */
+"<Not Available>" = "<不可用>";
+
+/* No comment provided by engineer. */
+"Activity:" = "活动：";
+
+/* No comment provided by engineer. */
+"Address" = "地址";
+
+/* No comment provided by engineer. */
+"Agree License" = "同意用户许可";
+
+/* No comment provided by engineer. */
+"Allow Auto Auth" = "允许自动验证";
+
+/* No comment provided by engineer. */
+"Auto Auth" = "自动认证";
+
+/* No comment provided by engineer. */
+"Available Identities" = "可用身份信息";
+
+/* No comment provided by engineer. */
+"Available Machines" = "可用主机";
+
+/* No comment provided by engineer. */
+"Banner:" = "标语";
+
+/* No comment provided by engineer. */
+"Clear Key Data" = "清除密钥数据";
+
+/* No comment provided by engineer. */
+"Clear Recent" = "清除最近项目";
+
+/* No comment provided by engineer. */
+"Clear Selection" = "清除选择";
+
+/* No comment provided by engineer. */
+"Close Monitor" = "关闭活动监视器";
+
+/* No comment provided by engineer. */
+"Code" = "代码";
+
+/* No comment provided by engineer. */
+"Comment" = "注释";
+
+/* No comment provided by engineer. */
+"Comment (Optional)" = "备注（可选）";
+
+/* No comment provided by engineer. */
+"Comment does not take any effect in authenticate, but keep you remember this identity." = "注释对身份认证无影响，但可以帮助您记住身份信息";
+
+/* No comment provided by engineer. */
+"Comment:" = "注释";
+
+/* No comment provided by engineer. */
+"Connect" = "连接";
+
+/* No comment provided by engineer. */
+"Copy Command" = "复制命令";
+
+/* No comment provided by engineer. */
+"Copy Private Key" = "复制私钥";
+
+/* No comment provided by engineer. */
+"Copy Public Key" = "复制公钥";
+
+/* No comment provided by engineer. */
+"Copy Script" = "复制脚本";
+
+/* No comment provided by engineer. */
+"Create Identity" = "创建新身份";
+
+/* No comment provided by engineer. */
+"Create Machine" = "创建主机";
+
+/* No comment provided by engineer. */
+"Create New Identity" = "创建新身份";
+
+/* No comment provided by engineer. */
+"Create Snippet" = "创建模版";
+
+/* No comment provided by engineer. */
+"Delete" = "删除";
+
+/* No comment provided by engineer. */
+"Delete Identity" = "删除身份";
+
+/* No comment provided by engineer. */
+"Delete Machine" = "删除主机";
+
+/* No comment provided by engineer. */
+"Delete Record" = "删除最近记录";
+
+/* No comment provided by engineer. */
+"Delete Snippet" = "删除模版";
+
+/* No comment provided by engineer. */
+"Done" = "完成";
+
+/* No comment provided by engineer. */
+"Duplicate" = "复制";
+
+/* No comment provided by engineer. */
+"Edit" = "编辑";
+
+/* No comment provided by engineer. */
+"Edit Identity" = "编辑身份";
+
+/* No comment provided by engineer. */
+"Edit Machine" = "编辑主机";
+
+/* No comment provided by engineer. */
+"Edit Snippet" = "编辑模版";
+
+/* No comment provided by engineer. */
+"Execute" = "执行";
+
+/* No comment provided by engineer. */
+"Execution Complete" = "代码执行完成";
+
+/* No comment provided by engineer. */
+"Execution In Progress" = "正在运行中";
+
+/* No comment provided by engineer. */
+"Get Source" = "获取源代码";
+
+/* No comment provided by engineer. */
+"Host Address" = "主机地址";
+
+/* No comment provided by engineer. */
+"Host Port" = "主机端口";
+
+/* No comment provided by engineer. */
+"Identity" = "身份信息";
+
+/* No comment provided by engineer. */
+"Import from file" = "从文件导入";
+
+/* No comment provided by engineer. */
+"Import from Pasteboard" = "从剪切板导入";
+
+/* No comment provided by engineer. */
+"Interface" = "网络界面";
+
+/* No comment provided by engineer. */
+"Key To Send" = "发送密钥";
+
+/* No comment provided by engineer. */
+"License" = "许可";
+
+/* No comment provided by engineer. */
+"Machine" = "主机";
+
+/* No comment provided by engineer. */
+"Monitor - %@" = "活动监控 - %@";
+
+/* No comment provided by engineer. */
+"Name" = "名称";
+
+/* No comment provided by engineer. */
+"No Associated Identity (Optional)" = "无关联身份（可选）";
+
+/* No comment provided by engineer. */
+"No Machine Available" = "无可用主机";
+
+/* No comment provided by engineer. */
+"No Recent" = "无最近会话";
+
+/* No comment provided by engineer. */
+"No Session" = "当前无会话";
+
+/* No comment provided by engineer. */
+"Not Selected" = "未指定";
+
+/* No comment provided by engineer. */
+"Open Monitor" = "打开活动监控";
+
+/* No comment provided by engineer. */
+"Open Terminal" = "打开终端";
+
+/* No comment provided by engineer. */
+"Open When Connect" = "连接时开启";
+
+/* No comment provided by engineer. */
+"Password" = "密码";
+
+/* No comment provided by engineer. */
+"Password is used to either authenticate the session or decrypt the private key. It's optional." = "可选的密码，用来进行会话身份认证或解密加密的私钥。";
+
+/* No comment provided by engineer. */
+"Pick Identity" = "选取身份信息";
+
+/* No comment provided by engineer. */
+"Pick Machine" = "选取主机";
+
+/* No comment provided by engineer. */
+"Preview Layout" = "预览布局";
+
+/* No comment provided by engineer. */
+"Private Key" = "私钥";
+
+/* No comment provided by engineer. */
+"Public Key" = "公钥";
+
+/* No comment provided by engineer. */
+"Rayon is open sourced at GitHub, any pull request are welcome!" = "Rayon 在 GitHub 开源，欢迎任何 Pull Request";
+
+/* No comment provided by engineer. */
+"Select Identity" = "选择身份";
+
+/* No comment provided by engineer. */
+"Select SF Symbol" = "选择 SF Symbol";
+
+/* No comment provided by engineer. */
+"Selected Identity" = "选择身份";
+
+/* No comment provided by engineer. */
+"Selected Machine" = "选择主机";
+
+/* No comment provided by engineer. */
+"Setting" = "设置";
+
+/* No comment provided by engineer. */
+"Snippet" = "模版";
+
+/* No comment provided by engineer. */
+"Snippet Name (Required)" = "模版名称（必需）";
+
+/* No comment provided by engineer. */
+"Software License" = "软件许可";
+
+/* No comment provided by engineer. */
+"Store Recent" = "存储当前会话";
+
+/* No comment provided by engineer. */
+"Terminate" = "中断";
+
+/* No comment provided by engineer. */
+"Timeout: %lld" = "超时：%lld";
+
+/* No comment provided by engineer. */
+"Use this key to authenticate server session automatically when needed." = "当需要时使用该公钥进行会话身份验证";
+
+/* No comment provided by engineer. */
+"Username" = "用户名";
+
+/* No comment provided by engineer. */
+"Username is identical to the parameter used during ssh login." = "用户名与 ssh 登陆参数相同";
+
