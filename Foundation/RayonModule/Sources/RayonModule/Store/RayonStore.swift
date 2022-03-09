@@ -5,6 +5,7 @@
 //  Created by Lakr Aream on 2022/2/8.
 //
 
+import Combine
 import NSRemoteShell
 import PropertyWrapper
 
@@ -59,6 +60,12 @@ public class RayonStore: ObservableObject {
             openInterfaceAutomatically.self
         ) {
             openInterfaceAutomatically = read
+        }
+        if let read = readEncryptedDefault(
+            from: .portForwardEncrypted,
+            portForwardGroup.self
+        ) {
+            portForwardGroup = read
         }
     }
 
@@ -171,6 +178,15 @@ public class RayonStore: ObservableObject {
             storeEncryptedDefault(
                 to: .snippetGroupEncrypted,
                 with: snippetGroup
+            )
+        }
+    }
+
+    @Published public var portForwardGroup: RDPortForwardGroup = .init() {
+        didSet {
+            storeEncryptedDefault(
+                to: .portForwardEncrypted,
+                with: portForwardGroup
             )
         }
     }

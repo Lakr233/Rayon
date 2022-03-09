@@ -88,6 +88,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
             .setupConnectionTimeout(6)
         TerminalContext.queue.async {
             self.processBootstrap()
+            self.processShutdown()
         }
     }
 
@@ -108,6 +109,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
             .setupConnectionTimeout(6)
         TerminalContext.queue.async {
             self.processBootstrap()
+            self.processShutdown()
         }
     }
 
@@ -220,6 +222,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
             host.isModalInPresentation = true
             host.modalTransitionStyle = .coverVertical
             host.modalPresentationStyle = .formSheet
+            host.preferredContentSize = preferredPopOverSize
             UIWindow.shutUpKeyWindow?
                 .topMostViewController?
                 .present(next: host)

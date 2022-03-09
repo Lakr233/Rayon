@@ -16,9 +16,6 @@ struct WelcomeView: View {
     @State var quickConnect: String = ""
     @FocusState var textFieldIsFocused: Bool
     @State var buttonDisabled: Bool = true
-    @State var openPickIdentity: Bool = false
-    @State var pickedIdentity: RDIdentity.ID? = nil
-    @State var pickedSemaphore: DispatchSemaphore? = nil
     @State var suggestion: String? = nil
 
     @State var openThanksView: Bool = false
@@ -102,14 +99,6 @@ struct WelcomeView: View {
 
             Toggle("Store Session", isOn: $store.saveTemporarySession)
         }
-        .sheet(isPresented: $openPickIdentity) {
-            pickedSemaphore?.signal()
-            pickedSemaphore = nil
-        } content: {
-            IdentityPickerSheetView { identity in
-                pickedIdentity = identity
-            }
-        }
         .sheet(isPresented: $openThanksView, onDismiss: nil) {
             ThanksView()
         }
@@ -185,18 +174,7 @@ struct WelcomeView: View {
             // our error
             return
         }
-        RayonStore
-            .shared
-            .beginTemporarySessionStartup(for: command) {
-                // TODO: FLAT THIS REQUEST
-                let sem = DispatchSemaphore(value: 0)
-                mainActor {
-                    pickedSemaphore = sem
-                    openPickIdentity = true
-                }
-                sem.wait()
-                return pickedIdentity
-            }
+        TerminalManager.shared.createSession(withCommand: command)
     }
 
     private func refreshSuggestion() {

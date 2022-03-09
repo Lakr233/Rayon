@@ -12,6 +12,10 @@
 		501017F327CE625C0079A516 /* StatusItem+Loop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501017F227CE625C0079A516 /* StatusItem+Loop.swift */; };
 		501FF79F27CEFC8B00380D59 /* CodeMirrorUI in Frameworks */ = {isa = PBXBuildFile; productRef = 501FF79E27CEFC8B00380D59 /* CodeMirrorUI */; };
 		501FF7A527CEFF2300380D59 /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 501FF7A427CEFF2300380D59 /* SymbolPicker */; };
+		5020A65927D9884300F6EA0D /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5020A65827D9884300F6EA0D /* SettingView.swift */; };
+		5020A65B27D98B6B00F6EA0D /* TerminalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5020A65A27D98B6B00F6EA0D /* TerminalManager.swift */; };
+		5020A65E27D9980B00F6EA0D /* TerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5020A65D27D9980B00F6EA0D /* TerminalView.swift */; };
+		5020A66027D9983300F6EA0D /* TerminalManager+Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5020A65F27D9983300F6EA0D /* TerminalManager+Context.swift */; };
 		5027915627CE442600EB22DD /* MenubarTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5027915527CE442600EB22DD /* MenubarTool.swift */; };
 		5027915827CE448200EB22DD /* MenubarLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5027915727CE448200EB22DD /* MenubarLoader.swift */; };
 		5027915C27CE4A7500EB22DD /* MachineActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5027915B27CE4A7500EB22DD /* MachineActionView.swift */; };
@@ -24,18 +28,13 @@
 		505E762B27B4ECFC008D80F6 /* MachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505E762927B4ECFC008D80F6 /* MachineView.swift */; };
 		505E762E27B4FFA9008D80F6 /* MachineEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505E762C27B4FFA9008D80F6 /* MachineEditView.swift */; };
 		505E763127B5053B008D80F6 /* AlignedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505E762F27B5053B008D80F6 /* AlignedLabel.swift */; };
-		5068AB2027B5501A00564D1D /* SessionTerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5068AB1E27B5501A00564D1D /* SessionTerminalView.swift */; };
 		5068AB2327B557A000564D1D /* SnippetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5068AB2127B557A000564D1D /* SnippetView.swift */; };
-		5068AB2627B56DDB00564D1D /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5068AB2427B56DDB00564D1D /* SessionView.swift */; };
 		5068AB2927B580C600564D1D /* Generic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5068AB2727B580C600564D1D /* Generic.swift */; };
-		5068AB3027B5B97200564D1D /* SessionInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5068AB2E27B5B97200564D1D /* SessionInfoView.swift */; };
-		5068AB3327B5B98900564D1D /* SessionSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5068AB3127B5B98900564D1D /* SessionSidebarView.swift */; };
 		5068E44C27CE3AAE00F8B770 /* RayonModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5068E44B27CE3AAE00F8B770 /* RayonModule */; };
 		5082A1CF27D0E0F300C71C0F /* EULA in Resources */ = {isa = PBXBuildFile; fileRef = 5082A1CD27D0E0F300C71C0F /* EULA */; };
 		5082A1D027D0E0F300C71C0F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 5082A1CE27D0E0F300C71C0F /* LICENSE */; };
 		5091898527B80A56003C1B0F /* CreateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5091898427B80A56003C1B0F /* CreateWindow.swift */; };
 		509820A127CDB354005FAA97 /* RayonStore+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509820A027CDB354005FAA97 /* RayonStore+SwiftUI.swift */; };
-		509820A327CDB492005FAA97 /* RayonStore+Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509820A227CDB492005FAA97 /* RayonStore+Window.swift */; };
 		509F4E5227B9502500ADAF5C /* AgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F4E5027B9502500ADAF5C /* AgreementView.swift */; };
 		509F7F4127B2AF7F00F28752 /* RayonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F2C27B2AF7E00F28752 /* RayonApp.swift */; };
 		509F7F4727B2AF7F00F28752 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 509F7F2F27B2AF7F00F28752 /* Assets.xcassets */; };
@@ -43,13 +42,13 @@
 		509F7F7627B2C95F00F28752 /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F7427B2C95F00F28752 /* Sidebar.swift */; };
 		509F7F7D27B2CB0D00F28752 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F7B27B2CB0D00F28752 /* WelcomeView.swift */; };
 		509F7F8127B2CB4100F28752 /* GenericViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F7F27B2CB4100F28752 /* GenericViewModifier.swift */; };
-		509F7F8D27B2E08600F28752 /* SnippetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F8B27B2E08600F28752 /* SnippetsView.swift */; };
-		509F7F9027B2E14900F28752 /* MachineGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F8E27B2E14900F28752 /* MachineGroupView.swift */; };
+		509F7F8D27B2E08600F28752 /* SnippetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F8B27B2E08600F28752 /* SnippetManager.swift */; };
+		509F7F9027B2E14900F28752 /* MachineManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F8E27B2E14900F28752 /* MachineManagerView.swift */; };
 		509F7F9527B2E3EE00F28752 /* StarLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F9327B2E3EE00F28752 /* StarLinkView.swift */; };
 		509F7F9A27B2F84100F28752 /* SheetTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F9927B2F84100F28752 /* SheetTemplate.swift */; };
 		509F7FA027B303DF00F28752 /* PresentError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F9F27B303DF00F28752 /* PresentError.swift */; };
 		509F7FA327B303FE00F28752 /* UIBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7FA227B303FE00F28752 /* UIBridge.swift */; };
-		509F7FAD27B309EE00F28752 /* IdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7FAB27B309D200F28752 /* IdentitiesView.swift */; };
+		509F7FAD27B309EE00F28752 /* IdentityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7FAB27B309D200F28752 /* IdentityManager.swift */; };
 		509F7FB327B3893000F28752 /* GenericComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7FB127B3893000F28752 /* GenericComparator.swift */; };
 		509F7FBA27B39BA800F28752 /* DoubleConfirm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7FB827B39BA800F28752 /* DoubleConfirm.swift */; };
 		509F7FC827B3BAB300F28752 /* AuthenticateSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7FC627B3BAB300F28752 /* AuthenticateSessionView.swift */; };
@@ -58,17 +57,13 @@
 		50A8A6A627B843A2004F6DDC /* BatchExecMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A8A6A427B843A2004F6DDC /* BatchExecMainView.swift */; };
 		50A8A6A927B84EF9004F6DDC /* BatchTerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A8A6A727B84EF9004F6DDC /* BatchTerminalView.swift */; };
 		50A8A6AC27B850E9004F6DDC /* BatchSnippetExecContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A8A6AA27B850E9004F6DDC /* BatchSnippetExecContext.swift */; };
-		50BBA50727B6FAAC00CE7BB1 /* SessionHelperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BBA50527B6FAAC00CE7BB1 /* SessionHelperView.swift */; };
 		50BBA54B27B7F08800CE7BB1 /* MachinePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BBA54927B7F08800CE7BB1 /* MachinePickerView.swift */; };
 		50BBA54F27B8000900CE7BB1 /* Colorful in Frameworks */ = {isa = PBXBuildFile; productRef = 50BBA54E27B8000900CE7BB1 /* Colorful */; };
-		50BBE74E27D21F8B00063BA9 /* RDSession.Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BBE74D27D21F8B00063BA9 /* RDSession.Context.swift */; };
-		50BBE75027D21F9500063BA9 /* TerminalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BBE74F27D21F9500063BA9 /* TerminalManager.swift */; };
-		50BBE75427D21FCB00063BA9 /* RayonStore+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BBE75327D21FCB00063BA9 /* RayonStore+Session.swift */; };
-		50BBE75527D220C700063BA9 /* RDSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BBE75227D21FA700063BA9 /* RDSession.swift */; };
 		50DDB33E27B4009800C471C0 /* IdentityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DDB33C27B4009800C471C0 /* IdentityPickerView.swift */; };
 		50F64E5A27B3CB35008D52FB /* EditIdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F64E5827B3CB35008D52FB /* EditIdentitiesView.swift */; };
 		50F64E5F27B3D922008D52FB /* MachineCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F64E5D27B3D922008D52FB /* MachineCreateView.swift */; };
 		50FC9AED27B66ED1005D9755 /* HostWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FC9AEB27B66ED1005D9755 /* HostWindow.swift */; };
+		50FD878827D9CC3300EE3A5C /* PortForwardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FD878727D9CC3300EE3A5C /* PortForwardManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -88,6 +83,10 @@
 		501017ED27CE51270079A516 /* StatusItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItem.swift; sourceTree = "<group>"; };
 		501017F027CE621D0079A516 /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
 		501017F227CE625C0079A516 /* StatusItem+Loop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatusItem+Loop.swift"; sourceTree = "<group>"; };
+		5020A65827D9884300F6EA0D /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		5020A65A27D98B6B00F6EA0D /* TerminalManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalManager.swift; sourceTree = "<group>"; };
+		5020A65D27D9980B00F6EA0D /* TerminalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalView.swift; sourceTree = "<group>"; };
+		5020A65F27D9983300F6EA0D /* TerminalManager+Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TerminalManager+Context.swift"; sourceTree = "<group>"; };
 		5027915527CE442600EB22DD /* MenubarTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenubarTool.swift; sourceTree = "<group>"; };
 		5027915727CE448200EB22DD /* MenubarLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenubarLoader.swift; sourceTree = "<group>"; };
 		5027915B27CE4A7500EB22DD /* MachineActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineActionView.swift; sourceTree = "<group>"; };
@@ -98,17 +97,12 @@
 		505E762927B4ECFC008D80F6 /* MachineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineView.swift; sourceTree = "<group>"; };
 		505E762C27B4FFA9008D80F6 /* MachineEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineEditView.swift; sourceTree = "<group>"; };
 		505E762F27B5053B008D80F6 /* AlignedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignedLabel.swift; sourceTree = "<group>"; };
-		5068AB1E27B5501A00564D1D /* SessionTerminalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTerminalView.swift; sourceTree = "<group>"; };
 		5068AB2127B557A000564D1D /* SnippetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetView.swift; sourceTree = "<group>"; };
-		5068AB2427B56DDB00564D1D /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		5068AB2727B580C600564D1D /* Generic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Generic.swift; sourceTree = "<group>"; };
-		5068AB2E27B5B97200564D1D /* SessionInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionInfoView.swift; sourceTree = "<group>"; };
-		5068AB3127B5B98900564D1D /* SessionSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSidebarView.swift; sourceTree = "<group>"; };
 		5082A1CD27D0E0F300C71C0F /* EULA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = EULA; path = ../../../Resources/EULA; sourceTree = "<group>"; };
 		5082A1CE27D0E0F300C71C0F /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../../../Resources/LICENSE; sourceTree = "<group>"; };
 		5091898427B80A56003C1B0F /* CreateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWindow.swift; sourceTree = "<group>"; };
 		509820A027CDB354005FAA97 /* RayonStore+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RayonStore+SwiftUI.swift"; sourceTree = "<group>"; };
-		509820A227CDB492005FAA97 /* RayonStore+Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RayonStore+Window.swift"; sourceTree = "<group>"; };
 		509F4E5027B9502500ADAF5C /* AgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementView.swift; sourceTree = "<group>"; };
 		509F7F2C27B2AF7E00F28752 /* RayonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RayonApp.swift; sourceTree = "<group>"; };
 		509F7F2F27B2AF7F00F28752 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -118,13 +112,13 @@
 		509F7F7427B2C95F00F28752 /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		509F7F7B27B2CB0D00F28752 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		509F7F7F27B2CB4100F28752 /* GenericViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericViewModifier.swift; sourceTree = "<group>"; };
-		509F7F8B27B2E08600F28752 /* SnippetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsView.swift; sourceTree = "<group>"; };
-		509F7F8E27B2E14900F28752 /* MachineGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineGroupView.swift; sourceTree = "<group>"; };
+		509F7F8B27B2E08600F28752 /* SnippetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetManager.swift; sourceTree = "<group>"; };
+		509F7F8E27B2E14900F28752 /* MachineManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineManagerView.swift; sourceTree = "<group>"; };
 		509F7F9327B2E3EE00F28752 /* StarLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarLinkView.swift; sourceTree = "<group>"; };
 		509F7F9927B2F84100F28752 /* SheetTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetTemplate.swift; sourceTree = "<group>"; };
 		509F7F9F27B303DF00F28752 /* PresentError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentError.swift; sourceTree = "<group>"; };
 		509F7FA227B303FE00F28752 /* UIBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBridge.swift; sourceTree = "<group>"; };
-		509F7FAB27B309D200F28752 /* IdentitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentitiesView.swift; sourceTree = "<group>"; };
+		509F7FAB27B309D200F28752 /* IdentityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityManager.swift; sourceTree = "<group>"; };
 		509F7FB127B3893000F28752 /* GenericComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericComparator.swift; sourceTree = "<group>"; };
 		509F7FB827B39BA800F28752 /* DoubleConfirm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleConfirm.swift; sourceTree = "<group>"; };
 		509F7FC627B3BAB300F28752 /* AuthenticateSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateSessionView.swift; sourceTree = "<group>"; };
@@ -133,16 +127,12 @@
 		50A8A6A427B843A2004F6DDC /* BatchExecMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchExecMainView.swift; sourceTree = "<group>"; };
 		50A8A6A727B84EF9004F6DDC /* BatchTerminalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchTerminalView.swift; sourceTree = "<group>"; };
 		50A8A6AA27B850E9004F6DDC /* BatchSnippetExecContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchSnippetExecContext.swift; sourceTree = "<group>"; };
-		50BBA50527B6FAAC00CE7BB1 /* SessionHelperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHelperView.swift; sourceTree = "<group>"; };
 		50BBA54927B7F08800CE7BB1 /* MachinePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachinePickerView.swift; sourceTree = "<group>"; };
-		50BBE74D27D21F8B00063BA9 /* RDSession.Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDSession.Context.swift; sourceTree = "<group>"; };
-		50BBE74F27D21F9500063BA9 /* TerminalManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TerminalManager.swift; sourceTree = "<group>"; };
-		50BBE75227D21FA700063BA9 /* RDSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDSession.swift; sourceTree = "<group>"; };
-		50BBE75327D21FCB00063BA9 /* RayonStore+Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RayonStore+Session.swift"; sourceTree = "<group>"; };
 		50DDB33C27B4009800C471C0 /* IdentityPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPickerView.swift; sourceTree = "<group>"; };
 		50F64E5827B3CB35008D52FB /* EditIdentitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIdentitiesView.swift; sourceTree = "<group>"; };
 		50F64E5D27B3D922008D52FB /* MachineCreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineCreateView.swift; sourceTree = "<group>"; };
 		50FC9AEB27B66ED1005D9755 /* HostWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostWindow.swift; sourceTree = "<group>"; };
+		50FD878727D9CC3300EE3A5C /* PortForwardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortForwardManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,23 +153,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		505E763527B51534008D80F6 /* SessionControllers */ = {
+		5020A65727D9883600F6EA0D /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				5068AB2427B56DDB00564D1D /* SessionView.swift */,
-				50BBA50527B6FAAC00CE7BB1 /* SessionHelperView.swift */,
-				5068AB3127B5B98900564D1D /* SessionSidebarView.swift */,
-				5068AB2E27B5B97200564D1D /* SessionInfoView.swift */,
-				5068AB1E27B5501A00564D1D /* SessionTerminalView.swift */,
+				5020A65827D9884300F6EA0D /* SettingView.swift */,
 			);
-			path = SessionControllers;
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		5020A65C27D997F400F6EA0D /* TerminalController */ = {
+			isa = PBXGroup;
+			children = (
+				5020A65D27D9980B00F6EA0D /* TerminalView.swift */,
+				5020A65A27D98B6B00F6EA0D /* TerminalManager.swift */,
+				5020A65F27D9983300F6EA0D /* TerminalManager+Context.swift */,
+			);
+			path = TerminalController;
 			sourceTree = "<group>";
 		};
 		505E763C27B51942008D80F6 /* Snippet */ = {
 			isa = PBXGroup;
 			children = (
+				509F7F8B27B2E08600F28752 /* SnippetManager.swift */,
 				5068AB2127B557A000564D1D /* SnippetView.swift */,
-				509F7F8B27B2E08600F28752 /* SnippetsView.swift */,
 				5038AAAA27B5297F00BFDF55 /* EditSnippetSheetView.swift */,
 			);
 			path = Snippet;
@@ -226,9 +222,7 @@
 		5098209F27CDB34B005FAA97 /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				50BBE75127D21FA700063BA9 /* Session */,
 				509820A027CDB354005FAA97 /* RayonStore+SwiftUI.swift */,
-				509820A227CDB492005FAA97 /* RayonStore+Window.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -284,8 +278,8 @@
 			isa = PBXGroup;
 			children = (
 				509F7F9127B2E3C500F28752 /* ApplicationControllers */,
-				505E763527B51534008D80F6 /* SessionControllers */,
-				50A8A69C27B83413004F6DDC /* BatchSnippetExec */,
+				5020A65C27D997F400F6EA0D /* TerminalController */,
+				50A8A69C27B83413004F6DDC /* SnippetController */,
 				5068E44F27CE3C3B00F8B770 /* Menubar */,
 				509F7F9227B2E3D100F28752 /* Effects */,
 			);
@@ -311,6 +305,8 @@
 				50F64E5C27B3D911008D52FB /* Machine */,
 				50F64E5B27B3D47B008D52FB /* Identity */,
 				505E763C27B51942008D80F6 /* Snippet */,
+				50FD878627D9CC2600EE3A5C /* PortForward */,
+				5020A65727D9883600F6EA0D /* Setting */,
 			);
 			path = ApplicationControllers;
 			sourceTree = "<group>";
@@ -335,7 +331,7 @@
 			path = UIBridge;
 			sourceTree = "<group>";
 		};
-		50A8A69C27B83413004F6DDC /* BatchSnippetExec */ = {
+		50A8A69C27B83413004F6DDC /* SnippetController */ = {
 			isa = PBXGroup;
 			children = (
 				50A8A6AA27B850E9004F6DDC /* BatchSnippetExecContext.swift */,
@@ -344,24 +340,13 @@
 				50A8A6A127B84317004F6DDC /* BatchSnippetSidebarView.swift */,
 				50A8A6A727B84EF9004F6DDC /* BatchTerminalView.swift */,
 			);
-			path = BatchSnippetExec;
-			sourceTree = "<group>";
-		};
-		50BBE75127D21FA700063BA9 /* Session */ = {
-			isa = PBXGroup;
-			children = (
-				50BBE75227D21FA700063BA9 /* RDSession.swift */,
-				50BBE74D27D21F8B00063BA9 /* RDSession.Context.swift */,
-				50BBE75327D21FCB00063BA9 /* RayonStore+Session.swift */,
-				50BBE74F27D21F9500063BA9 /* TerminalManager.swift */,
-			);
-			path = Session;
+			path = SnippetController;
 			sourceTree = "<group>";
 		};
 		50F64E5B27B3D47B008D52FB /* Identity */ = {
 			isa = PBXGroup;
 			children = (
-				509F7FAB27B309D200F28752 /* IdentitiesView.swift */,
+				509F7FAB27B309D200F28752 /* IdentityManager.swift */,
 				50DDB33C27B4009800C471C0 /* IdentityPickerView.swift */,
 				50F64E5827B3CB35008D52FB /* EditIdentitiesView.swift */,
 			);
@@ -371,11 +356,11 @@
 		50F64E5C27B3D911008D52FB /* Machine */ = {
 			isa = PBXGroup;
 			children = (
+				509F7F8E27B2E14900F28752 /* MachineManagerView.swift */,
 				50F64E5D27B3D922008D52FB /* MachineCreateView.swift */,
 				505E762C27B4FFA9008D80F6 /* MachineEditView.swift */,
 				505E762927B4ECFC008D80F6 /* MachineView.swift */,
 				5027915B27CE4A7500EB22DD /* MachineActionView.swift */,
-				509F7F8E27B2E14900F28752 /* MachineGroupView.swift */,
 				50BBA54927B7F08800CE7BB1 /* MachinePickerView.swift */,
 			);
 			path = Machine;
@@ -393,6 +378,14 @@
 				509F7F7B27B2CB0D00F28752 /* WelcomeView.swift */,
 			);
 			path = Application;
+			sourceTree = "<group>";
+		};
+		50FD878627D9CC2600EE3A5C /* PortForward */ = {
+			isa = PBXGroup;
+			children = (
+				50FD878727D9CC3300EE3A5C /* PortForwardManager.swift */,
+			);
+			path = PortForward;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -476,58 +469,53 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50BBA50727B6FAAC00CE7BB1 /* SessionHelperView.swift in Sources */,
 				50A8A6A327B84317004F6DDC /* BatchSnippetSidebarView.swift in Sources */,
 				501017F127CE621D0079A516 /* EventMonitor.swift in Sources */,
 				509F7FBA27B39BA800F28752 /* DoubleConfirm.swift in Sources */,
-				50BBE74E27D21F8B00063BA9 /* RDSession.Context.swift in Sources */,
 				509F7F4127B2AF7F00F28752 /* RayonApp.swift in Sources */,
 				5027F25327B81C5200F422BB /* ThanksView.swift in Sources */,
 				5038AAAC27B5297F00BFDF55 /* EditSnippetSheetView.swift in Sources */,
 				509F7FA327B303FE00F28752 /* UIBridge.swift in Sources */,
-				50BBE75027D21F9500063BA9 /* TerminalManager.swift in Sources */,
 				501017F327CE625C0079A516 /* StatusItem+Loop.swift in Sources */,
 				50A8A6A627B843A2004F6DDC /* BatchExecMainView.swift in Sources */,
 				50A8A69B27B833FE004F6DDC /* BatchSnippetExecView.swift in Sources */,
 				509F7FA027B303DF00F28752 /* PresentError.swift in Sources */,
 				50F64E5A27B3CB35008D52FB /* EditIdentitiesView.swift in Sources */,
-				509F7F9027B2E14900F28752 /* MachineGroupView.swift in Sources */,
-				50BBE75427D21FCB00063BA9 /* RayonStore+Session.swift in Sources */,
+				509F7F9027B2E14900F28752 /* MachineManagerView.swift in Sources */,
 				509F7F9527B2E3EE00F28752 /* StarLinkView.swift in Sources */,
 				509F7F8127B2CB4100F28752 /* GenericViewModifier.swift in Sources */,
 				50A8A6AC27B850E9004F6DDC /* BatchSnippetExecContext.swift in Sources */,
+				5020A65927D9884300F6EA0D /* SettingView.swift in Sources */,
 				50DDB33E27B4009800C471C0 /* IdentityPickerView.swift in Sources */,
 				505E762E27B4FFA9008D80F6 /* MachineEditView.swift in Sources */,
-				5068AB2027B5501A00564D1D /* SessionTerminalView.swift in Sources */,
 				505E762B27B4ECFC008D80F6 /* MachineView.swift in Sources */,
-				50BBE75527D220C700063BA9 /* RDSession.swift in Sources */,
 				5027F25D27B8210300F422BB /* LicenseView.swift in Sources */,
 				50BBA54B27B7F08800CE7BB1 /* MachinePickerView.swift in Sources */,
 				50A8A6A927B84EF9004F6DDC /* BatchTerminalView.swift in Sources */,
 				5068AB2327B557A000564D1D /* SnippetView.swift in Sources */,
-				509F7F8D27B2E08600F28752 /* SnippetsView.swift in Sources */,
+				509F7F8D27B2E08600F28752 /* SnippetManager.swift in Sources */,
+				5020A65E27D9980B00F6EA0D /* TerminalView.swift in Sources */,
 				5027915627CE442600EB22DD /* MenubarTool.swift in Sources */,
 				505E763127B5053B008D80F6 /* AlignedLabel.swift in Sources */,
+				50FD878827D9CC3300EE3A5C /* PortForwardManager.swift in Sources */,
+				5020A65B27D98B6B00F6EA0D /* TerminalManager.swift in Sources */,
 				5091898527B80A56003C1B0F /* CreateWindow.swift in Sources */,
 				509F4E5227B9502500ADAF5C /* AgreementView.swift in Sources */,
 				509820A127CDB354005FAA97 /* RayonStore+SwiftUI.swift in Sources */,
-				5068AB3027B5B97200564D1D /* SessionInfoView.swift in Sources */,
 				509F7F7627B2C95F00F28752 /* Sidebar.swift in Sources */,
 				50F64E5F27B3D922008D52FB /* MachineCreateView.swift in Sources */,
 				509F7F6F27B2C32900F28752 /* MainView.swift in Sources */,
-				5068AB2627B56DDB00564D1D /* SessionView.swift in Sources */,
 				501017EE27CE51270079A516 /* StatusItem.swift in Sources */,
-				5068AB3327B5B98900564D1D /* SessionSidebarView.swift in Sources */,
 				5027915C27CE4A7500EB22DD /* MachineActionView.swift in Sources */,
 				509F7FC827B3BAB300F28752 /* AuthenticateSessionView.swift in Sources */,
 				5068AB2927B580C600564D1D /* Generic.swift in Sources */,
 				509F7F7D27B2CB0D00F28752 /* WelcomeView.swift in Sources */,
 				509F7FB327B3893000F28752 /* GenericComparator.swift in Sources */,
-				509820A327CDB492005FAA97 /* RayonStore+Window.swift in Sources */,
 				509F7F9A27B2F84100F28752 /* SheetTemplate.swift in Sources */,
-				509F7FAD27B309EE00F28752 /* IdentitiesView.swift in Sources */,
+				509F7FAD27B309EE00F28752 /* IdentityManager.swift in Sources */,
 				50FC9AED27B66ED1005D9755 /* HostWindow.swift in Sources */,
 				5027915827CE448200EB22DD /* MenubarLoader.swift in Sources */,
+				5020A66027D9983300F6EA0D /* TerminalManager+Context.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

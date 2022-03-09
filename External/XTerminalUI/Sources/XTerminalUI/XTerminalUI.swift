@@ -141,17 +141,28 @@ class XTerminalCore: XTerminal {
         writeBuffer = []
         lock.unlock()
 
-        let write = copy.map { $0.base64EncodedString() }
-
-        DispatchQueue.main.async {
-            for data in write {
-                let script = "term.writeBase64('\(data)');"
-                webView.evaluateJavaScript(script) { _, error in
-                    if let error = error {
-                        debugPrint(error.localizedDescription)
-                        debugPrint(script)
+        let writes = copy
+            .map { $0.base64EncodedString() }
+        for write in writes {
+            var attempt = 0
+            var success: Bool = false
+            while (!success && attempt < 5) {
+                attempt += 1
+                let sem = DispatchSemaphore(value: 0)
+                DispatchQueue.main.async {
+                    let script = "term.writeBase64('\(write)');"
+                    webView.evaluateJavaScript(script) { _, error in
+                        if let error = error {
+                            debugPrint(error.localizedDescription)
+                            debugPrint(script)
+                        } else {
+                            success = true
+                        }
+                        sem.signal()
                     }
                 }
+                let _ = sem.wait(timeout: .now() + 1)
+                usleep(1000)
             }
         }
     }

@@ -10,172 +10,172 @@ import SwiftUI
 
 struct SidebarView: View {
     @EnvironmentObject var store: RayonStore
-    @SceneStorage("sidebar.selection") var sidebarSelection: String = ""
-    @State var selection: NavigationItem? = nil
-
-    @StateObject var sessionManager = RDSessionManager.shared
+    @EnvironmentObject var terminalManager: TerminalManager
 
     @State var openServerSelector: Bool = false
 
-    enum NavigationItem: String {
-        case quickConnect
-        case servers
-        case identities
-        case snippets
-    }
-
     var body: some View {
-        List(selection: $selection) {
+        List {
             NavigationLink {
                 WelcomeView()
             } label: {
                 Label("Welcome", systemImage: "sun.min.fill")
             }
-            .tag(NavigationItem.quickConnect)
-            Section("Manager") {
-                NavigationLink {
-                    MachineGroupView()
-                } label: {
-                    Label("Server", systemImage: "server.rack")
-                }
-                .badge(store.machineGroup.count)
-                .tag(NavigationItem.servers)
-                NavigationLink {
-                    IdentitiesView()
-                } label: {
-                    Label("Identity", systemImage: "key.fill")
-                }
-                .badge(store.identityGroup.count)
-                .tag(NavigationItem.identities)
-                NavigationLink {
-                    SnippetsView()
-                } label: {
-                    Label("Snippet", systemImage: "arrow.right.doc.on.clipboard")
-                }
-                .badge(store.snippetGroup.count)
-                .tag(NavigationItem.snippets)
-            }
-            Section("Session") {
-                if sessionManager.remoteSessions.count == 0 {
-                    Button {} label: {
-                        HStack {
-                            Label("No Session", systemImage: "app.dashed")
-                            Spacer()
-                        }
-                        .background(Color.accentColor.opacity(0.0001))
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .expended()
-                } else {
-                    ForEach(sessionManager.remoteSessions) { session in
-                        Button {
-                            store.requestSessionInterface(session: session.id)
-                        } label: {
-                            HStack {
-                                Label(session.context.machine.name, systemImage: "play.fill")
-                                Spacer()
-                            }
-                            .background(Color.accentColor.opacity(0.001))
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        .contextMenu {
-                            Button {
-                                UIBridge.requiresConfirmation(
-                                    message: "This will close all sub-channel associated to this session"
-                                ) { confirmed in
-                                    if confirmed {
-                                        store.terminateSession(with: session.id)
-                                    }
-                                }
-                            } label: {
-                                Label("Close Connection", image: "trash")
-                            }
-                        }
-                    }
-                    Button {
-                        UIBridge.requiresConfirmation(
-                            message: "Are you sure you want to stop all session?")
-                        { confirmed in
-                                guard confirmed else {
-                                    return
-                                }
-                                for session in sessionManager.remoteSessions {
-                                    store.terminateSession(with: session.id)
-                                }
-                            }
-                    } label: {
-                        HStack {
-                            Label("Stop All", systemImage: "trash")
-                            Spacer()
-                        }
-                        .background(Color.accentColor.opacity(0.0001))
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .expended()
-                }
-                Button {
-                    openServerSelector = true
-                } label: {
-                    HStack {
-                        Label("Batch Startup", systemImage: "wind")
-                        Spacer()
-                    }
-                    .background(Color.accentColor.opacity(0.0001))
-                }
-                .sheet(isPresented: $openServerSelector, onDismiss: nil, content: {
-                    MachinePickerView(onComplete: { machines in
-                        for machine in machines {
-                            store.beginSessionStartup(for: machine)
-                        }
-                    }, allowSelectMany: true)
-                })
-                .buttonStyle(PlainButtonStyle())
-                .expended()
-            }
-            Section("Recent") {
-                if store.recentRecord.count > 0 {
-                    ForEach(store.recentRecord) { record in
-                        switch record {
-                        case let .command(command): recentButton(for: command)
-                        case let .machine(machine): recentButton(for: machine)
-                        }
-                    }
-                    Button {
-                        clearRecentTapped()
-                    } label: {
-                        HStack {
-                            Label("Clear Recent", systemImage: "trash")
-                            Spacer()
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .expended()
-                } else {
-                    Button {} label: {
-                        HStack {
-                            Label("No Recent", systemImage: "arrow.counterclockwise")
-                            Spacer()
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .expended()
-                }
-            }
-        }
-        .onAppear {
-            selection = NavigationItem(rawValue: sidebarSelection)
-        }
-        .onChange(of: selection) { newValue in
-            sidebarSelection = newValue?.rawValue ?? ""
+            manager
+            session
+            recent
         }
         .navigationTitle("Rayon")
         .frame(minWidth: 200)
     }
 
-    // copied from welcome view
-    @State var openPickIdentity: Bool = false
-    @State var pickedIdentity: RDIdentity.ID? = nil
-    @State var pickedSemaphore: DispatchSemaphore? = nil
+    var manager: some View {
+        Section("Manager") {
+            NavigationLink {
+                MachineManagerView()
+            } label: {
+                Label("Server", systemImage: "server.rack")
+            }
+            .badge(store.machineGroup.count)
+            NavigationLink {
+                IdentityManager()
+            } label: {
+                Label("Identity", systemImage: "person.fill")
+            }
+            .badge(store.identityGroup.count)
+            NavigationLink {
+                SnippetManager()
+            } label: {
+                Label("Snippet", systemImage: "arrow.right.doc.on.clipboard")
+            }
+            .badge(store.snippetGroup.count)
+            NavigationLink {
+                PortForwardManager()
+            } label: {
+                Label("Port Forward", systemImage: "arrowshape.turn.up.right.circle.fill")
+            }
+            .badge(store.portForwardGroup.count)
+            NavigationLink {
+                SettingView()
+            } label: {
+                Label("Setting", systemImage: "gearshape.fill")
+            }
+        }
+    }
+
+    var session: some View {
+        Section("Session") {
+            if terminalManager.sessionContexts.count == 0 {
+                Button {} label: {
+                    HStack {
+                        Label("No Session", systemImage: "app.dashed")
+                        Spacer()
+                    }
+                    .background(Color.accentColor.opacity(0.0001))
+                }
+                .buttonStyle(PlainButtonStyle())
+                .expended()
+            } else {
+                ForEach(terminalManager.sessionContexts) { context in
+                    NavigationLink {
+                        TerminalView(context: context)
+                    } label: {
+                        if context.remoteType == .machine {
+                            Label(context.machine.name, systemImage: "terminal")
+                        } else {
+                            Label(context.command?.command ?? "?", systemImage: "text.and.command.macwindow")
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .contextMenu {
+                        Button {
+                            if terminalManager.sessionAlive(forContext: context.id) {
+                                UIBridge.requiresConfirmation(
+                                    message: "Terminal session still alive, are you sure you want to terminate?"
+                                ) { confirmed in
+                                    if confirmed {
+                                        terminalManager.closeSession(withContextID: context.id)
+                                    }
+                                }
+                            } else {
+                                terminalManager.closeSession(withContextID: context.id)
+                            }
+                        } label: {
+                            Label("Close Connection", image: "trash")
+                        }
+                    }
+                }
+                Button {
+                    UIBridge.requiresConfirmation(
+                        message: "Are you sure you want to stop all session?")
+                    { confirmed in
+                            guard confirmed else {
+                                return
+                            }
+                            terminalManager.closeAll()
+                        }
+                } label: {
+                    HStack {
+                        Label("Stop All", systemImage: "trash")
+                        Spacer()
+                    }
+                    .background(Color.accentColor.opacity(0.0001))
+                }
+                .buttonStyle(PlainButtonStyle())
+                .expended()
+            }
+            Button {
+                openServerSelector = true
+            } label: {
+                HStack {
+                    Label("Batch Startup", systemImage: "wind")
+                    Spacer()
+                }
+                .background(Color.accentColor.opacity(0.0001))
+            }
+            .sheet(isPresented: $openServerSelector, onDismiss: nil, content: {
+                MachinePickerView(onComplete: { machines in
+                    for machine in machines {
+                        terminalManager.createSession(withMachineID: machine)
+                    }
+                }, allowSelectMany: true)
+            })
+            .buttonStyle(PlainButtonStyle())
+            .expended()
+        }
+    }
+
+    var recent: some View {
+        Section("Recent") {
+            if store.recentRecord.count > 0 {
+                ForEach(store.recentRecord) { record in
+                    switch record {
+                    case let .command(command): recentButton(for: command)
+                    case let .machine(machine): recentButton(for: machine)
+                    }
+                }
+                Button {
+                    clearRecentTapped()
+                } label: {
+                    HStack {
+                        Label("Clear Recent", systemImage: "trash")
+                        Spacer()
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+                .expended()
+            } else {
+                Button {} label: {
+                    HStack {
+                        Label("No Recent", systemImage: "arrow.counterclockwise")
+                        Spacer()
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+                .expended()
+            }
+        }
+    }
 
     func recentButton(for command: SSHCommandReader) -> some View {
         Button {
@@ -183,18 +183,7 @@ struct SidebarView: View {
                 message: "Open connection with \(command.command)?"
             ) { confirmed in
                 if confirmed {
-                    store.beginTemporarySessionStartup(for: command, requestIdentityFromBackgroundThread: {
-                        // TODO: FLAT THIS REQUEST
-                        let sem = DispatchSemaphore(value: 0)
-                        mainActor {
-                            pickedSemaphore = sem
-                            openPickIdentity = true
-                        }
-                        sem.wait()
-                        return pickedIdentity
-                    }, saveSessionOverrideControl: false) { sessionId in
-                        RayonStore.shared.requestSessionInterface(session: sessionId)
-                    }
+                    terminalManager.createSession(withCommand: command)
                 }
             }
         } label: {
@@ -218,14 +207,6 @@ struct SidebarView: View {
             }
             .background(Color.accentColor.opacity(0.0001))
         }
-        .sheet(isPresented: $openPickIdentity) {
-            pickedSemaphore?.signal()
-            pickedSemaphore = nil
-        } content: {
-            IdentityPickerSheetView { identity in
-                pickedIdentity = identity
-            }
-        }
         .buttonStyle(PlainButtonStyle())
         .expended()
     }
@@ -238,7 +219,7 @@ struct SidebarView: View {
                         message: "Open connection to \(store.machineGroup[machine].name)?"
                     ) { confirmed in
                         if confirmed {
-                            store.beginSessionStartup(for: machine)
+                            terminalManager.createSession(withMachineID: machine)
                         }
                     }
                 } label: {

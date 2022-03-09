@@ -1,5 +1,5 @@
 //
-//  EditIdentitiesView.swift
+//  EditIdentityManager.swift
 //  Rayon
 //
 //  Created by Lakr Aream on 2022/2/9.
@@ -8,7 +8,7 @@
 import RayonModule
 import SwiftUI
 
-struct EditIdentitiesView: View {
+struct EditIdentityManager: View {
     @Binding var selection: RDIdentity.ID?
 
     @State var username: String = ""

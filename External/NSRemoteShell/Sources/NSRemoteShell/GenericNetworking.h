@@ -7,16 +7,26 @@
 
 #import <Foundation/Foundation.h>
 
+#import "GenericHeaders.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface GenericNetworking : NSObject
 
 + (NSArray *)resolveIpAddressesFor:(NSString*)candidateHost;
 
-+ (nullable CFSocketRef)connectSocketWith:(id)candidateHostData
-                                 withPort:(long)candidatePort
-                              withTimeout:(double)candidateTimeout
-                            withIpAddress:(NSMutableString*)resolvedAddress;
++ (BOOL)isValidateWithPort:(NSNumber*)port;
+
++ (int)createSocketNonblockingListenerWithLocalPort:(NSNumber*)localPort;
+
++ (int)createSocketWithTargetHost:(NSString*)targetHost
+                   withTargetPort:(NSNumber*)targetPort
+             requireNonblockingIO:(BOOL)useNonblocking
+;
+
++ (void)destroyNativeSocket:(int)socketDescriptor;
+
++ (NSString*)getResolvedIpAddressWith:(int)socket;
 
 @end
 

@@ -23,17 +23,17 @@ struct IdentityPickerSheetView: View {
             title: "Select Identity",
             body: AnyView(sheetBody)
         ) { confirmed in
-            var shouldDismiss = false
-            defer { if shouldDismiss { presentationMode.wrappedValue.dismiss() } }
+            defer {
+                presentationMode.wrappedValue.dismiss()
+            }
             if !confirmed {
-                shouldDismiss = true
+                onComplete(nil)
                 return
             }
             onComplete(currentSelection)
-            shouldDismiss = true
         }
         .sheet(isPresented: $openCreateSheet, onDismiss: nil) {
-            EditIdentitiesView(selection: .constant(nil)) {
+            EditIdentityManager(selection: .constant(nil)) {
                 currentSelection = $0
             }
         }

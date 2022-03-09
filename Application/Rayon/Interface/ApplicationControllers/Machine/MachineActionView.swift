@@ -13,8 +13,6 @@ struct MachineActionView: View {
 
     @EnvironmentObject var store: RayonStore
 
-    @StateObject var sessionManager = RDSessionManager.shared
-
     @State var openEdit: Bool = false
 
     var body: some View {
@@ -64,19 +62,14 @@ struct MachineActionView: View {
     }
 
     func beingConnect() {
-        var lookup = false
-        for session in sessionManager.remoteSessions where session.context.machine.id == machine {
-            lookup = true
-            break
-        }
-        if lookup {
+        if TerminalManager.shared.sessionExists(for: machine) {
             UIBridge.requiresConfirmation(message: "A session is already in place, are you sure to open another?") { confirmed in
                 if confirmed {
-                    store.beginSessionStartup(for: machine)
+                    TerminalManager.shared.createSession(withMachineID: machine)
                 }
             }
         } else {
-            store.beginSessionStartup(for: machine)
+            TerminalManager.shared.createSession(withMachineID: machine)
         }
     }
 

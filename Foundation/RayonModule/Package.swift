@@ -7,7 +7,7 @@ let package = Package(
     name: "RayonModule",
     platforms: [
         .macOS(.v11),
-        .iOS(.v14),
+        .iOS(.v13),
         .watchOS(.v7),
     ],
     products: [

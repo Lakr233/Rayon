@@ -14,6 +14,7 @@ import XTerminalUI
 @main
 struct RayonApp: App {
     @StateObject private var store = RayonStore.shared
+    @StateObject private var terminalManager = TerminalManager.shared
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
@@ -34,6 +35,7 @@ struct RayonApp: App {
         WindowGroup {
             MainView()
                 .environmentObject(store)
+                .environmentObject(terminalManager)
         }
         .windowToolbarStyle(.unifiedCompact)
         .commands {
@@ -62,14 +64,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {
-        if RDSessionManager.shared.remoteSessions.count > 0 {
+        if !TerminalManager.shared.sessionContexts.isEmpty {
             UIBridge.requiresConfirmation(
                 message: "One or more session is running, do you want to close them all?"
             ) { confirmed in
                 guard confirmed else { return }
-                for session in RDSessionManager.shared.remoteSessions {
-                    RayonStore.shared.terminateSession(with: session.id)
-                }
+                TerminalManager.shared.closeAll()
                 NSApp.terminate(nil)
             }
             return .terminateCancel

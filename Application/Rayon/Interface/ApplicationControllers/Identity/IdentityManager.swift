@@ -1,5 +1,5 @@
 //
-//  IdentitiesView.swift
+//  IdentityManager.swift
 //  Rayon
 //
 //  Created by Lakr Aream on 2022/2/9.
@@ -8,7 +8,7 @@
 import RayonModule
 import SwiftUI
 
-struct IdentitiesView: View {
+struct IdentityManager: View {
     @EnvironmentObject var store: RayonStore
 
     var tableItems: [RDIdentity] {
@@ -143,7 +143,7 @@ struct IdentitiesView: View {
             .sheet(isPresented: $openCreateSheet) {
                 editSelection = nil
             } content: {
-                EditIdentitiesView(selection: $editSelection)
+                EditIdentityManager(selection: $editSelection)
             }
     }
 

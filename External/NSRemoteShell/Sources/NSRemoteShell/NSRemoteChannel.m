@@ -9,6 +9,9 @@
 
 @interface NSRemoteChannel ()
 
+@property (nonatomic, nullable, readwrite, assign) LIBSSH2_SESSION *representedSession;
+@property (nonatomic, nullable, readwrite, assign) LIBSSH2_CHANNEL *representedChannel;
+
 @property (nonatomic, nullable, strong) NSRemoteChannelRequestDataBlock requestDataBlock;
 @property (nonatomic, nullable, strong) NSRemoteChannelReceiveDataBlock receiveDataBlock;
 @property (nonatomic, nullable, strong) NSRemoteChannelContinuationBlock continuationDecisionBlock;
@@ -42,68 +45,40 @@
 
 - (void)dealloc {
     NSLog(@"channel object at %p deallocating", self);
-    [self uncheckedConcurrencyChannelCloseIfNeeded];
-}
-
-// MARK: - EVENT LOOP
-
-- (void)insanityUncheckedEventLoop {
-    if (self.channelCompleted) { return; }
-    if (![self seatbeltCheckPassed]) { return; }
-    [self uncheckedConcurrencyChannelRead];
-    [self uncheckedConcurrencyChannelTerminalSizeUpdate];
-    [self uncheckedConcurrencyChannelWrite];
-    [self uncheckedConcurrencyChannelShouldTerminate];
+    [self uncheckedConcurrencyDisconnectAndPrepareForRelease];
 }
 
 // MARK: - SETUP
 
 - (void)onTermination:(dispatch_block_t)terminationHandler {
-    if (terminationHandler) {
-        self.terminationBlock = terminationHandler;
-    } else {
-        self.terminationBlock = NULL;
-    }
+    self.terminationBlock = terminationHandler;
 }
 
 - (void)setRequestDataChain:(NSRemoteChannelRequestDataBlock _Nonnull)requestData {
-    if (!requestData) {
-        self.requestDataBlock = NULL;
-    } else {
-        self.requestDataBlock = requestData;
-    }
+    self.requestDataBlock = requestData;
 }
 
 - (void)setRecivedDataChain:(NSRemoteChannelReceiveDataBlock _Nonnull)receiveData {
-    if (!receiveData) {
-        self.receiveDataBlock = NULL;
-    } else {
-        self.receiveDataBlock = receiveData;
-    }
+    self.receiveDataBlock = receiveData;
 }
 
 - (void)setContinuationChain:(NSRemoteChannelContinuationBlock _Nonnull)continuation {
-    if (!continuation) {
-        self.continuationDecisionBlock = NULL;
-    } else {
-        self.continuationDecisionBlock = continuation;
-    }
+    self.continuationDecisionBlock = continuation;
 }
 
 - (void)setTerminalSizeChain:(NSRemoteChannelTerminalSizeBlock _Nonnull)terminalSize {
-    if (terminalSize) {
-        self.requestTerminalSizeBlock = terminalSize;
-    } else {
-        self.requestTerminalSizeBlock = NULL;
-    }
+    self.requestTerminalSizeBlock = terminalSize;
 }
 
 - (void)setChannelTimeoutWith:(double)timeoutValueFromNowInSecond {
     if (timeoutValueFromNowInSecond <= 0) {
-        return;
+#if DEBUG
+        NSLog(@"setChannelTimeoutWith was called with negative value or zero, setChannelTimeoutWithScheduled skipped");
+#endif
+    } else {
+        NSDate *schedule = [[NSDate alloc] initWithTimeIntervalSinceNow:timeoutValueFromNowInSecond];
+        [self setChannelTimeoutWithScheduled:schedule];
     }
-    NSDate *schedule = [[NSDate alloc] initWithTimeIntervalSinceNow:timeoutValueFromNowInSecond];
-    [self setChannelTimeoutWithScheduled:schedule];
 }
 
 - (void)setChannelTimeoutWithScheduled:(NSDate*)timeoutDate {
@@ -113,7 +88,7 @@
 - (void)setChannelCompleted:(BOOL)channelCompleted {
     if (_channelCompleted != channelCompleted) {
         _channelCompleted = channelCompleted;
-        [self uncheckedConcurrencyChannelCloseIfNeeded];
+        [self uncheckedConcurrencyDisconnectAndPrepareForRelease];
     }
 }
 
@@ -228,22 +203,34 @@
     }
 }
 
-- (void)uncheckedConcurrencyChannelCloseIfNeeded {
-    // may called from outside, and don't loop here
-//    if (![self seatbeltCheckPassed]) { return; }
+- (void)uncheckedConcurrencyCallNonblockingOperations {
+    if (self.channelCompleted) { return; }
+    if (![self seatbeltCheckPassed]) { return; }
+    [self uncheckedConcurrencyChannelRead];
+    [self uncheckedConcurrencyChannelTerminalSizeUpdate];
+    [self uncheckedConcurrencyChannelWrite];
+    [self uncheckedConcurrencyChannelShouldTerminate];
+}
+
+- (BOOL)uncheckedConcurrencyInsanityCheckAndReturnDidSuccess {
+    do {
+        if (self.channelCompleted) { break; }
+        if (![self seatbeltCheckPassed]) { break; }
+        return YES;
+    } while (0);
+    return NO;
+}
+
+- (void)uncheckedConcurrencyDisconnectAndPrepareForRelease {
+    if (!self.channelCompleted) { self.channelCompleted = YES; }
     if (!self.representedSession) { return; }
     if (!self.representedChannel) { return; }
-    if (!self.channelCompleted) { self.channelCompleted = YES; }
     LIBSSH2_CHANNEL *channel = self.representedChannel;
     self.representedChannel = NULL;
     self.representedSession = NULL;
-    while (libssh2_channel_send_eof(channel) == LIBSSH2_ERROR_EAGAIN) {};
-    while (libssh2_channel_close(channel) == LIBSSH2_ERROR_EAGAIN) {};
-    while (libssh2_channel_wait_closed(channel) == LIBSSH2_ERROR_EAGAIN) {};
-    while (libssh2_channel_free(channel) == LIBSSH2_ERROR_EAGAIN) {};
-    if (self.terminationBlock) {
-        self.terminationBlock();
-    }
+    LIBSSH2_CHANNEL_SHUTDOWN(channel);
+    if (self.terminationBlock) { self.terminationBlock(); }
     self.terminationBlock = NULL;
 }
+
 @end

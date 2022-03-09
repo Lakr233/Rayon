@@ -1,5 +1,5 @@
 //
-//  MachineGroupView.swift
+//  MachineManagerView.swift
 //  Rayon
 //
 //  Created by Lakr Aream on 2022/2/9.
@@ -8,7 +8,7 @@
 import RayonModule
 import SwiftUI
 
-struct MachineGroupView: View {
+struct MachineManagerView: View {
     @EnvironmentObject var store: RayonStore
 
     @State var searchText: String = ""

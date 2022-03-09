@@ -1,5 +1,5 @@
 //
-//  SnippetsView.swift
+//  SnippetManager.swift
 //  Rayon
 //
 //  Created by Lakr Aream on 2022/2/9.
@@ -9,7 +9,7 @@ import CodeMirrorUI
 import RayonModule
 import SwiftUI
 
-struct SnippetsView: View {
+struct SnippetManager: View {
     @EnvironmentObject var store: RayonStore
 
     @State var searchText: String = ""

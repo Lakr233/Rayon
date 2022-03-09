@@ -7,14 +7,16 @@ let package = Package(
     products: [
         .library(
             name: "NSRemoteShell",
-            targets: ["NSRemoteShell"]),
+            targets: ["NSRemoteShell"]
+        ),
     ],
     dependencies: [
-        .package(name: "CSSH", path: "External/CSSH")
+        .package(name: "CSSH", path: "External/CSSH"),
     ],
     targets: [
         .target(
             name: "NSRemoteShell",
-            dependencies: ["CSSH"]),
+            dependencies: ["CSSH"]
+        ),
     ]
 )
