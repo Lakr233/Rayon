@@ -12,22 +12,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSRemoteChannel : NSObject
+@interface NSRemoteChannel : NSObject <NSRemoteOperableObject>
 
 typedef NSString* _Nonnull (^NSRemoteChannelRequestDataBlock)(void);
 typedef void (^NSRemoteChannelReceiveDataBlock)(NSString *);
 typedef BOOL (^NSRemoteChannelContinuationBlock)(void);
 typedef CGSize (^NSRemoteChannelTerminalSizeBlock)(void);
 
-@property (nonatomic, nullable, assign) LIBSSH2_SESSION *representedSession;
-@property (nonatomic, nullable, assign) LIBSSH2_CHANNEL *representedChannel;
+@property (nonatomic, nullable, readonly, assign) LIBSSH2_SESSION *representedSession;
+@property (nonatomic, nullable, readonly, assign) LIBSSH2_CHANNEL *representedChannel;
 
 @property (nonatomic, readonly) BOOL channelCompleted;
 
 - (instancetype)initWithRepresentedSession:(LIBSSH2_SESSION*)representedSession
                     withRepresentedChanel:(LIBSSH2_CHANNEL*)representedChannel;
-
-- (void)insanityUncheckedEventLoop;
 
 - (void)onTermination:(dispatch_block_t)terminationHandler;
 
@@ -40,7 +38,10 @@ typedef CGSize (^NSRemoteChannelTerminalSizeBlock)(void);
 - (void)setChannelTimeoutWithScheduled:(NSDate*)timeoutDate;
 
 - (void)uncheckedConcurrencyChannelTerminalSizeUpdate;
-- (void)uncheckedConcurrencyChannelCloseIfNeeded;
+
+- (void)uncheckedConcurrencyCallNonblockingOperations;
+- (BOOL)uncheckedConcurrencyInsanityCheckAndReturnDidSuccess;
+- (void)uncheckedConcurrencyDisconnectAndPrepareForRelease;
 
 @end
 

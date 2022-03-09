@@ -19,7 +19,6 @@ __attribute__((constructor)) void libssh2_constructor() {
         kLIBSSH2_CONSTRUCTOR_SUCCESS = 1;
         NSLog(@"libssh2 init success");
     }
-    [TSEventLoop sharedLoop];
 }
 
 __attribute__((destructor)) void libssh2_destructor() {

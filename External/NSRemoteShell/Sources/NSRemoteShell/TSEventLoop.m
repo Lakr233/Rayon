@@ -15,39 +15,29 @@
 @property (nonatomic, nonnull, strong) NSRunLoop *associatedRunLoop;
 @property (nonatomic, nonnull, strong) NSTimer *associatedTimer;
 @property (nonatomic, nonnull, strong) NSPort *associatedPort;
-
-@property (nonatomic, nonnull, strong) NSLock *concurrentLock;
-@property (nonatomic, nonnull, strong) dispatch_queue_t concurrentQueue;
-@property (nonatomic, nonnull, strong) NSHashTable<NSRemoteShell *> *delegatedObjects;
+@property (nonatomic, nullable, weak) NSRemoteShell *parent;
 
 @end
 
 @implementation TSEventLoop
 
-+ (instancetype)sharedLoop {
-    static TSEventLoop *shared = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        shared = [[self alloc] init];
-    });
-    return shared;
-}
-
-- (instancetype)init {
+- (instancetype)initWithParent:(__weak NSRemoteShell*)parent {
     if (self = [super init]) {
-        _concurrentQueue = dispatch_queue_create("wiki.qaq.remote.event.concurrent", DISPATCH_QUEUE_CONCURRENT);
-        _delegatedObjects = [NSHashTable weakObjectsHashTable];
+        _parent = parent;
         _associatedThread = [[NSThread alloc] initWithTarget:self
                                                     selector:@selector(associatedThreadHandler)
                                                       object:NULL];
-        _concurrentLock = [[NSLock alloc] init];
+        NSString *threadName = [[NSString alloc] initWithFormat:@"wiki.qaq.shell.%p", parent];
+        [_associatedThread setName:threadName];
+        NSLog(@"opening thread %@", threadName);
         [_associatedThread start];
     }
     return self;
 }
 
 - (void)dealloc {
-    NSLog(@"deallocating %p", self);
+    NSLog(@"TSEventLoop object at %p deallocating", self);
+    [self destroyLoop];
 }
 
 - (void)explicitRequestHandle {
@@ -71,7 +61,7 @@
                             repeats:YES];
     [self.associatedRunLoop addTimer:self.associatedTimer forMode:NSRunLoopCommonModes];
     [self.associatedRunLoop run];
-    assert(false);
+    NSLog(@"thread %@ exiting", [[NSThread currentThread] name]);
 }
 
 - (void)handleMachMessage:(void *)msg {
@@ -80,28 +70,19 @@
 }
 
 - (void)associatedLoopHandler {
-    BOOL tryLock = [self.concurrentLock tryLock];
-    if (tryLock) {
-        [self processUncheckedLoopDispatch];
-        [self.concurrentLock unlock];
-    }
+#if DEBUG
+    NSString *name = [[NSThread currentThread] name];
+    NSString *want = [[NSString alloc] initWithFormat:@"wiki.qaq.shell.%p", self.parent];
+    assert([name isEqualToString:want]);
+#endif
+    [self.parent handleRequestsIfNeeded];
+    usleep(20000); // 50 times each second
 }
 
-- (void)delegatingRemoteWith:(NSRemoteShell *)object {
-    [self.concurrentLock lock];
-    [self.delegatedObjects addObject:object];
-    [self.concurrentLock unlock];
-}
-
-- (void)processUncheckedLoopDispatch {
-    for (NSRemoteShell *delegatedObject in self.delegatedObjects.allObjects) {
-        if (!delegatedObject) {
-            continue;
-        }
-        dispatch_async(self.concurrentQueue, ^{
-            [delegatedObject handleRequestsIfNeeded];
-        });
-    }
+- (void)destroyLoop {
+    [self.associatedTimer invalidate];
+    [self.associatedRunLoop removePort:self.associatedPort forMode:NSRunLoopCommonModes];
+    CFRunLoopStop([self.associatedRunLoop getCFRunLoop]);
 }
 
 @end

@@ -14,10 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TSEventLoop : NSObject <NSPortDelegate>
 
-+ (instancetype)sharedLoop;
-
+- (instancetype)initWithParent:(__weak NSRemoteShell*)parent;
 - (void)explicitRequestHandle;
-- (void)delegatingRemoteWith:(NSRemoteShell*)object;
+- (void)destroyLoop;
 
 @end
 
