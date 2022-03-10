@@ -7,6 +7,7 @@
 
 import RayonModule
 import SwiftUI
+import SwiftUIPolyfill
 
 struct IdentityView: View {
     @EnvironmentObject var store: RayonStore
