@@ -9,6 +9,7 @@ import CodeMirrorUI
 import RayonModule
 import SwiftUI
 import SymbolPicker
+import SwiftUIPolyfill
 
 struct EditSnippetView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -48,8 +49,7 @@ struct EditSnippetView: View {
             } header: {
                 Label("Name", systemImage: "tag")
             } footer: {
-                Text(avatar.isEmpty ? "No Symbol Selected" : avatar)
-                    .textSelection(.enabled)
+                CopyableText(avatar.isEmpty ? "No Symbol Selected" : avatar)
             }
 
 //                Group is not available on iOS, :P

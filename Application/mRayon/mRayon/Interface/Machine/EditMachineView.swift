@@ -7,6 +7,7 @@
 
 import RayonModule
 import SwiftUI
+import SwiftUIPolyfill
 
 struct EditMachineView: View {
     @Environment(\.presentationMode) var presentationMode

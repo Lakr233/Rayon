@@ -9,11 +9,34 @@ import Colorful
 import RayonModule
 import SwiftUI
 
+@available(iOS 15.0, *)
+struct WelcomeViewModifier15 : ViewModifier {
+    let parent : WelcomeView
+    @FocusState var textFieldIsFocused : Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .onSubmit {
+                parent.beginQuickConnect()
+            }
+            .focused($textFieldIsFocused)
+            .onChange(of: textFieldIsFocused, perform: { newValue in
+                // Autofill "ssh " if the text field is empty.
+                if newValue, parent.quickConnect.isEmpty {
+                    parent.quickConnect = "ssh "
+                }
+            })
+    }
+    init(parent: WelcomeView) {
+        self.parent = parent
+    }
+}
+
 struct WelcomeView: View {
     @EnvironmentObject var store: RayonStore
 
-    @State var quickConnect: String = ""
-    @FocusState var textFieldIsFocused: Bool
+    @State public var quickConnect: String = ""
+    
     @State var buttonDisabled: Bool = true
     @State var suggestion: String? = nil
 
@@ -38,36 +61,31 @@ struct WelcomeView: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    TextField("ssh root@www.example.com -p 22 ↵", text: $quickConnect)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .textInputAutocapitalization(.never)
-                        .disableAutocorrection(true)
-                        .focused($textFieldIsFocused)
-                        .font(.system(.headline, design: .rounded))
-                        .onChange(of: quickConnect, perform: { newValue in
-                            if newValue.hasPrefix("ssh ssh ") {
-                                // user pasting command
-                                quickConnect.removeFirst("ssh ".count)
-                            }
-                            buttonDisabled = SSHCommandReader(command: newValue) == nil
-                            refreshSuggestion()
-                        })
-                        .onChange(of: textFieldIsFocused, perform: { newValue in
-                            // Autofill "ssh " if the text field is empty.
-                            if newValue, quickConnect.isEmpty {
-                                quickConnect = "ssh "
-                            }
-                        })
-                        .onSubmit {
-                            beginQuickConnect()
-                        }
-                        .padding(6)
-                        .background(
-                            Rectangle()
-                                .foregroundColor(.black.opacity(0.1))
-                                .cornerRadius(4)
-                        )
+                    if #available(iOS 15.0, *) {
+                        TextField("ssh root@www.example.com -p 22 ↵", text: $quickConnect)
+                            .modifier(WelcomeViewModifier15(parent: self))
+                    } else {
+                        TextField("ssh root@www.example.com -p 22 ↵", text: $quickConnect, onCommit: beginQuickConnect)
+                    }
                 }
+                .textFieldStyle(PlainTextFieldStyle())
+                .textInputAutocapitalization(.never)
+                .disableAutocorrection(true)
+                .font(.system(.headline, design: .rounded))
+                .onChange(of: quickConnect, perform: { newValue in
+                    if newValue.hasPrefix("ssh ssh ") {
+                        // user pasting command
+                        quickConnect.removeFirst("ssh ".count)
+                    }
+                    buttonDisabled = SSHCommandReader(command: newValue) == nil
+                    refreshSuggestion()
+                })
+                .padding(6)
+                .background(
+                    Rectangle()
+                        .foregroundColor(.black.opacity(0.1))
+                        .cornerRadius(4)
+                )
                 .frame(maxWidth: 400)
 
                 if suggestion != nil {
@@ -147,7 +165,7 @@ struct WelcomeView: View {
         }
     }
 
-    private func beginQuickConnect() {
+    public func beginQuickConnect() {
         guard let command = SSHCommandReader(command: quickConnect) else {
             return
         }

@@ -7,6 +7,7 @@
 
 import RayonModule
 import SwiftUI
+import SwiftUIPolyfill
 
 struct SidebarView: View {
     @EnvironmentObject var store: RayonStore
@@ -116,14 +117,15 @@ struct SidebarView: View {
                     } label: {
                         Label(context.title, systemImage: "text.magnifyingglass")
                     }
-                    .swipeActions {
-                        Button {
-                            monitorManager.end(for: context.id)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                        .tint(.red)
-                    }
+                    .swipeActions(
+                        trailing: [
+                            SwipeActionButton(
+                                text: "Delete", icon: "trash",
+                                action: {
+                                    monitorManager.end(for: context.id)
+                                },
+                                tint: .red)
+                        ])
                 }
             }
         }
@@ -147,14 +149,15 @@ struct SidebarView: View {
                     } label: {
                         Label(context.title, systemImage: "terminal")
                     }
-                    .swipeActions {
-                        Button {
-                            terminalManager.end(for: context.id)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                        .tint(.red)
-                    }
+                    .swipeActions(
+                        trailing: [
+                            SwipeActionButton(
+                                text: "Delete", icon: "trash",
+                                action: {
+                                    terminalManager.end(for: context.id)
+                                },
+                                tint: .red)
+                        ])
                 }
             }
         }
@@ -187,14 +190,15 @@ struct SidebarView: View {
             }
             .background(Color.accentColor.opacity(0.0001))
         }
-        .swipeActions {
-            Button {
-                delete()
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-            .tint(.red)
-        }
+        .swipeActions(
+            trailing: [
+                SwipeActionButton(
+                    text: "Delete", icon: "trash",
+                    action: {
+                        delete()
+                    },
+                    tint: .red)
+            ])
         .contextMenu {
             Button {
                 UIBridge.sendPasteboard(str: command.command)
@@ -230,14 +234,15 @@ struct SidebarView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 .expended()
-                .swipeActions {
-                    Button {
-                        delete()
-                    } label: {
-                        Label("Delete", systemImage: "trash")
-                    }
-                    .tint(.red)
-                }
+                .swipeActions(
+                    trailing: [
+                        SwipeActionButton(
+                            text: "Delete", icon: "trash",
+                            action: {
+                                delete()
+                            },
+                            tint: .red)
+                    ])
                 .contextMenu {
                     Button {
                         UIBridge.sendPasteboard(str: store.machineGroup[machine].getCommand())
