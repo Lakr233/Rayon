@@ -7,6 +7,7 @@
 
 import RayonModule
 import SwiftUI
+import SwiftUIPolyfill
 
 struct AgreementView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -18,12 +19,19 @@ struct AgreementView: View {
 //        .navigationViewStyle(StackNavigationViewStyle())
     }
 
+    struct AddButtonStyle : ViewModifier {
+        func body(content: Content) -> some View {
+            if #available(iOS 15.0, *) {
+                content.buttonStyle(.borderedProminent)
+            }
+        }
+    }
+    
     var contentView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 5) {
                 Divider().hidden()
-                Text(loadLicense())
-                    .textSelection(.enabled)
+                CopyableText(loadLicense())
                     .font(.system(.caption, design: .monospaced))
                 Divider().hidden()
 
@@ -43,7 +51,7 @@ struct AgreementView: View {
                             .bold()
                             .frame(width: 250)
                     }
-                    .buttonStyle(.borderedProminent)
+                        .modifier(AddButtonStyle())
                     Spacer()
                 }
             }

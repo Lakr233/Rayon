@@ -7,6 +7,7 @@
 
 import RayonModule
 import SwiftUI
+import SwiftUIPolyfill
 import XTerminalUI
 
 struct TerminalView: View {
@@ -71,7 +72,9 @@ struct TerminalView: View {
                                     .popover(isPresented: $openControlKeyPopover) {
                                         HStack(spacing: 2) {
                                             Text("Ctrl + ")
-                                            TextField("Key To Send", text: $controlKey)
+                                            TextField("Key To Send", text: $controlKey, onCommit: {
+                                                sendCtrl()
+                                            })
                                                 .disableAutocorrection(true)
                                                 .textInputAutocapitalization(.never)
                                                 .onChange(of: controlKey) { newValue in
@@ -82,9 +85,6 @@ struct TerminalView: View {
                                                     if controlKey != String(f) {
                                                         controlKey = String(f)
                                                     }
-                                                }
-                                                .onSubmit {
-                                                    sendCtrl()
                                                 }
                                             Button {
                                                 sendCtrl()
@@ -192,7 +192,7 @@ struct TerminalView: View {
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
                 .frame(width: 20, height: 20)
         }
-        .buttonStyle(.bordered)
+//        .buttonStyle(.bordered)
         .animation(.spring(), value: context.interfaceDisabled)
         .disabled(context.interfaceDisabled)
     }

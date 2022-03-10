@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D8DDECD27D9A5FB00E1C974 /* SwiftUIPolyfill in Frameworks */ = {isa = PBXBuildFile; productRef = 4D8DDECC27D9A5FB00E1C974 /* SwiftUIPolyfill */; };
 		500D726827CF1BC000149A43 /* MachineElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500D726727CF1BC000149A43 /* MachineElement.swift */; };
 		500D726A27CF1C0800149A43 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500D726927CF1C0800149A43 /* View.swift */; };
 		500D726D27CF269700149A43 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500D726C27CF269700149A43 /* PlaceholderView.swift */; };
@@ -116,6 +117,7 @@
 				505E326727D2626900054573 /* MachineStatus in Frameworks */,
 				501FF79D27CEFC6700380D59 /* Colorful in Frameworks */,
 				505E326927D2642700054573 /* MachineStatusView in Frameworks */,
+				4D8DDECD27D9A5FB00E1C974 /* SwiftUIPolyfill in Frameworks */,
 				501FF7A127CEFC9900380D59 /* CodeMirrorUI in Frameworks */,
 				501FF79B27CEFC6300380D59 /* RayonModule in Frameworks */,
 			);
@@ -327,6 +329,7 @@
 				505E326227D2602E00054573 /* XTerminalUI */,
 				505E326627D2626900054573 /* MachineStatus */,
 				505E326827D2642700054573 /* MachineStatusView */,
+				4D8DDECC27D9A5FB00E1C974 /* SwiftUIPolyfill */,
 			);
 			productName = mRayon;
 			productReference = 501FF78727CEFADD00380D59 /* mRayon.app */;
@@ -479,7 +482,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -534,7 +537,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -568,7 +571,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -609,7 +612,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -650,6 +653,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4D8DDECC27D9A5FB00E1C974 /* SwiftUIPolyfill */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftUIPolyfill;
+		};
 		501FF79A27CEFC6300380D59 /* RayonModule */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RayonModule;
