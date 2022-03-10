@@ -27,6 +27,9 @@ protocol XTerminal {
 
     @discardableResult
     func setupBellChain(callback: (() -> Void)?) -> Self
+    
+    @discardableResult
+    func setupSizeChain(callback: ((CGSize) -> Void)?) -> Self
 
     func write(_ str: String)
 
@@ -106,6 +109,12 @@ class XTerminalCore: XTerminal {
         associatedScriptDelegate.onBellChain = callback
         return self
     }
+    
+    @discardableResult
+    func setupSizeChain(callback: ((CGSize) -> Void)?) -> Self {
+        associatedScriptDelegate.onSizeChain = callback
+        return self
+    }
 
     var writeBuffer: [Data] = []
     let lock = NSLock()
@@ -120,8 +129,8 @@ class XTerminalCore: XTerminal {
         lock.lock()
         writeBuffer.append(data)
         lock.unlock()
-        DispatchQueue.global().async { [weak self] in
-            self?.writeData()
+        DispatchQueue.global().async {
+            self.writeData()
         }
     }
 
@@ -129,12 +138,21 @@ class XTerminalCore: XTerminal {
         guard writeLock.try() else {
             return
         }
-        defer { writeLock.unlock() }
+        defer {
+            writeLock.unlock()
+            lock.lock()
+            let recall = !writeBuffer.isEmpty
+            lock.unlock()
+            if recall {
+                // to avoid stack overflow
+                DispatchQueue.global().async {
+                    self.writeData()
+                }
+            }
+        }
 
         // wait for the webview to load
         while !associatedWebDelegate.navigateCompleted { usleep(1000) }
-
-        let webView = associatedWebView
 
         lock.lock()
         let copy = writeBuffer
@@ -143,10 +161,15 @@ class XTerminalCore: XTerminal {
 
         let writes = copy
             .map { $0.base64EncodedString() }
-        for write in writes {
+        scriptBridgeWrite(writes, to: associatedWebView)
+    }
+
+    func scriptBridgeWrite(_ base64Array: [String], to webView: WKWebView) {
+        assert(!Thread.isMainThread)
+        for write in base64Array {
             var attempt = 0
             var success: Bool = false
-            while (!success && attempt < 5) {
+            while !success, attempt < 5 {
                 attempt += 1
                 let sem = DispatchSemaphore(value: 0)
                 DispatchQueue.main.async {
@@ -161,7 +184,7 @@ class XTerminalCore: XTerminal {
                         sem.signal()
                     }
                 }
-                let _ = sem.wait(timeout: .now() + 1)
+                _ = sem.wait(timeout: .now() + 1)
                 usleep(1000)
             }
         }

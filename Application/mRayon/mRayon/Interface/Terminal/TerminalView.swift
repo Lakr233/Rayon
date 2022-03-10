@@ -75,17 +75,17 @@ struct TerminalView: View {
                                             TextField("Key To Send", text: $controlKey, onCommit: {
                                                 sendCtrl()
                                             })
-                                                .disableAutocorrection(true)
-                                                .textInputAutocapitalization(.never)
-                                                .onChange(of: controlKey) { newValue in
-                                                    guard let f = newValue.uppercased().last else {
-                                                        if !controlKey.isEmpty { controlKey = "" }
-                                                        return
-                                                    }
-                                                    if controlKey != String(f) {
-                                                        controlKey = String(f)
-                                                    }
+                                            .disableAutocorrection(true)
+                                            .textInputAutocapitalization(.never)
+                                            .onChange(of: controlKey) { newValue in
+                                                guard let f = newValue.uppercased().last else {
+                                                    if !controlKey.isEmpty { controlKey = "" }
+                                                    return
                                                 }
+                                                if controlKey != String(f) {
+                                                    controlKey = String(f)
+                                                }
+                                            }
                                             Button {
                                                 sendCtrl()
                                             } label: {

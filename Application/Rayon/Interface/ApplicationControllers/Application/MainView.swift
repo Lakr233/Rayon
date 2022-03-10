@@ -13,9 +13,6 @@ private var isBootstrapCompleted = false
 struct MainView: View {
     @EnvironmentObject var store: RayonStore
 
-    @StateObject
-    var windowObserver: WindowObserver = .init()
-
     @State var openLicenseAgreementView: Bool = false
 
     var body: some View {
@@ -44,33 +41,6 @@ struct MainView: View {
                 )
                 .ignoresSafeArea()
                 .animation(.easeInOut(duration: 0.5), value: store.globalProgressInPresent)
-        )
-        .background(
-            HostingWindowFinder { [weak windowObserver] window in
-                windowObserver?.window = window
-                guard let window = window else {
-                    return
-                }
-                guard !isBootstrapCompleted else {
-                    return
-                }
-                isBootstrapCompleted = true
-
-                window.tabbingMode = .disallowed
-                let windows = NSApplication
-                    .shared
-                    .windows
-                var notKeyWindow = windows
-                    .filter { !$0.isKeyWindow }
-                if notKeyWindow.count > 0,
-                   notKeyWindow.count == windows.count
-                {
-                    // don't close them all
-                    notKeyWindow.removeFirst()
-                }
-                notKeyWindow.forEach { $0.close() }
-                window.tabbingMode = .automatic
-            }
         )
         .toolbar {
             ToolbarItem(placement: .navigation) {

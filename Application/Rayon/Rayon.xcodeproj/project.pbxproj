@@ -33,8 +33,6 @@
 		5068E44C27CE3AAE00F8B770 /* RayonModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5068E44B27CE3AAE00F8B770 /* RayonModule */; };
 		5082A1CF27D0E0F300C71C0F /* EULA in Resources */ = {isa = PBXBuildFile; fileRef = 5082A1CD27D0E0F300C71C0F /* EULA */; };
 		5082A1D027D0E0F300C71C0F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 5082A1CE27D0E0F300C71C0F /* LICENSE */; };
-		5091898527B80A56003C1B0F /* CreateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5091898427B80A56003C1B0F /* CreateWindow.swift */; };
-		509820A127CDB354005FAA97 /* RayonStore+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509820A027CDB354005FAA97 /* RayonStore+SwiftUI.swift */; };
 		509F4E5227B9502500ADAF5C /* AgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F4E5027B9502500ADAF5C /* AgreementView.swift */; };
 		509F7F4127B2AF7F00F28752 /* RayonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F2C27B2AF7E00F28752 /* RayonApp.swift */; };
 		509F7F4727B2AF7F00F28752 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 509F7F2F27B2AF7F00F28752 /* Assets.xcassets */; };
@@ -59,10 +57,10 @@
 		50A8A6AC27B850E9004F6DDC /* BatchSnippetExecContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A8A6AA27B850E9004F6DDC /* BatchSnippetExecContext.swift */; };
 		50BBA54B27B7F08800CE7BB1 /* MachinePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BBA54927B7F08800CE7BB1 /* MachinePickerView.swift */; };
 		50BBA54F27B8000900CE7BB1 /* Colorful in Frameworks */ = {isa = PBXBuildFile; productRef = 50BBA54E27B8000900CE7BB1 /* Colorful */; };
+		50DB352127DAE999002DEE72 /* PortForwardBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DB352027DAE999002DEE72 /* PortForwardBackend.swift */; };
 		50DDB33E27B4009800C471C0 /* IdentityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DDB33C27B4009800C471C0 /* IdentityPickerView.swift */; };
 		50F64E5A27B3CB35008D52FB /* EditIdentitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F64E5827B3CB35008D52FB /* EditIdentitiesView.swift */; };
 		50F64E5F27B3D922008D52FB /* MachineCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F64E5D27B3D922008D52FB /* MachineCreateView.swift */; };
-		50FC9AED27B66ED1005D9755 /* HostWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FC9AEB27B66ED1005D9755 /* HostWindow.swift */; };
 		50FD878827D9CC3300EE3A5C /* PortForwardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FD878727D9CC3300EE3A5C /* PortForwardManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -101,8 +99,6 @@
 		5068AB2727B580C600564D1D /* Generic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Generic.swift; sourceTree = "<group>"; };
 		5082A1CD27D0E0F300C71C0F /* EULA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = EULA; path = ../../../Resources/EULA; sourceTree = "<group>"; };
 		5082A1CE27D0E0F300C71C0F /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../../../Resources/LICENSE; sourceTree = "<group>"; };
-		5091898427B80A56003C1B0F /* CreateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWindow.swift; sourceTree = "<group>"; };
-		509820A027CDB354005FAA97 /* RayonStore+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RayonStore+SwiftUI.swift"; sourceTree = "<group>"; };
 		509F4E5027B9502500ADAF5C /* AgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementView.swift; sourceTree = "<group>"; };
 		509F7F2C27B2AF7E00F28752 /* RayonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RayonApp.swift; sourceTree = "<group>"; };
 		509F7F2F27B2AF7F00F28752 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -128,10 +124,10 @@
 		50A8A6A727B84EF9004F6DDC /* BatchTerminalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchTerminalView.swift; sourceTree = "<group>"; };
 		50A8A6AA27B850E9004F6DDC /* BatchSnippetExecContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchSnippetExecContext.swift; sourceTree = "<group>"; };
 		50BBA54927B7F08800CE7BB1 /* MachinePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachinePickerView.swift; sourceTree = "<group>"; };
+		50DB352027DAE999002DEE72 /* PortForwardBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortForwardBackend.swift; sourceTree = "<group>"; };
 		50DDB33C27B4009800C471C0 /* IdentityPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPickerView.swift; sourceTree = "<group>"; };
 		50F64E5827B3CB35008D52FB /* EditIdentitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIdentitiesView.swift; sourceTree = "<group>"; };
 		50F64E5D27B3D922008D52FB /* MachineCreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineCreateView.swift; sourceTree = "<group>"; };
-		50FC9AEB27B66ED1005D9755 /* HostWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostWindow.swift; sourceTree = "<group>"; };
 		50FD878727D9CC3300EE3A5C /* PortForwardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortForwardManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -193,15 +189,6 @@
 			path = Menubar;
 			sourceTree = "<group>";
 		};
-		5098209C27CDB081005FAA97 /* Window */ = {
-			isa = PBXGroup;
-			children = (
-				5091898427B80A56003C1B0F /* CreateWindow.swift */,
-				50FC9AEB27B66ED1005D9755 /* HostWindow.swift */,
-			);
-			path = Window;
-			sourceTree = "<group>";
-		};
 		5098209D27CDB09A005FAA97 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -217,14 +204,6 @@
 				509F7F7F27B2CB4100F28752 /* GenericViewModifier.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		5098209F27CDB34B005FAA97 /* Store */ = {
-			isa = PBXGroup;
-			children = (
-				509820A027CDB354005FAA97 /* RayonStore+SwiftUI.swift */,
-			);
-			path = Store;
 			sourceTree = "<group>";
 		};
 		509F7F2627B2AF7E00F28752 = {
@@ -289,11 +268,9 @@
 		509F7F7E27B2CB2D00F28752 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				5098209F27CDB34B005FAA97 /* Store */,
 				509F7FA127B303E900F28752 /* UIBridge */,
 				5098209D27CDB09A005FAA97 /* Utils */,
 				5098209E27CDB0A1005FAA97 /* View */,
-				5098209C27CDB081005FAA97 /* Window */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -384,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				50FD878727D9CC3300EE3A5C /* PortForwardManager.swift */,
+				50DB352027DAE999002DEE72 /* PortForwardBackend.swift */,
 			);
 			path = PortForward;
 			sourceTree = "<group>";
@@ -499,9 +477,7 @@
 				505E763127B5053B008D80F6 /* AlignedLabel.swift in Sources */,
 				50FD878827D9CC3300EE3A5C /* PortForwardManager.swift in Sources */,
 				5020A65B27D98B6B00F6EA0D /* TerminalManager.swift in Sources */,
-				5091898527B80A56003C1B0F /* CreateWindow.swift in Sources */,
 				509F4E5227B9502500ADAF5C /* AgreementView.swift in Sources */,
-				509820A127CDB354005FAA97 /* RayonStore+SwiftUI.swift in Sources */,
 				509F7F7627B2C95F00F28752 /* Sidebar.swift in Sources */,
 				50F64E5F27B3D922008D52FB /* MachineCreateView.swift in Sources */,
 				509F7F6F27B2C32900F28752 /* MainView.swift in Sources */,
@@ -512,8 +488,8 @@
 				509F7F7D27B2CB0D00F28752 /* WelcomeView.swift in Sources */,
 				509F7FB327B3893000F28752 /* GenericComparator.swift in Sources */,
 				509F7F9A27B2F84100F28752 /* SheetTemplate.swift in Sources */,
+				50DB352127DAE999002DEE72 /* PortForwardBackend.swift in Sources */,
 				509F7FAD27B309EE00F28752 /* IdentityManager.swift in Sources */,
-				50FC9AED27B66ED1005D9755 /* HostWindow.swift in Sources */,
 				5027915827CE448200EB22DD /* MenubarLoader.swift in Sources */,
 				5020A66027D9983300F6EA0D /* TerminalManager+Context.swift in Sources */,
 			);
@@ -642,7 +618,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -656,7 +632,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.rayon.debug;
 				PRODUCT_NAME = Rayon;
 				SDKROOT = macosx;
@@ -674,7 +650,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -688,7 +664,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n;
 				PRODUCT_NAME = Rayon;
 				PROVISIONING_PROFILE_SPECIFIER = "";

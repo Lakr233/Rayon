@@ -26,11 +26,11 @@ struct IdentityPickerSheetView: View {
             defer {
                 presentationMode.wrappedValue.dismiss()
             }
-            if !confirmed {
+            if confirmed {
+                onComplete(currentSelection)
+            } else {
                 onComplete(nil)
-                return
             }
-            onComplete(currentSelection)
         }
         .sheet(isPresented: $openCreateSheet, onDismiss: nil) {
             EditIdentityManager(selection: .constant(nil)) {

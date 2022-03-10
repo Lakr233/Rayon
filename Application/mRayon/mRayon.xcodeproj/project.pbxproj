@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4D8DDECD27D9A5FB00E1C974 /* SwiftUIPolyfill in Frameworks */ = {isa = PBXBuildFile; productRef = 4D8DDECC27D9A5FB00E1C974 /* SwiftUIPolyfill */; };
 		500D726827CF1BC000149A43 /* MachineElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500D726727CF1BC000149A43 /* MachineElement.swift */; };
 		500D726A27CF1C0800149A43 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500D726927CF1C0800149A43 /* View.swift */; };
 		500D726D27CF269700149A43 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500D726C27CF269700149A43 /* PlaceholderView.swift */; };
@@ -56,6 +55,7 @@
 		50D3AEFB27D05D6D0085F899 /* EditMachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D3AEFA27D05D6D0085F899 /* EditMachineView.swift */; };
 		50D3AEFD27D063A30085F899 /* PickIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D3AEFC27D063A30085F899 /* PickIdentityView.swift */; };
 		50D77BE727D2F0FB00177190 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D77BE627D2F0FB00177190 /* SettingView.swift */; };
+		50DB351B27DA0B3A002DEE72 /* SwiftUIPolyfill in Frameworks */ = {isa = PBXBuildFile; productRef = 50DB351A27DA0B3A002DEE72 /* SwiftUIPolyfill */; };
 		50FD853A27D0445D00F6F01A /* EditSnippetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FD853927D0445D00F6F01A /* EditSnippetView.swift */; };
 /* End PBXBuildFile section */
 
@@ -117,7 +117,7 @@
 				505E326727D2626900054573 /* MachineStatus in Frameworks */,
 				501FF79D27CEFC6700380D59 /* Colorful in Frameworks */,
 				505E326927D2642700054573 /* MachineStatusView in Frameworks */,
-				4D8DDECD27D9A5FB00E1C974 /* SwiftUIPolyfill in Frameworks */,
+				50DB351B27DA0B3A002DEE72 /* SwiftUIPolyfill in Frameworks */,
 				501FF7A127CEFC9900380D59 /* CodeMirrorUI in Frameworks */,
 				501FF79B27CEFC6300380D59 /* RayonModule in Frameworks */,
 			);
@@ -329,7 +329,7 @@
 				505E326227D2602E00054573 /* XTerminalUI */,
 				505E326627D2626900054573 /* MachineStatus */,
 				505E326827D2642700054573 /* MachineStatusView */,
-				4D8DDECC27D9A5FB00E1C974 /* SwiftUIPolyfill */,
+				50DB351A27DA0B3A002DEE72 /* SwiftUIPolyfill */,
 			);
 			productName = mRayon;
 			productReference = 501FF78727CEFADD00380D59 /* mRayon.app */;
@@ -482,7 +482,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -537,7 +537,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -576,7 +576,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.mRayon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "QAQ Wiki iOS Wildcard";
@@ -617,7 +617,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "QAQ Wiki iOS Distribution Wildcard";
@@ -653,10 +653,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4D8DDECC27D9A5FB00E1C974 /* SwiftUIPolyfill */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SwiftUIPolyfill;
-		};
 		501FF79A27CEFC6300380D59 /* RayonModule */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RayonModule;
@@ -684,6 +680,10 @@
 		505E326827D2642700054573 /* MachineStatusView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MachineStatusView;
+		};
+		50DB351A27DA0B3A002DEE72 /* SwiftUIPolyfill */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftUIPolyfill;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

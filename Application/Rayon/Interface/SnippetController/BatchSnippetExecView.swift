@@ -10,17 +10,16 @@ import RayonModule
 import SwiftUI
 
 struct BatchSnippetExecView: View {
-    internal init(snippet: RDSnippet, machines: [RDMachine.ID]) {
+    internal init(snippet: RDSnippet, machines: [RDMachine.ID], onComplete: @escaping () -> Void) {
         self.snippet = snippet
         self.machines = machines
+        self.onComplete = onComplete
         _context = .init(wrappedValue: .init(snippet: snippet, machines: machines))
     }
 
     let snippet: RDSnippet
     let machines: [RDMachine.ID]
-
-    @StateObject
-    var windowObserver: WindowObserver = .init()
+    let onComplete: () -> Void
 
     @StateObject var store: RayonStore = .shared
 
@@ -33,24 +32,33 @@ struct BatchSnippetExecView: View {
     }
 
     var builder: some View {
+        SheetTemplate.makeSheet(
+            title: "Batch Exec",
+            body: AnyView(sheetBody)
+        ) { _ in
+            func doExit() {
+                onComplete()
+                DispatchQueue.global().async {
+                    context.shellObjects
+                        .values
+                        .forEach { $0.requestDisconnectAndWait() }
+                }
+            }
+            if !context.completed {
+                UIBridge.requiresConfirmation(message: "Are you sure you want to quit?") { y in
+                    if y { doExit() }
+                }
+            } else {
+                doExit()
+            }
+        }
+    }
+
+    var sheetBody: some View {
         NavigationView {
             BatchSnippetSidebarView()
             BatchExecMainView()
         }
-        .background(
-            HostingWindowFinder { [weak windowObserver] window in
-                windowObserver?.window = window
-                setWindowTitle()
-            }
-        )
-        .onAppear {
-            setWindowTitle()
-        }
         .requiresFrame()
-    }
-
-    func setWindowTitle() {
-        windowObserver.window?.title = "Batch Execution: \(snippet.name)"
-        windowObserver.window?.subtitle = "\(machines.count) target in queue"
     }
 }

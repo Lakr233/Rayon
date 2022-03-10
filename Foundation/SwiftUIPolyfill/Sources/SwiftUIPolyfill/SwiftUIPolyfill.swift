@@ -1,31 +1,30 @@
 import Foundation
 import SwiftUI
 
-//@available(iOS, introduced:14.0, obsoleted:15.0)
-//@available(tvOS, unavailable)
-//@available(watchOS, unavailable)
-//public protocol TextSelectability {
+// @available(iOS, introduced:14.0, obsoleted:15.0)
+// @available(tvOS, unavailable)
+// @available(watchOS, unavailable)
+// public protocol TextSelectability {
 //    static var allowsSelection: Bool { get }
-//}
+// }
 //
-//@available(iOS, introduced:14.0, obsoleted:15.0)
-//@available(tvOS, unavailable)
-//@available(watchOS, unavailable)
-//extension View {
+// @available(iOS, introduced:14.0, obsoleted:15.0)
+// @available(tvOS, unavailable)
+// @available(watchOS, unavailable)
+// extension View {
 //    public func textSelection<S>(_ selectability: S) -> some View where S : TextSelectability {
 //        return self
 //    }
-//}
+// }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 extension Date {
     public struct FormatStylePolyfill {
-
         /// The locale to use when formatting date and time values.
         public var date: Date.FormatStylePolyfill.DateStyle?
-        
+
         public var time: Date.FormatStylePolyfill.TimeStyle?
-        
+
         /// The locale to use when formatting date and time values.
         public var locale: Locale
 
@@ -44,7 +43,7 @@ extension Date {
         ///   - timeZone: The time zone with which to specify date and time values.
         ///   - capitalizationContext: The capitalization formatting context used when formatting date and time values.
         /// - Note: Always specify the date length, time length, or the date components to be included in the formatted string with the symbol modifiers. Otherwise, an empty string will be returned when you use the instance to format a `Date`.
-        public init(date: Date.FormatStylePolyfill.DateStyle? = nil, time: Date.FormatStylePolyfill.TimeStyle? = nil, locale: Locale = .autoupdatingCurrent, calendar: Calendar = .autoupdatingCurrent, timeZone: TimeZone = .autoupdatingCurrent, capitalizationContext: Any? = nil) {
+        public init(date: Date.FormatStylePolyfill.DateStyle? = nil, time: Date.FormatStylePolyfill.TimeStyle? = nil, locale: Locale = .autoupdatingCurrent, calendar: Calendar = .autoupdatingCurrent, timeZone: TimeZone = .autoupdatingCurrent, capitalizationContext _: Any? = nil) {
             self.date = date
             self.time = time
             self.locale = locale
@@ -54,11 +53,10 @@ extension Date {
     }
 }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 extension Date.FormatStylePolyfill {
-
     /// Predefined date styles varied in lengths or the components included. The exact format depends on the locale.
-    public struct DateStyle : Codable, Hashable {
+    public struct DateStyle: Codable, Hashable {
         /// Excludes the date part.
         public static let omitted = Date.FormatStylePolyfill.DateStyle(style: "omitted")
 
@@ -74,8 +72,7 @@ extension Date.FormatStylePolyfill {
         /// Shows the complete day. For example, "Wednesday, October 21, 2015".
         public static let complete = Date.FormatStylePolyfill.DateStyle(style: "complete")
 
-        
-        public let style : String
+        public let style: String
 
         public init(style: String) {
             self.style = style
@@ -83,8 +80,7 @@ extension Date.FormatStylePolyfill {
     }
 
     /// Predefined time styles varied in lengths or the components included. The exact format depends on the locale.
-    public struct TimeStyle : Codable, Hashable {
-
+    public struct TimeStyle: Codable, Hashable {
         /// Excludes the time part.
         public static let omitted = Date.FormatStylePolyfill.TimeStyle(style: "omitted")
 
@@ -97,25 +93,24 @@ extension Date.FormatStylePolyfill {
         /// For example, `4:29:24 PM PDT`, `16:29:24 GMT`.
         public static let complete = Date.FormatStylePolyfill.TimeStyle(style: "complete")
 
-        public let style : String
+        public let style: String
 
         public init(style: String) {
             self.style = style
         }
     }
-    
 }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 extension Date {
     public func formatted() -> String {
         let formatter = DateFormatter()
         return formatter.string(from: self)
     }
-    
+
     public func formatted(date: Date.FormatStylePolyfill.DateStyle, time: Date.FormatStylePolyfill.TimeStyle) -> String {
         let formatter = DateFormatter()
-        switch (date.style) {
+        switch date.style {
         case "complete":
             formatter.dateStyle = .full
         case "long":
@@ -129,8 +124,8 @@ extension Date {
         default:
             formatter.dateStyle = .full
         }
-        
-        switch (time.style) {
+
+        switch time.style {
         case "complete":
             formatter.timeStyle = .full
         case "standard":
@@ -144,17 +139,15 @@ extension Date {
         }
         return formatter.string(from: self)
     }
-
 }
-
 
 public struct CopyableText: View {
     @State var text: String
-    
+
     public init(_ text: String) {
         self.text = text
     }
-    
+
     public var body: some View {
         if #available(iOS 15.0, *) {
             Text(self.text)
@@ -170,11 +163,9 @@ public struct CopyableText: View {
     }
 }
 
-
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 @available(macOS, unavailable)
 public struct TextInputAutocapitalization {
-
     /// Defines an autocapitalizing behavior that will not capitalize anything.
     public static var never = TextInputAutocapitalization("never")
 
@@ -188,19 +179,19 @@ public struct TextInputAutocapitalization {
 
     /// Defines an autocapitalizing behavior that will capitalize every letter.
     public static var characters = TextInputAutocapitalization("characters")
-    
+
     public var style: String
     public init(_ style: String) {
         self.style = style
     }
 }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 @available(macOS, unavailable)
 extension View {
     public func textInputAutocapitalization(_ autocapitalization: TextInputAutocapitalization?) -> some View {
         let _style = autocapitalization?.style
-        switch (_style) {
+        switch _style {
         case "never":
             return self.autocapitalization(.none)
         case "words":
@@ -215,9 +206,8 @@ extension View {
     }
 }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 public struct InterfaceOrientation {
-
     public static let portrait = InterfaceOrientation()
 
     public static let portraitUpsideDown = InterfaceOrientation()
@@ -226,12 +216,10 @@ public struct InterfaceOrientation {
 
     public static let landscapeRight = InterfaceOrientation()
 
-    public init() {
-        
-    }
+    public init() {}
 }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 extension View {
     /// Overrides the orientation of the preview.
     ///
@@ -249,24 +237,22 @@ extension View {
     ///
     /// - Parameter value: An orientation to use for preview.
     /// - Returns: A preview that uses the given orientation.
-    public func previewInterfaceOrientation(_ value: InterfaceOrientation) -> some View {
-        return self
+    public func previewInterfaceOrientation(_: InterfaceOrientation) -> some View {
+        self
     }
-
 }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
-extension Section where Parent == Text, Content : View, Footer == EmptyView {
-    public init<S>(_ title: S, @ViewBuilder content: () -> Content) where S : StringProtocol {
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
+extension Section where Parent == Text, Content: View, Footer == EmptyView {
+    public init<S>(_ title: S, @ViewBuilder content: () -> Content) where S: StringProtocol {
         self.init(content: content, header: {
             Text(title)
         })
     }
 }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 public struct SearchFieldPlacement {
-
     public static let automatic = SearchFieldPlacement()
 
     @available(tvOS, unavailable)
@@ -276,28 +262,25 @@ public struct SearchFieldPlacement {
     @available(watchOS, unavailable)
     public static let sidebar = SearchFieldPlacement()
 
-    public init() {
-        
-    }
+    public init() {}
 }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 extension View {
-    public func searchable(text: Binding<String>, placement: SearchFieldPlacement = .automatic, prompt: Text? = nil) -> some View {
-        return self
+    public func searchable(text _: Binding<String>, placement _: SearchFieldPlacement = .automatic, prompt _: Text? = nil) -> some View {
+        self
     }
 }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 extension View {
-    @inlinable public func overlay<V>(alignment: Alignment = .center, @ViewBuilder content: () -> V) -> some View where V : View {
-        return self.overlay(content(), alignment: alignment)
+    @inlinable public func overlay<V>(alignment: Alignment = .center, @ViewBuilder content: () -> V) -> some View where V: View {
+        overlay(content(), alignment: alignment)
     }
 }
 
-@available(iOS, introduced:14.0, obsoleted:15.0)
+@available(iOS, introduced: 14.0, obsoleted: 15.0)
 extension PrimitiveButtonStyle {
-
     /// The default button style, based on the button's context.
     ///
     /// If you create a button directly on a blank canvas, the style varies by
@@ -311,9 +294,7 @@ extension PrimitiveButtonStyle {
     /// You can override a button's style. To apply the default style to a
     /// button, or to a view that contains buttons, use the
     /// ``View/buttonStyle(_:)-66fbx`` modifier.
-    public static var bordered : DefaultButtonStyle {
-        get {
-            return DefaultButtonStyle.automatic
-        }
+    public static var bordered: DefaultButtonStyle {
+        DefaultButtonStyle.automatic
     }
 }

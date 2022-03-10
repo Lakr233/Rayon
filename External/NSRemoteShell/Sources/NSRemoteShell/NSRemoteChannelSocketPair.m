@@ -1,25 +1,22 @@
 //
-//  NSRemoteChannleSocketPair.m
+//  NSRemoteChannelSocketPair.m
 //  
 //
 //  Created by Lakr Aream on 2022/3/9.
 //
 
-#import "NSRemoteChannleSocketPair.h"
+#import "NSRemoteChannelSocketPair.h"
 
-@implementation NSRemoteChannleSocketPair
+@implementation NSRemoteChannelSocketPair
 
 - (instancetype)initWithSocket:(int)socket
                    withChannel:(LIBSSH2_CHANNEL*)channel
-                   withTimeout:(NSNumber*)timeout
 {
     self = [super init];
     if (self) {
         _socket = socket;
         _channel = channel;
         _completed = NO;
-        _lastDataAvailable = [[NSDate alloc] init];
-        _timeout = timeout;
     }
     return self;
 }
@@ -48,7 +45,6 @@
                 }
                 wr += i;
             }
-            self.lastDataAvailable = [[NSDate alloc] init];
         }
     } while (0);
     do {
@@ -63,13 +59,14 @@
                 if (i <= 0) { self.completed = YES; return; }
                 wr += i;
             }
-            self.lastDataAvailable = [[NSDate alloc] init];
         } else if (len != LIBSSH2_ERROR_EAGAIN) {
             NSLog(@"libssh2_channel_read returns failure %ld", len);
             self.completed = YES;
             return;
         }
     } while (0);
+    // connection may send 0 tcp packet data but still keep alive
+    // so only check eof
 }
 
 - (void)setCompleted:(BOOL)completed {
@@ -90,10 +87,6 @@
         if (self.completed) { break; }
         if (![self seatbeltCheckPassed]) { break; }
         if (libssh2_channel_eof(self.channel)) { break; }
-        if ([self.timeout doubleValue] > 0) {
-            NSDate *terminate = [self.lastDataAvailable dateByAddingTimeInterval:[self.timeout doubleValue]];
-            if ([terminate timeIntervalSinceNow] < 0) { break; }
-        }
         return YES;
     } while (0);
     return NO;

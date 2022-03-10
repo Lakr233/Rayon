@@ -6,9 +6,7 @@ import PackageDescription
 let package = Package(
     name: "SwiftUIPolyfill",
     platforms: [
-        .macOS(.v11),
         .iOS(.v14),
-        .watchOS(.v7),
     ],
     products: [
         .library(

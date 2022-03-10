@@ -50,8 +50,9 @@ class BatchSnippetExecContext: ObservableObject {
         debugPrint("\(self) \(#function)")
     }
 
-    private var completed: Bool = false
-    private var shellObjects: [RDMachine.ID: NSRemoteShell] = [:]
+    var shellObjects: [RDMachine.ID: NSRemoteShell] = [:]
+    var completed: Bool = false
+
     private var requiredIdentities: [RDMachine.ID: RDIdentity] = [:]
     private var shellContinue: [RDMachine.ID: Bool] = [:]
     private var receivedBuffer: [RDMachine.ID: String] = [:]

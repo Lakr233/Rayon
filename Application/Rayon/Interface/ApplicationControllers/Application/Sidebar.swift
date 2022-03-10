@@ -135,6 +135,7 @@ struct SidebarView: View {
             }
             .sheet(isPresented: $openServerSelector, onDismiss: nil, content: {
                 MachinePickerView(onComplete: { machines in
+                    if machines.isEmpty { return }
                     for machine in machines {
                         terminalManager.createSession(withMachineID: machine)
                     }

@@ -23,6 +23,16 @@ class XTerminalWebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate {
         // the buffer chain will that holds a retain to shell
         // to fool the release logic for disconnect and cleanup
         debugPrint("\(self) __deinit__")
-        userContentController?.removeScriptMessageHandler(forName: "callbackHandler")
+        #if DEBUG
+            if Thread.isMainThread {
+                userContentController?.removeScriptMessageHandler(forName: "callbackHandler")
+            } else {
+                fatalError("Malformed dispatch")
+            }
+        #else
+            if Thread.isMainThread {
+                userContentController?.removeScriptMessageHandler(forName: "callbackHandler")
+            }
+        #endif
     }
 }

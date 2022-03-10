@@ -19,14 +19,14 @@ struct AgreementView: View {
 //        .navigationViewStyle(StackNavigationViewStyle())
     }
 
-    struct AddButtonStyle : ViewModifier {
+    struct AddButtonStyle: ViewModifier {
         func body(content: Content) -> some View {
             if #available(iOS 15.0, *) {
                 content.buttonStyle(.borderedProminent)
             }
         }
     }
-    
+
     var contentView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 5) {
@@ -51,7 +51,7 @@ struct AgreementView: View {
                             .bold()
                             .frame(width: 250)
                     }
-                        .modifier(AddButtonStyle())
+                    .modifier(AddButtonStyle())
                     Spacer()
                 }
             }

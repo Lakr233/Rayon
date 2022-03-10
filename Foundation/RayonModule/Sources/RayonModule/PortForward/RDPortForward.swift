@@ -11,7 +11,6 @@ import NSRemoteShell
 public struct RDPortForward: Codable, Identifiable, Equatable {
     public init(
         id: UUID = .init(),
-        name: String = "",
         forwardOrientation: ForwardOrientation = .listenLocal,
         bindPort: Int = 0,
         targetHost: String = "",
@@ -20,7 +19,6 @@ public struct RDPortForward: Codable, Identifiable, Equatable {
         attachment: [String: String] = [:]
     ) {
         self.id = id
-        self.name = name
         self.forwardOrientation = forwardOrientation
         self.bindPort = bindPort
         self.targetHost = targetHost
@@ -31,14 +29,24 @@ public struct RDPortForward: Codable, Identifiable, Equatable {
 
     public var id: UUID
 
-    public var name: String
-
-    public enum ForwardOrientation: String, Codable {
-        case listenLocal
-        case listenRemote
+    public enum ForwardOrientation: String, Codable, CaseIterable {
+        case listenLocal = "Local"
+        case listenRemote = "Remote"
     }
 
     public var forwardOrientation: ForwardOrientation = .listenLocal
+
+    public var forwardReversed: Bool {
+        get {
+            forwardOrientation == .listenRemote
+        }
+        set {
+            switch newValue {
+            case true: forwardOrientation = .listenRemote
+            case false: forwardOrientation = .listenLocal
+            }
+        }
+    }
 
     public var bindPort: Int // UInt32 maybe?
 
@@ -49,7 +57,7 @@ public struct RDPortForward: Codable, Identifiable, Equatable {
 
     public var attachment: [String: String]
 
-    func isValid() -> Bool {
+    public func isValid() -> Bool {
         guard bindPort >= 0, bindPort <= 65535,
               !targetHost.isEmpty,
               targetPort >= 0, targetPort <= 65535,
@@ -59,5 +67,28 @@ public struct RDPortForward: Codable, Identifiable, Equatable {
             return false
         }
         return true
+    }
+
+    public func getMachineName() -> String? {
+        guard let mid = usingMachine else {
+            return nil
+        }
+        let machine = RayonStore.shared.machineGroup[mid]
+        if machine.isNotPlaceholder() {
+            return machine.name
+        }
+        return nil
+    }
+
+    public func shortDescription() -> String {
+        guard isValid() else {
+            return "Invalid"
+        }
+        switch forwardOrientation {
+        case .listenLocal:
+            return "localhost:\(bindPort) --ssh-tunnel-\(getMachineName() ?? "Unknown")-> \(targetHost):\(targetPort)"
+        case .listenRemote:
+            return "\(getMachineName() ?? "Unknown"):\(bindPort) --ssh-tunnel-localhost-> \(targetHost):\(targetPort)"
+        }
     }
 }

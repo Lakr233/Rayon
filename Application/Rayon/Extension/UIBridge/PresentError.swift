@@ -22,7 +22,7 @@ extension UIBridge {
         }
     }
 
-    static func presentError(with message: String, delay: Double = 0.5) {
+    static func presentError(with message: String, delay: Double = 0) {
         debugPrint("<InterfaceError> \(message)")
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             let alert = NSAlert()

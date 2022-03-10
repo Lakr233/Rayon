@@ -124,7 +124,8 @@ struct SidebarView: View {
                                 action: {
                                     monitorManager.end(for: context.id)
                                 },
-                                tint: .red)
+                                tint: .red
+                            ),
                         ])
                 }
             }
@@ -156,7 +157,8 @@ struct SidebarView: View {
                                 action: {
                                     terminalManager.end(for: context.id)
                                 },
-                                tint: .red)
+                                tint: .red
+                            ),
                         ])
                 }
             }
@@ -197,7 +199,8 @@ struct SidebarView: View {
                     action: {
                         delete()
                     },
-                    tint: .red)
+                    tint: .red
+                ),
             ])
         .contextMenu {
             Button {
@@ -241,7 +244,8 @@ struct SidebarView: View {
                             action: {
                                 delete()
                             },
-                            tint: .red)
+                            tint: .red
+                        ),
                     ])
                 .contextMenu {
                     Button {

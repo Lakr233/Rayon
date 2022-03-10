@@ -25,11 +25,11 @@ struct MachinePickerView: View {
         ) { confirmed in
             var shouldDismiss = false
             defer { if shouldDismiss { presentationMode.wrappedValue.dismiss() } }
-            if !confirmed {
-                shouldDismiss = true
-                return
+            if confirmed {
+                onComplete([RDIdentity.ID](currentSelection))
+            } else {
+                onComplete([])
             }
-            onComplete([RDIdentity.ID](currentSelection))
             shouldDismiss = true
         }
     }
@@ -65,6 +65,7 @@ struct MachinePickerView: View {
                 }
             }
         }
+        .frame(maxHeight: 500)
         .requiresSheetFrame()
     }
 

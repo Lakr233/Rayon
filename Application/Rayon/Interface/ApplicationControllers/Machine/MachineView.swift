@@ -15,7 +15,7 @@ struct MachineView: View {
 
     @State var openEditSheet: Bool = false
 
-    let redactedColor: Color = .green
+    let redactedColor: Color = .accentColor
 
     var body: some View {
         contentView

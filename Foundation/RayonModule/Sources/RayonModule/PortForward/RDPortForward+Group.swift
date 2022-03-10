@@ -23,7 +23,6 @@ public struct RDPortForwardGroup: Codable, Identifiable, Equatable {
     }
 
     public mutating func insert(_ value: AssociatedType) {
-        guard !value.name.isEmpty else { return }
         if let index = forwards.firstIndex(where: { $0.id == value.id }) {
             forwards[index] = value
         } else {

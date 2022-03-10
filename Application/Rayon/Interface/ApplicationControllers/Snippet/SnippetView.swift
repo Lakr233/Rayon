@@ -73,7 +73,6 @@ struct SnippetFloatingPanelView: View {
     @EnvironmentObject var store: RayonStore
 
     @State var openEdit: Bool = false
-    @State var openServerPicker: Bool = false
 
     var body: some View {
         Group {
@@ -99,7 +98,7 @@ struct SnippetFloatingPanelView: View {
             }
             .foregroundColor(.accentColor)
             Button {
-                chooseMachine()
+                begin()
             } label: {
                 Image(systemName: "paperplane.fill")
                     .frame(width: 15)
@@ -109,15 +108,6 @@ struct SnippetFloatingPanelView: View {
         .sheet(isPresented: $openEdit, onDismiss: nil) {
             EditSnippetSheetView(inEdit: snippet)
         }
-        .sheet(isPresented: $openServerPicker, onDismiss: nil, content: {
-            MachinePickerView(onComplete: { machines in
-                store.beginBatchScriptExecution(for: snippet, and: machines)
-            }, allowSelectMany: true)
-        })
-    }
-
-    func chooseMachine() {
-        openServerPicker = true
     }
 
     func duplicateButtonTapped() {
@@ -137,16 +127,53 @@ struct SnippetFloatingPanelView: View {
         }
     }
 
-    func beginExecutionOn(machines: [RDMachine.ID]) {
-        debugPrint("will execute on \(machines)")
-    }
-
     func deleteButtonTapped() {
         UIBridge.requiresConfirmation(
             message: "You are about to delete this item"
         ) { confirmed in
             guard confirmed else { return }
             store.snippetGroup.delete(snippet)
+        }
+    }
+
+    func begin() {
+        DispatchQueue.global().async {
+            let snippet = RayonStore.shared.snippetGroup[snippet]
+            guard snippet.code.count > 0 else {
+                return
+            }
+            let machines = RayonUtil.selectMachine()
+            guard machines.count > 0 else {
+                RayonStore.presentError("No machine was selected for execution")
+                return
+            }
+            mainActor {
+                var panelRef: NSPanel?
+                var windowRef: NSWindow?
+                let controller = NSHostingController(rootView: Group {
+                    BatchSnippetExecView(snippet: snippet, machines: machines) {
+                        if let panelRef = panelRef {
+                            if let windowRef = windowRef {
+                                windowRef.endSheet(panelRef)
+                            } else {
+                                panelRef.close()
+                            }
+                        }
+                    }
+                    .frame(width: 700, height: 400)
+                })
+                let panel = NSPanel(contentViewController: controller)
+                panelRef = panel
+                panel.title = ""
+                panel.titleVisibility = .hidden
+
+                if let keyWindow = RayonUtil.findWindow() {
+                    windowRef = keyWindow
+                    keyWindow.beginSheet(panel) { _ in }
+                } else {
+                    panel.makeKeyAndOrderFront(nil)
+                }
+            }
         }
     }
 }

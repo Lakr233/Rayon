@@ -29,7 +29,7 @@ struct BatchSnippetSidebarView: View {
                 }
             }
         }
-        .listStyle(SidebarListStyle())
+        .listStyle(PlainListStyle())
         .frame(minWidth: 200)
     }
 }

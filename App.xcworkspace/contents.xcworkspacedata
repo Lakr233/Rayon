@@ -35,12 +35,12 @@
       location = "group:Foundation/SymbolPicker">
    </FileRef>
    <FileRef
+      location = "group:Foundation/SwiftUIPolyfill">
+   </FileRef>
+   <FileRef
       location = "group:External/XTerminalUI">
    </FileRef>
    <FileRef
       location = "group:Foundation/XMLCoder">
-   </FileRef>
-   <FileRef
-      location = "group:Foundation/SwiftUIPolyfill">
    </FileRef>
 </Workspace>

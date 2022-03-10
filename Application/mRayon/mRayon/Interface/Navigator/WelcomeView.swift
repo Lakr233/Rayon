@@ -10,10 +10,10 @@ import RayonModule
 import SwiftUI
 
 @available(iOS 15.0, *)
-struct WelcomeViewModifier15 : ViewModifier {
-    let parent : WelcomeView
-    @FocusState var textFieldIsFocused : Bool
-    
+struct WelcomeViewModifier15: ViewModifier {
+    let parent: WelcomeView
+    @FocusState var textFieldIsFocused: Bool
+
     func body(content: Content) -> some View {
         content
             .onSubmit {
@@ -27,6 +27,7 @@ struct WelcomeViewModifier15 : ViewModifier {
                 }
             })
     }
+
     init(parent: WelcomeView) {
         self.parent = parent
     }
@@ -36,7 +37,7 @@ struct WelcomeView: View {
     @EnvironmentObject var store: RayonStore
 
     @State public var quickConnect: String = ""
-    
+
     @State var buttonDisabled: Bool = true
     @State var suggestion: String? = nil
 

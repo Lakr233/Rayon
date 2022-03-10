@@ -102,7 +102,6 @@ extension TerminalManager {
             title = machine.name
             Context.queue.async {
                 self.processBootstrap()
-                self.processShutdown()
             }
         }
 
@@ -119,7 +118,6 @@ extension TerminalManager {
             remoteType = .machine
             Context.queue.async {
                 self.processBootstrap()
-                self.processShutdown()
             }
         }
 
@@ -139,6 +137,10 @@ extension TerminalManager {
         }
 
         func processBootstrap() {
+            defer {
+                mainActor { self.processShutdown(exitFromShell: true) }
+            }
+
             setupShellData()
 
             debugPrint("\(self) \(#function) \(machine.id)")
@@ -154,6 +156,9 @@ extension TerminalManager {
                 }
                 .setupTitleChain { [weak self] str in
                     self?.title = str
+                }
+                .setupSizeChain { [weak self] size in
+                    self?.termianlSize = size
                 }
 
             shell.requestConnectAndWait()
@@ -235,16 +240,17 @@ extension TerminalManager {
                 self?.continueDecision ?? false
             }
 
-            putInformation("")
-            putInformation("[*] Connection Closed")
-
             // leave loop
             debugPrint("\(self) \(#function) defer \(machine.id)")
 
             processShutdown()
         }
 
-        func processShutdown() {
+        func processShutdown(exitFromShell: Bool = false) {
+            if exitFromShell {
+                putInformation("")
+                putInformation("[*] Connection Closed")
+            }
             continueDecision = false
             Context.queue.async {
                 self.shell.requestDisconnectAndWait()

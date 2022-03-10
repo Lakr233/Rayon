@@ -8,7 +8,7 @@
 #import "GenericHeaders.h"
 #import "GenericNetworking.h"
 #import "NSRemoteShell.h"
-#import "NSRemoteChannleSocketPair.h"
+#import "NSRemoteChannelSocketPair.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

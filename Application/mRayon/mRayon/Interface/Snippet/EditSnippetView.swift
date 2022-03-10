@@ -8,8 +8,8 @@
 import CodeMirrorUI
 import RayonModule
 import SwiftUI
-import SymbolPicker
 import SwiftUIPolyfill
+import SymbolPicker
 
 struct EditSnippetView: View {
     @Environment(\.presentationMode) var presentationMode

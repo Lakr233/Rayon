@@ -12,24 +12,12 @@ import XTerminalUI
 struct TerminalView: View {
     @StateObject var context: TerminalManager.Context
     @State var interfaceToken = UUID()
-    @State var terminalSize: CGSize = .init(width: 80, height: 40)
 
     var body: some View {
         Group {
             if context.interfaceToken == interfaceToken {
-                GeometryReader { r in
-                    VStack {
-                        context.termInterface
-                            .onChange(of: r.size) { _ in
-                                guard context.interfaceToken == interfaceToken else {
-                                    debugPrint("interface token mismatch")
-                                    return
-                                }
-                                updateTerminalSize()
-                            }
-                            .padding(r.size.width > 600 ? 8 : 2)
-                    }
-                }
+                context.termInterface
+                    .padding(2)
             } else {
                 Text("Terminal Transfer To Another Window")
             }
@@ -97,28 +85,5 @@ struct TerminalView: View {
         .buttonStyle(.bordered)
         .animation(.spring(), value: context.interfaceDisabled)
         .disabled(context.interfaceDisabled)
-    }
-
-    func updateTerminalSize() {
-        let core = context.termInterface
-        let origSize = terminalSize
-        DispatchQueue.global().async {
-            let newSize = core.requestTerminalSize()
-            guard newSize.width > 5, newSize.height > 5 else {
-                debugPrint("ignoring malformed terminal size: \(newSize)")
-                return
-            }
-            if newSize != origSize {
-                mainActor {
-                    guard context.interfaceToken == interfaceToken else {
-                        debugPrint("interface token mismatch")
-                        return
-                    }
-                    debugPrint("new terminal size: \(newSize)")
-                    terminalSize = newSize
-                    context.shell.explicitRequestStatusPickup()
-                }
-            }
-        }
     }
 }
