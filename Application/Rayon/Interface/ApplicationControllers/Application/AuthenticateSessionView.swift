@@ -38,7 +38,6 @@ struct AuthenticateSessionView: View {
                     }
             }
         }
-        .requiresFrame()
     }
 
     var sheetBody: some View {

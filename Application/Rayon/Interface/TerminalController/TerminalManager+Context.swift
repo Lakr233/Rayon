@@ -125,7 +125,7 @@ extension TerminalManager {
             shell
                 .setupConnectionHost(machine.remoteAddress)
                 .setupConnectionPort(NSNumber(value: Int(machine.remotePort) ?? 0))
-                .setupConnectionTimeout(6)
+                .setupConnectionTimeout(RayonStore.shared.timeoutNumber)
         }
 
         static func == (lhs: Context, rhs: Context) -> Bool {
@@ -250,6 +250,10 @@ extension TerminalManager {
             if exitFromShell {
                 putInformation("")
                 putInformation("[*] Connection Closed")
+            }
+            if let lastError = shell.getLastError() {
+                putInformation("[i] Last Error Provided By Backend")
+                putInformation("    " + lastError)
             }
             continueDecision = false
             Context.queue.async {

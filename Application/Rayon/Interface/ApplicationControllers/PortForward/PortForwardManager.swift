@@ -37,7 +37,7 @@ struct PortForwardManager: View {
     @State var searchText: String = ""
     @State var selection: Set<RDPortForward.ID> = []
     @State var sortOrder: [KeyPathComparator<RDPortForward>] = []
-    
+
     var startButtonCanWork: Bool {
         for sel in selection {
             if !backend.sessionExists(withPortForwardID: sel) {
@@ -46,7 +46,7 @@ struct PortForwardManager: View {
         }
         return false
     }
-    
+
     var stopButtonCanWork: Bool {
         for sel in selection {
             if backend.sessionExists(withPortForwardID: sel) {
@@ -65,7 +65,17 @@ struct PortForwardManager: View {
                 table
             }
         }
-        .requiresFrame()
+        .onChange(of: selection) { newValue in
+            // bug when deletion
+            var rebuild = Set<RDPortForward.ID>()
+            for value in newValue {
+                let check = store.portForwardGroup.forwards.contains {
+                    $0.id == value
+                }
+                if check { rebuild.insert(value) }
+            }
+            if selection != rebuild { selection = rebuild }
+        }
         .toolbar {
             ToolbarItem {
                 Button {
@@ -129,7 +139,10 @@ struct PortForwardManager: View {
                     }
                 } label: {
                     Text(backend.sessionExists(withPortForwardID: data.id) ? "Terminate" : "Open")
+                        .foregroundColor(.accentColor)
+                        .underline()
                 }
+                .buttonStyle(.borderless)
             }
             .width(80)
             TableColumn("Status") { data in
@@ -180,6 +193,7 @@ struct PortForwardManager: View {
             .width(65)
             TableColumn("Target Host", value: \.targetHost) { data in
                 TextField("Host Address", text: $store.portForwardGroup[data.id].targetHost)
+                    .disabled(backend.sessionExists(withPortForwardID: data.id))
             }
             TableColumn("Target Port", value: \.targetPort) { data in
                 TextField("Target Port", text: .init(get: {
@@ -201,7 +215,7 @@ struct PortForwardManager: View {
             }
         }
     }
-    
+
     func removeButtonTapped() {
         UIBridge.requiresConfirmation(
             message: "Are you sure you want to remove \(selection.count) items?"
@@ -211,6 +225,7 @@ struct PortForwardManager: View {
                     store.portForwardGroup.delete(selected)
                     backend.endSession(withPortForwardID: selected)
                 }
+                selection = []
             }
         }
     }

@@ -52,7 +52,6 @@ struct MachineManagerView: View {
     var body: some View {
         Group {
             collections
-                .requiresFrame()
                 .animation(.interactiveSpring(), value: hoverSelection)
                 .animation(.interactiveSpring(), value: selection)
                 .animation(.interactiveSpring(), value: store.machineGroup)

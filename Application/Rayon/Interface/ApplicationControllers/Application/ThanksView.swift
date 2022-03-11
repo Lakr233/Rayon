@@ -6,10 +6,12 @@
 //
 
 import Colorful
+import RayonModule
 import SwiftUI
 
 struct ThanksView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var store: RayonStore
 
     @State var openLicenseInfo: Bool = false
 
@@ -48,12 +50,16 @@ struct ThanksView: View {
         }
         .frame(width: 600, height: 250)
         .background(
-            ColorfulView(
-                colors: [Color.accentColor],
-                colorCount: 4
-            )
-            .ignoresSafeArea()
-            .opacity(0.25)
+            Group {
+                if !store.reducedViewEffects {
+                    ColorfulView(
+                        colors: [Color.accentColor],
+                        colorCount: 4
+                    )
+                    .ignoresSafeArea()
+                    .opacity(0.25)
+                }
+            }
         )
     }
 }

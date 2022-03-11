@@ -83,7 +83,7 @@ extension MenubarStatusItem {
         let shell = NSRemoteShell()
             .setupConnectionHost(machine.remoteAddress)
             .setupConnectionPort(NSNumber(value: Int(machine.remotePort) ?? 0))
-            .setupConnectionTimeout(6)
+            .setupConnectionTimeout(RayonStore.shared.timeoutNumber)
             .requestConnectAndWait()
         representedShell = shell
         identity.callAuthenticationWith(remote: shell)
@@ -109,9 +109,9 @@ extension MenubarStatusItem {
                 catSpeed = newSpeed
                 accessLock.unlock()
             }
-            sleep(3)
+            sleep(UInt32(exactly: RayonStore.shared.monitorInterval) ?? 5)
         }
         catSpeed = .broken
-        sleep(3)
+        sleep(5)
     }
 }

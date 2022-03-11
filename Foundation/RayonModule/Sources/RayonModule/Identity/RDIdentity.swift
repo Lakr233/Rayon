@@ -90,8 +90,7 @@ public struct RDIdentity: Codable, Identifiable, Equatable {
         if remote.isAuthenicated { return }
         if privateKey.count > 0 || publicKey.count > 0 {
             remote.authenticate(with: username, andPublicKey: publicKey, andPrivateKey: privateKey, andPassword: password)
-        }
-        if remote.isConnected, !remote.isAuthenicated {
+        } else {
             remote.authenticate(with: username, andPassword: password)
         }
         guard remote.isAuthenicated else {

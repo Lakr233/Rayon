@@ -59,6 +59,5 @@ struct BatchSnippetExecView: View {
             BatchSnippetSidebarView()
             BatchExecMainView()
         }
-        .requiresFrame()
     }
 }

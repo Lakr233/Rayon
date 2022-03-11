@@ -55,7 +55,7 @@
     [self.associatedRunLoop addPort:self.associatedPort forMode:NSRunLoopCommonModes];
     
     self.associatedTimer = [[NSTimer alloc] initWithFireDate: [[NSDate alloc] init]
-                            interval:0.2
+                            interval:0.1
                             target:self selector:@selector(associatedLoopHandler)
                             userInfo:NULL
                             repeats:YES];

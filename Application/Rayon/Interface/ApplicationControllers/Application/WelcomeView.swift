@@ -105,14 +105,24 @@ struct WelcomeView: View {
         .navigationTitle("Rayon")
         .padding()
         .expended()
-        .background(StarLinkView().ignoresSafeArea())
         .background(
-            ColorfulView(
-                colors: [Color.accentColor],
-                colorCount: 4
-            )
-            .ignoresSafeArea()
-            .opacity(0.25)
+            Group {
+                if !store.reducedViewEffects {
+                    StarLinkView().ignoresSafeArea()
+                }
+            }
+        )
+        .background(
+            Group {
+                if !store.reducedViewEffects {
+                    ColorfulView(
+                        colors: [Color.accentColor],
+                        colorCount: 4
+                    )
+                    .ignoresSafeArea()
+                    .opacity(0.25)
+                }
+            }
         )
         .overlay(
             VStack {
@@ -123,7 +133,6 @@ struct WelcomeView: View {
             }
             .padding()
         )
-        .requiresFrame()
         .toolbar {
             ToolbarItem {
                 Button {

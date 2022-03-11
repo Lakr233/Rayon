@@ -50,7 +50,6 @@ struct IdentityManager: View {
                     .expended()
             }
         }
-        .requiresFrame()
         .toolbar {
             ToolbarItem {
                 Button {

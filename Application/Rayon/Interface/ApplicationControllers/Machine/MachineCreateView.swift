@@ -154,7 +154,7 @@ struct MachineCreateView: View {
                 NSRemoteShell()
                     .setupConnectionHost(serverLocation)
                     .setupConnectionPort(NSNumber(value: Int(serverPort) ?? 0))
-                    .setupConnectionTimeout(6)
+                    .setupConnectionTimeout(RayonStore.shared.timeoutNumber)
                     .requestConnectAndWait()
             }
 
@@ -205,7 +205,7 @@ struct MachineCreateView: View {
             let remote = NSRemoteShell()
                 .setupConnectionHost(serverLocation)
                 .setupConnectionPort(NSNumber(value: Int(serverPort) ?? 0))
-                .setupConnectionTimeout(6)
+                .setupConnectionTimeout(RayonStore.shared.timeoutNumber)
                 .requestConnectAndWait()
             identity.callAuthenticationWith(remote: remote)
             debugPrint(remote.isAuthenicated)

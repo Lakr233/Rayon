@@ -62,7 +62,7 @@ class PortForwardBackend: ObservableObject {
             context.shell
                 .setupConnectionHost(context.machine.remoteAddress)
                 .setupConnectionPort(NSNumber(value: Int(context.machine.remotePort) ?? 0))
-                .setupConnectionTimeout(6)
+                .setupConnectionTimeout(RayonStore.shared.timeoutNumber)
                 .requestConnectAndWait()
             guard context.shell.isConnected else {
                 self.putHint(for: context.info.id, with: "failed connect")

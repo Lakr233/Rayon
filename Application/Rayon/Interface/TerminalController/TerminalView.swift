@@ -17,7 +17,7 @@ struct TerminalView: View {
         Group {
             if context.interfaceToken == interfaceToken {
                 context.termInterface
-                    .padding(2)
+                    .padding(4)
             } else {
                 Text("Terminal Transfer To Another Window")
             }
@@ -31,6 +31,8 @@ struct TerminalView: View {
                 Button {
                     if context.closed {
                         DispatchQueue.global().async {
+                            self.context.putInformation("[i] Reconnect will use the information you provide previously,")
+                            self.context.putInformation("    if the machine was edited, recreate a new terminal.")
                             self.context.processBootstrap()
                         }
                     } else {

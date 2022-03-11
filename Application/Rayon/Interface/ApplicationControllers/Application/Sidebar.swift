@@ -12,18 +12,16 @@ struct SidebarView: View {
     @EnvironmentObject var store: RayonStore
     @EnvironmentObject var terminalManager: TerminalManager
 
-    @State var openServerSelector: Bool = false
-
     var body: some View {
         List {
             NavigationLink {
-                WelcomeView()
+                WelcomeView().requiresFrame()
             } label: {
                 Label("Welcome", systemImage: "sun.min.fill")
             }
             manager
             session
-            recent
+            if store.storeRecent { recent }
         }
         .navigationTitle("Rayon")
         .frame(minWidth: 200)
@@ -32,31 +30,31 @@ struct SidebarView: View {
     var manager: some View {
         Section("Manager") {
             NavigationLink {
-                MachineManagerView()
+                MachineManagerView().requiresFrame()
             } label: {
                 Label("Server", systemImage: "server.rack")
             }
             .badge(store.machineGroup.count)
             NavigationLink {
-                IdentityManager()
+                IdentityManager().requiresFrame()
             } label: {
                 Label("Identity", systemImage: "person.fill")
             }
             .badge(store.identityGroup.count)
             NavigationLink {
-                SnippetManager()
+                SnippetManager().requiresFrame()
             } label: {
                 Label("Snippet", systemImage: "arrow.right.doc.on.clipboard")
             }
             .badge(store.snippetGroup.count)
             NavigationLink {
-                PortForwardManager()
+                PortForwardManager().requiresFrame()
             } label: {
                 Label("Port Forward", systemImage: "arrowshape.turn.up.right.circle.fill")
             }
             .badge(store.portForwardGroup.count)
             NavigationLink {
-                SettingView()
+                SettingView().requiresFrame()
             } label: {
                 Label("Setting", systemImage: "gearshape.fill")
             }
@@ -78,7 +76,7 @@ struct SidebarView: View {
             } else {
                 ForEach(terminalManager.sessionContexts) { context in
                     NavigationLink {
-                        TerminalView(context: context)
+                        TerminalView(context: context).requiresFrame()
                     } label: {
                         if context.remoteType == .machine {
                             Label(context.machine.name, systemImage: "terminal")
@@ -125,7 +123,14 @@ struct SidebarView: View {
                 .expended()
             }
             Button {
-                openServerSelector = true
+                DispatchQueue.global().async {
+                    let machines = RayonUtil.selectMachine(allowMany: true)
+                    mainActor {
+                        for machine in machines {
+                            terminalManager.createSession(withMachineID: machine)
+                        }
+                    }
+                }
             } label: {
                 HStack {
                     Label("Batch Startup", systemImage: "wind")
@@ -133,14 +138,6 @@ struct SidebarView: View {
                 }
                 .background(Color.accentColor.opacity(0.0001))
             }
-            .sheet(isPresented: $openServerSelector, onDismiss: nil, content: {
-                MachinePickerView(onComplete: { machines in
-                    if machines.isEmpty { return }
-                    for machine in machines {
-                        terminalManager.createSession(withMachineID: machine)
-                    }
-                }, allowSelectMany: true)
-            })
             .buttonStyle(PlainButtonStyle())
             .expended()
         }

@@ -18,6 +18,7 @@ class TerminalManager: ObservableObject {
     func createSession(withMachineObject machine: RDMachine) {
         let context = Context(machine: machine)
         sessionContexts.append(context)
+        RayonStore.shared.storeRecentIfNeeded(from: machine.id)
     }
 
     func createSession(withMachineID machineId: RDMachine.ID) {
@@ -32,6 +33,7 @@ class TerminalManager: ObservableObject {
     func createSession(withCommand command: SSHCommandReader) {
         let context = Context(command: command)
         sessionContexts.append(context)
+        RayonStore.shared.storeRecentIfNeeded(from: command)
     }
 
     func sessionExists(for machine: RDMachine.ID) -> Bool {

@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 import NSRemoteShell
 import PropertyWrapper
 
@@ -23,6 +24,9 @@ public class RayonStore: ObservableObject {
         storeRecent = UDStoreRecent
         saveTemporarySession = UDSaveTemporarySession
         timeout = UDTimeout
+        reducedViewEffects = UDReducedViewEffects
+        disableConformation = UDDisableConformation
+        monitorInterval = UDMonitorInterval
         if timeout <= 0 { timeout = 5 }
 
         if let read = readEncryptedDefault(
@@ -96,6 +100,18 @@ public class RayonStore: ObservableObject {
         }
     }
 
+    @UserDefaultsWrapper(key: "wiki.qaq.rayon.monitorInterval", defaultValue: 3)
+    private var UDMonitorInterval: Int
+    @Published public var monitorInterval: Int = 0 {
+        didSet {
+            UDMonitorInterval = monitorInterval
+        }
+    }
+
+    public var timeoutNumber: NSNumber {
+        NSNumber(value: timeout)
+    }
+
     @Published public var openInterfaceAutomatically: Bool = true {
         didSet {
             storeEncryptedDefault(
@@ -158,6 +174,24 @@ public class RayonStore: ObservableObject {
             if !storeRecent {
                 recentRecord = []
             }
+        }
+    }
+
+    @UserDefaultsWrapper(key: "wiki.qaq.rayon.reducedViewEffects", defaultValue: false)
+    private var UDReducedViewEffects: Bool
+
+    @Published public var reducedViewEffects: Bool = false {
+        didSet {
+            UDReducedViewEffects = reducedViewEffects
+        }
+    }
+
+    @UserDefaultsWrapper(key: "wiki.qaq.rayon.disableConformation", defaultValue: false)
+    private var UDDisableConformation: Bool
+
+    @Published public var disableConformation: Bool = false {
+        didSet {
+            UDDisableConformation = disableConformation
         }
     }
 
