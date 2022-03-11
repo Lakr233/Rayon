@@ -24,6 +24,10 @@ struct AgreementView: View {
             if #available(iOS 15.0, *) {
                 content.buttonStyle(.borderedProminent)
             }
+            else if #available(iOS 14.0, *)
+            {
+                content.buttonStyle(.automatic)
+            }
         }
     }
 
