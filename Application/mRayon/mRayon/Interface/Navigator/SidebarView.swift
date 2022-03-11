@@ -7,18 +7,18 @@
 
 import RayonModule
 import SwiftUI
-import SwiftUIPolyfill
 
 struct SidebarView: View {
     @EnvironmentObject var store: RayonStore
 
     @StateObject var monitorManager = MonitorManager.shared
     @StateObject var terminalManager = TerminalManager.shared
+    @StateObject var forwardBackend = PortForwardBackend.shared
 
     var body: some View {
         NavigationView {
             sidebar
-            WelcomeView()
+            JustWelcomeView()
         }
     }
 
@@ -27,11 +27,8 @@ struct SidebarView: View {
             app
             monitor
             terminals
-
-            if store.storeRecent {
-                recent
-            }
 //            portForward
+            if store.storeRecent { recent }
         }
         .listStyle(SidebarListStyle())
         .navigationTitle("Rayon")
@@ -58,6 +55,11 @@ struct SidebarView: View {
                 SnippetView()
             } label: {
                 Label("Snippet", systemImage: "chevron.left.forwardslash.chevron.right")
+            }
+            NavigationLink {
+                PortForwardView()
+            } label: {
+                Label("Port Forward", systemImage: "arrow.left.arrow.right")
             }
             NavigationLink {
                 SettingView()
@@ -117,16 +119,14 @@ struct SidebarView: View {
                     } label: {
                         Label(context.title, systemImage: "text.magnifyingglass")
                     }
-                    .swipeActions(
-                        trailing: [
-                            SwipeActionButton(
-                                text: "Delete", icon: "trash",
-                                action: {
-                                    monitorManager.end(for: context.id)
-                                },
-                                tint: .red
-                            ),
-                        ])
+                    .swipeActions {
+                        Button {
+                            monitorManager.end(for: context.id)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                        .tint(.red)
+                    }
                 }
             }
         }
@@ -148,138 +148,54 @@ struct SidebarView: View {
                     NavigationLink {
                         TerminalView(context: context)
                     } label: {
-                        Label(context.title, systemImage: "terminal")
+                        Label(context.navigationTitle, systemImage: "terminal")
                     }
-                    .swipeActions(
-                        trailing: [
-                            SwipeActionButton(
-                                text: "Delete", icon: "trash",
-                                action: {
-                                    terminalManager.end(for: context.id)
-                                },
-                                tint: .red
-                            ),
-                        ])
+                    .swipeActions {
+                        Button {
+                            terminalManager.end(for: context.id)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                        .tint(.red)
+                    }
                 }
             }
         }
     }
 
-    var portForward: some View {
-        Section("Port Forward") {
-            Button {} label: {
-                HStack {
-                    Label("No Session", systemImage: "square.dashed")
-                    Spacer()
-                }
-            }
-            .buttonStyle(PlainButtonStyle())
-            .expended()
-        }
-    }
-
-    func recentButton(for command: SSHCommandReader) -> some View {
-        func delete() {
-            store.recentRecord = store.recentRecord
-                .filter { $0.id != command.command }
-        }
-        return Button {
-            TerminalManager.shared.begin(for: command)
-        } label: {
-            HStack {
-                Label(command.command, systemImage: "rectangle.dashed.and.paperclip")
-                Spacer()
-            }
-            .background(Color.accentColor.opacity(0.0001))
-        }
-        .swipeActions(
-            trailing: [
-                SwipeActionButton(
-                    text: "Delete", icon: "trash",
-                    action: {
-                        delete()
-                    },
-                    tint: .red
-                ),
-            ])
-        .contextMenu {
-            Button {
-                UIBridge.sendPasteboard(str: command.command)
-            } label: {
-                Label("Copy Command", systemImage: "doc.on.doc")
-            }
-            Button {
-                delete()
-            } label: {
-                Label("Delete Record", systemImage: "trash")
-            }
-            .background(Color.accentColor.opacity(0.0001))
-        }
-        .buttonStyle(PlainButtonStyle())
-        .expended()
-    }
-
-    func recentButton(for machine: RDMachine.ID) -> some View {
-        func delete() {
-            store.recentRecord = store.recentRecord
-                .filter { $0.id != machine.uuidString }
-        }
-        return Group {
-            if store.machineGroup[machine].isNotPlaceholder() {
-                Button {
-                    TerminalManager.shared.begin(for: machine)
-                } label: {
-                    HStack {
-                        Label(store.machineGroup[machine].name, systemImage: "rectangle.and.paperclip")
-                        Spacer()
-                    }
-                    .background(Color.accentColor.opacity(0.0001))
-                }
-                .buttonStyle(PlainButtonStyle())
-                .expended()
-                .swipeActions(
-                    trailing: [
-                        SwipeActionButton(
-                            text: "Delete", icon: "trash",
-                            action: {
-                                delete()
-                            },
-                            tint: .red
-                        ),
-                    ])
-                .contextMenu {
-                    Button {
-                        UIBridge.sendPasteboard(str: store.machineGroup[machine].getCommand())
-                    } label: {
-                        Label("Copy Command", systemImage: "doc.on.doc")
-                    }
-                    Button {
-                        delete()
-                    } label: {
-                        Label("Delete Record", systemImage: "trash")
-                    }
-                }
-            } else {
-                Button {} label: {
-                    HStack {
-                        Label("[deleted]", systemImage: "square.dashed")
-                        Spacer()
-                    }
-                }
-                .buttonStyle(PlainButtonStyle())
-                .expended()
-            }
-        }
-    }
-
-    func clearRecentTapped() {
-        UIBridge.requiresConfirmation(
-            message: "Are you sure you want to clear recent?"
-        ) { confirmed in
-            guard confirmed else { return }
-            store.recentRecord = []
-        }
-    }
+//    var portForward: some View {
+//        Section("Port Forward") {
+//            if forwardBackend.container.isEmpty {
+//                Button {} label: {
+//                    HStack {
+//                        Label("No Session", systemImage: "square.dashed")
+//                        Spacer()
+//                    }
+//                }
+//                .buttonStyle(PlainButtonStyle())
+//                .expended()
+//            } else {
+//                ForEach(forwardBackend.container) { context in
+//                    NavigationLink {
+//                        PortForwardExecView(context: context)
+//                    } label: {
+//                        Label(
+//                            context.info.shortDescription(),
+//                            systemImage: context.info.forwardOrientation == .listenLocal ? "l.joystick.tilt.right" : "r.joystick.tilt.right"
+//                        )
+//                    }
+//                    .swipeActions {
+//                        Button {
+//                            forwardBackend.endSession(withPortForwardID: context.info.id)
+//                        } label: {
+//                            Label("Delete", systemImage: "trash")
+//                        }
+//                        .tint(.red)
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
 
 struct SidebarView_Previews: PreviewProvider {

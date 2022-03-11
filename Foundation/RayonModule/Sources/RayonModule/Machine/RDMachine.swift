@@ -64,7 +64,7 @@ public struct RDMachine: Codable, Identifiable, Equatable {
         return false
     }
 
-    public func shortDescription() -> String {
+    public func shortDescription(withComment: Bool = true) -> String {
         var build = name + " "
         if let aid = associatedIdentity,
            let uid = UUID(uuidString: aid)
@@ -78,7 +78,7 @@ public struct RDMachine: Codable, Identifiable, Equatable {
         if remotePort != "22" {
             build += " -p " + remotePort
         }
-        if !comment.isEmpty {
+        if withComment, !comment.isEmpty {
             build += " (" + comment + ")"
         }
         return build
@@ -88,18 +88,19 @@ public struct RDMachine: Codable, Identifiable, Equatable {
         remoteAddress.count > 0 && remotePort.count > 0
     }
 
-    public func getCommand() -> String {
+    public func getCommand(insertLeadingSSH: Bool = true) -> String {
         var build = ""
+        let leading = insertLeadingSSH ? "ssh " : ""
         if let id = associatedIdentity,
            let rid = UUID(uuidString: id)
         {
             let oid = RayonStore.shared.identityGroup[rid]
             if !oid.username.isEmpty {
-                build = "ssh \(oid.username)@\(remoteAddress)"
+                build = leading + "\(oid.username)@\(remoteAddress)"
             }
         }
         if build.isEmpty {
-            build = "ssh \(remoteAddress)"
+            build = leading + "\(remoteAddress)"
         }
         if remotePort != "22" {
             build += " -p " + remotePort

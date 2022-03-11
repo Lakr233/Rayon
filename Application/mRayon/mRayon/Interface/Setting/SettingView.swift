@@ -38,9 +38,20 @@ struct SettingView: View {
             }
 
             Section {
-                Toggle("Open When Connect", isOn: $store.openInterfaceAutomatically)
+                Toggle("Open at Connect", isOn: $store.openInterfaceAutomatically)
+                Toggle("Reduced Effects", isOn: $store.reducedViewEffects)
             } header: {
                 Label("Interface", systemImage: "arrow.right")
+            }
+
+            Section {
+                NavigationLink {
+                    LogView()
+                } label: {
+                    Text("Show App Log")
+                }
+            } header: {
+                Label("Diagnostic", systemImage: "doc.text.below.ecg")
             }
 
             Section {

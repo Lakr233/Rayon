@@ -7,7 +7,6 @@
 
 import RayonModule
 import SwiftUI
-import SwiftUIPolyfill
 
 struct EditMachineView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -26,8 +25,6 @@ struct EditMachineView: View {
     @State var group = ""
     @State var comment = ""
     @State var associatedIdentity: UUID? = nil
-
-    @State var openPickIdentity: Bool = false
 
     var body: some View {
         List {
@@ -55,8 +52,13 @@ struct EditMachineView: View {
             }
 
             Section {
-                NavigationLink {
-                    PickIdentityView(selection: $associatedIdentity)
+                Button {
+                    DispatchQueue.global().async {
+                        let identity = RayonUtil.selectIdentity()
+                        mainActor {
+                            self.associatedIdentity = identity
+                        }
+                    }
                 } label: {
                     Label("Select Identity", systemImage: "arrow.right")
                         .foregroundColor(.accentColor)
@@ -135,15 +137,15 @@ struct EditMachineView: View {
 
     func completeSheet() {
         guard !name.isEmpty else {
-            UIBridge.presentError(with: "Name can not be empty")
+            UIBridge.presentError(with: "Empty Name")
             return
         }
         guard !remoteAddress.isEmpty else {
-            UIBridge.presentError(with: "Address can not be empty")
+            UIBridge.presentError(with: "Empty Address")
             return
         }
         guard !remotePort.isEmpty else {
-            UIBridge.presentError(with: "Port can not be empty")
+            UIBridge.presentError(with: "Empty Port")
             return
         }
 

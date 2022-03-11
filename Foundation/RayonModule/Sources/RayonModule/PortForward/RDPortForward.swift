@@ -82,13 +82,26 @@ public struct RDPortForward: Codable, Identifiable, Equatable {
 
     public func shortDescription() -> String {
         guard isValid() else {
-            return "Invalid"
+            return "Invalid Forward"
         }
         switch forwardOrientation {
         case .listenLocal:
-            return "localhost:\(bindPort) --ssh-tunnel-\(getMachineName() ?? "Unknown")-> \(targetHost):\(targetPort)"
+            return "localhost:\(bindPort) -\(getMachineName() ?? "Unknown")-> \(targetHost):\(targetPort)"
         case .listenRemote:
-            return "\(getMachineName() ?? "Unknown"):\(bindPort) --ssh-tunnel-localhost-> \(targetHost):\(targetPort)"
+            return "\(getMachineName() ?? "Unknown"):\(bindPort) -localhost-> \(targetHost):\(targetPort)"
+        }
+    }
+
+    public func getCommand() -> String? {
+        guard isValid(), let using = usingMachine else {
+            return nil
+        }
+        let machineCommand = RayonStore.shared.machineGroup[using]
+        switch forwardOrientation {
+        case .listenLocal:
+            return "ssh -L \(bindPort):\(targetHost):\(targetPort) \(machineCommand.getCommand(insertLeadingSSH: false))"
+        case .listenRemote:
+            return "ssh -R \(bindPort):\(targetHost):\(targetPort) \(machineCommand.getCommand(insertLeadingSSH: false))"
         }
     }
 }

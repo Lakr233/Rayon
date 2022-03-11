@@ -12,13 +12,22 @@ class CodeMirrorDelegate: NSObject, WKNavigationDelegate, WKUIDelegate {
     weak var userContentController: WKUserContentController?
     var navigateCompleted: Bool = false
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_: WKWebView, didFinish _: WKNavigation!) {
         navigateCompleted = true
     }
 
     deinit {
         // webkit's bug, still holding ref after deinit
         debugPrint("\(self) __deinit__")
-        userContentController?.removeScriptMessageHandler(forName: "callbackHandler")
+        if Thread.isMainThread {
+            userContentController?.removeScriptMessageHandler(forName: "callbackHandler")
+        } else {
+            let sem = DispatchSemaphore(value: 0)
+            DispatchQueue.main.async { [self] in
+                defer { sem.signal() }
+                self.userContentController?.removeScriptMessageHandler(forName: "callbackHandler")
+            }
+            sem.wait()
+        }
     }
 }

@@ -22,9 +22,6 @@ struct RayonApp: App {
         #if DEBUG
             NSLog(CommandLine.arguments.joined(separator: "\n"))
         #endif
-        RayonStore.setPresentError { error in
-            UIBridge.presentError(with: error)
-        }
         _ = RayonStore.shared
 //        requiresMenubarSetup = MenubarTool.shared.requireMenubarSetup()
 

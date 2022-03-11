@@ -27,7 +27,7 @@ protocol XTerminal {
 
     @discardableResult
     func setupBellChain(callback: (() -> Void)?) -> Self
-    
+
     @discardableResult
     func setupSizeChain(callback: ((CGSize) -> Void)?) -> Self
 
@@ -109,7 +109,7 @@ class XTerminalCore: XTerminal {
         associatedScriptDelegate.onBellChain = callback
         return self
     }
-    
+
     @discardableResult
     func setupSizeChain(callback: ((CGSize) -> Void)?) -> Self {
         associatedScriptDelegate.onSizeChain = callback

@@ -7,7 +7,6 @@
 
 import RayonModule
 import SwiftUI
-import SwiftUIPolyfill
 
 struct MachineElementView: View {
     let machine: RDMachine.ID
@@ -164,7 +163,8 @@ struct MachineElementView: View {
                     )
             )
             Divider()
-            CopyableText(machine.uuidString)
+            Text(machine.uuidString)
+                .textSelection(.enabled)
                 .font(.system(size: 8, weight: .light, design: .monospaced))
         }
         .animation(.interactiveSpring(), value: store.machineRedacted)

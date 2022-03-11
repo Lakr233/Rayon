@@ -20,6 +20,8 @@
 
 @interface NSRemoteShell ()
 
+@property(nonatomic, assign) BOOL destroyed;
+
 @property(nonatomic, nonnull, strong) TSEventLoop *associatedLoop;
 
 @property(nonatomic, nonnull, strong) NSString *remoteHost;
@@ -55,6 +57,7 @@
     self = [super init];
     
     if (self) {
+        _destroyed = NO;
         _associatedLoop = [[TSEventLoop alloc] initWithParent:self];
         _remoteHost = @"";
         _remotePort = @(22);
@@ -74,9 +77,36 @@
 }
 
 - (void)dealloc {
+    self.destroyed = YES;
     NSLog(@"shell object at %p deallocating", self);
     [self uncheckedConcurrencyDisconnect];
     [self.associatedLoop destroyLoop];
+}
+
+- (void)destroyPermanently {
+    if (self.destroyed) { return; }
+    self.destroyed = YES;
+    NSLog(@"shell object at %p destroy permanently", self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        [self.requestLoopLock lock];
+        [self.associatedLoop destroyLoop];
+        [self uncheckedConcurrencyDisconnect];
+        // so there won't be any connect request semaphore f***ing us
+        for (dispatch_block_t invocation in self.requestInvokations) {
+            if (invocation) { invocation(); }
+        }
+        // call again to make sure no connect invocation
+        [self uncheckedConcurrencyDisconnect];
+        [self.requestInvokations removeAllObjects];
+        // and no more semaphore sitting there in sub channels
+        for (id<NSRemoteOperableObject> object in [self.operableObjects copy]) {
+            [object uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        }
+        [self.operableObjects removeAllObjects];
+        // should cancel any source
+        [self uncheckedConcurrencyDispatchSourceMakeDecision];
+        [self.requestLoopLock unlock];
+    });
 }
 
 - (instancetype)setupConnectionHost:(NSString *)targetHost {
@@ -151,6 +181,7 @@ continue; \
 // MARK: - API
 
 - (instancetype)requestConnectAndWait {
+    if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
@@ -166,6 +197,7 @@ continue; \
 }
 
 - (instancetype)requestDisconnectAndWait {
+    if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
@@ -181,6 +213,7 @@ continue; \
 }
 
 - (instancetype)authenticateWith:(NSString *)username andPassword:(NSString *)password {
+    if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
@@ -197,6 +230,7 @@ continue; \
 }
 
 - (instancetype)authenticateWith:(NSString *)username andPublicKey:(NSString *)publicKey andPrivateKey:(NSString *)privateKey andPassword:(NSString *)password {
+    if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
@@ -219,6 +253,7 @@ continue; \
                    withOutput:(void (^)(NSString * _Nonnull))responseDataBlock
       withContinuationHandler:(BOOL (^)(void))continuationBlock
 {
+    if (self.destroyed) return;
     NSLog(@"requesting execute: %@", command);
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
@@ -243,6 +278,7 @@ continue; \
                            withOutput:(void (^)(NSString * _Nonnull))responseDataBlock
               withContinuationHandler:(BOOL (^)(void))continuationBlock
 {
+    if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
@@ -266,6 +302,7 @@ continue; \
                          withForwardTargetPort:(NSNumber *)targetPort
                        withContinuationHandler:(BOOL (^)(void))continuationBlock
 {
+    if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
@@ -288,6 +325,7 @@ continue; \
                           withForwardTargetPort:(NSNumber *)targetPort
                         withContinuationHandler:(BOOL (^)(void))continuationBlock
 {
+    if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {

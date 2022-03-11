@@ -102,7 +102,7 @@ class MonitorContext: ObservableObject, Identifiable, Equatable {
         }
         MonitorContext.queue.async {
             self.shell.requestDisconnectAndWait()
-            self.shell = .init()
+            self.shell.destroyPermanently()
         }
     }
 }

@@ -139,10 +139,8 @@ struct PortForwardManager: View {
                     }
                 } label: {
                     Text(backend.sessionExists(withPortForwardID: data.id) ? "Terminate" : "Open")
-                        .foregroundColor(.accentColor)
-                        .underline()
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(.borderedProminent)
             }
             .width(80)
             TableColumn("Status") { data in

@@ -89,7 +89,7 @@ public extension ServerStatusViews {
                     }
                 }
                 HStack {
-                    Text("Displaying network speed, measured each second.")
+                    Text("Displaying network speed, measured each second")
                         .font(.system(size: 8, weight: .regular, design: .monospaced))
                     Spacer()
                 }

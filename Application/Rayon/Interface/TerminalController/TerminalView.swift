@@ -32,7 +32,7 @@ struct TerminalView: View {
                     if context.closed {
                         DispatchQueue.global().async {
                             self.context.putInformation("[i] Reconnect will use the information you provide previously,")
-                            self.context.putInformation("    if the machine was edited, recreate a new terminal.")
+                            self.context.putInformation("    if the machine was edited, create a new terminal.")
                             self.context.processBootstrap()
                         }
                     } else {

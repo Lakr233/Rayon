@@ -43,7 +43,7 @@ struct SnippetView: View {
             } else {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
-                        Label("\(content.count) snippet/snippets available, long press for option.", systemImage: "chevron.left.forwardslash.chevron.right")
+                        Label("\(content.count) snippet(s) available, tap for option.", systemImage: "chevron.left.forwardslash.chevron.right")
                             .font(.system(.footnote, design: .rounded))
                         Divider()
                         LazyVGrid(columns: columns, alignment: .leading, spacing: 10) {

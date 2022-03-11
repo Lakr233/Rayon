@@ -13,7 +13,7 @@ import PropertyWrapper
 public class RayonStore: ObservableObject {
     public init() {
         defer {
-            debugPrint("RayonStore initialer completed")
+            debugPrint("RayonStore init completed")
         }
 
         licenseAgreed = UserDefaults

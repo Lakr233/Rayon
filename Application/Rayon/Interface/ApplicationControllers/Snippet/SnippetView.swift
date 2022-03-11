@@ -144,7 +144,6 @@ struct SnippetFloatingPanelView: View {
             }
             let machines = RayonUtil.selectMachine()
             guard machines.count > 0 else {
-                RayonStore.presentError("No machine was selected for execution")
                 return
             }
             mainActor {

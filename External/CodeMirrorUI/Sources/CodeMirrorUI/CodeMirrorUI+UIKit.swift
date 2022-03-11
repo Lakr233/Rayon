@@ -31,7 +31,7 @@
         func setDocumentData(_ data: String) {
             associatedCore.setDocumentData(data)
         }
-        
+
         public func setDocumentFont(size: Int) {
             associatedCore.setDocumentFont(size: size)
         }

@@ -47,7 +47,10 @@ class CodeEditorCore: CodeEditor {
         configuration.userContentController = contentController
         configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
         associatedWebDelegate.userContentController = contentController
-        associatedWebView = TransparentWebView(frame: .zero, configuration: configuration)
+        associatedWebView = TransparentWebView(
+            frame: CGRect(x: 0, y: 0, width: 500, height: 500),
+            configuration: configuration
+        )
         associatedWebView.uiDelegate = associatedWebDelegate
         associatedWebView.navigationDelegate = associatedWebDelegate
 
@@ -86,51 +89,40 @@ class CodeEditorCore: CodeEditor {
     }
 
     func setDocumentData(_ doc: String) {
-        setDocumentData(doc, retry: 3)
-    }
-
-    func evaluateJavaScript(_ script: String, withError: @escaping (Error) -> Void) {
-        DispatchQueue.global().async { [weak self] in
-            while !(self?.associatedWebDelegate.navigateCompleted ?? true) { usleep(1000) }
-            DispatchQueue.main.async { [weak self] in
-                self?.associatedWebView.evaluateJavaScript(script) { _, error in
-                    // TODO: FIXME: FUCK
-                    if let error = error {
-                        print(error.localizedDescription)
-                        print(script)
-                        withError(error)
-                    }
-                }
-            }
-        }
-    }
-
-    func setDocumentData(_ doc: String, retry: Int) {
         guard let data = doc.data(using: .utf8) else {
             return
         }
-        guard retry >= 0 else { return }
         let base64 = data.base64EncodedString()
         let script = "setText(atob('\(base64)'))"
-        evaluateJavaScript(script) { _ in
-            DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.setDocumentData(doc, retry: retry - 1)
+        evaluateJavaScript(script, webView: associatedWebView)
+    }
+
+    func evaluateJavaScript(_ script: String, webView: WKWebView) {
+        DispatchQueue.global().async {
+            while !self.associatedWebDelegate.navigateCompleted { usleep(1000) }
+            var attempt = 0
+            var success: Bool = false
+            while !success, attempt < 10 {
+                attempt += 1
+                let sem = DispatchSemaphore(value: 0)
+                DispatchQueue.main.async {
+                    webView.evaluateJavaScript(script) { _, error in
+                        if let error = error {
+                            debugPrint(error.localizedDescription)
+                            debugPrint(script)
+                        } else {
+                            success = true
+                        }
+                        sem.signal()
+                    }
+                }
+                _ = sem.wait(timeout: .now() + 0.1)
             }
         }
     }
 
     public func setDocumentFont(size: Int) {
-        setDocumentFont(size: size, retry: 3)
-    }
-    
-    public func setDocumentFont(size: Int, retry: Int) {
-        guard retry >= 0 else { return }
         let script = "window.setSize(\(size))"
-        evaluateJavaScript(script) { _ in
-            DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.setDocumentFont(size: size, retry: retry - 1)
-            }
-        }
-        
+        evaluateJavaScript(script, webView: associatedWebView)
     }
 }

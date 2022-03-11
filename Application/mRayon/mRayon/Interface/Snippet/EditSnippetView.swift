@@ -8,7 +8,6 @@
 import CodeMirrorUI
 import RayonModule
 import SwiftUI
-import SwiftUIPolyfill
 import SymbolPicker
 
 struct EditSnippetView: View {
@@ -49,7 +48,8 @@ struct EditSnippetView: View {
             } header: {
                 Label("Name", systemImage: "tag")
             } footer: {
-                CopyableText(avatar.isEmpty ? "No Symbol Selected" : avatar)
+                Text(avatar.isEmpty ? "No Symbol Selected" : avatar)
+                    .textSelection(.enabled)
             }
 
 //                Group is not available on iOS, :P
@@ -136,7 +136,7 @@ struct EditSnippetView: View {
 
     func completeSheet() {
         guard !name.isEmpty else {
-            UIBridge.presentError(with: "Name can not be empty")
+            UIBridge.presentError(with: "Empty Name")
             return
         }
 

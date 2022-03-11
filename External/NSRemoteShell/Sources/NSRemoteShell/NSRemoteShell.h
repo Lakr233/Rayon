@@ -78,6 +78,12 @@ NS_ASSUME_NONNULL_BEGIN
                           withForwardTargetPort:(NSNumber*)targetPort
                         withContinuationHandler:(BOOL (^)(void))continuationBlock;
 
+#pragma mark destory
+
+/// This function is used to force shutdown everything, including the run loop and it's associated thread
+/// when ARC is not working, call this function
+- (void)destroyPermanently;
+
 @end
 
 NS_ASSUME_NONNULL_END

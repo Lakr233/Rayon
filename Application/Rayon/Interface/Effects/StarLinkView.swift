@@ -25,7 +25,7 @@ struct StarLinkView: View {
     let starFaith: [StarFaith] = {
         var newFaith = [StarFaith]()
         for _ in 0 ..< starCount {
-            newFaith.append(.init())
+            newFaith.append(.init(id: .init()))
         }
         return newFaith
     }()
@@ -37,11 +37,11 @@ struct StarLinkView: View {
     var body: some View {
         GeometryReader { r in
             ZStack {
-                ForEach(0 ..< shineOffsets.count, id: \.self) { index in
+                ForEach(shineOffsets) { faith in
                     ShineDotView()
-                        .offset(x: shineOffsets[index].x, y: shineOffsets[index].y)
-                        .opacity(shineOffsets[index].opacity)
-                        .scaleEffect(shineOffsets[index].scale)
+                        .offset(x: faith.x, y: faith.y)
+                        .opacity(faith.opacity)
+                        .scaleEffect(faith.scale)
                 }
             }
             .expended()
@@ -70,6 +70,7 @@ struct StarLinkView: View {
         var initialOffset = [ShineOffset]()
         for faith in starFaith {
             initialOffset.append(.init(
+                id: faith.id,
                 x: faith.currentPositionOffsetX,
                 y: faith.currentPositionOffsetY,
                 scale: 1.0,
@@ -84,6 +85,7 @@ struct StarLinkView: View {
         var newArray = [ShineOffset]()
         for faith in starFaith {
             newArray.append(.init(
+                id: faith.id,
                 x: faith.currentPositionOffsetX,
                 y: faith.currentPositionOffsetY,
                 scale: Double.random(in: 1.0 ... 2.5),
@@ -118,15 +120,18 @@ struct StarLinkView: View {
     }
 
     struct ShineOffset: Identifiable {
-        var id: String { "(\(x), \(y))" }
+        var id: UUID
         var x: Double
         var y: Double
         var scale: Double
         var opacity: Double
     }
 
-    struct StarFaith {
-        init() {
+    struct StarFaith: Identifiable {
+        var id: UUID
+
+        init(id: UUID) {
+            self.id = id
             beginData = Date(timeIntervalSinceNow:
                 TimeInterval.random(in: -starAnimationDurationSecond ... 0)
             )

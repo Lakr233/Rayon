@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LocalAuthentication
 import RayonModule
 import SwiftUI
 import UIKit
@@ -13,6 +14,36 @@ import UIKit
 let preferredPopOverSize = CGSize(width: 700, height: 555)
 
 enum RayonUtil {
+    private static func deviceHasPassword() -> Bool {
+        LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+    }
+
+    typealias DeviceOwnershipCheckSuccess = Bool
+    static func deviceOwnershipAuthenticate(onComplete: @escaping (DeviceOwnershipCheckSuccess) -> Void) {
+        DispatchQueue.global().async {
+            guard deviceHasPassword() else {
+                onComplete(true)
+                return
+            }
+            let context = LAContext()
+            let reason = "Performing privacy sensitive operation requires device ownership authenticated"
+            context.evaluatePolicy(
+                .deviceOwnerAuthentication,
+                localizedReason: reason
+            ) { success, error in
+                mainActor {
+                    if success {
+                        debugPrint(#function, "success")
+                        onComplete(true)
+                    } else {
+                        debugPrint(#function, "failure", error?.localizedDescription ?? "Unknown Error")
+                        onComplete(false)
+                    }
+                }
+            }
+        }
+    }
+
     static func selectIdentity() -> RDIdentity.ID? {
         assert(!Thread.isMainThread, "select identity must be called from background thread")
 
@@ -45,7 +76,7 @@ enum RayonUtil {
         return selection
     }
 
-    static func selectMachine() -> [RDMachine.ID] {
+    static func selectMachine(canSelectMany: Bool = true) -> [RDMachine.ID] {
         assert(!Thread.isMainThread, "select identity must be called from background thread")
 
         var selection: [RDMachine.ID] = []
@@ -55,10 +86,10 @@ enum RayonUtil {
 
         mainActor {
             let picker = NavigationView {
-                PickMachineView {
+                PickMachineView(completion: {
                     selection = $0
                     sem.signal()
-                }
+                }, canSelectMany: canSelectMany)
             }
             .expended()
             .navigationViewStyle(StackNavigationViewStyle())
@@ -75,6 +106,10 @@ enum RayonUtil {
         sem.wait()
 
         return selection
+    }
+
+    static func selectOneMachine() -> [RDMachine.ID] {
+        selectMachine(canSelectMany: false)
     }
 
     static func createExecuteFor(snippet: RDSnippet) {

@@ -7,7 +7,6 @@
 
 import RayonModule
 import SwiftUI
-import SwiftUIPolyfill
 import XTerminalUI
 
 struct TerminalView: View {
@@ -19,6 +18,8 @@ struct TerminalView: View {
 
     @State var openControlKeyPopover: Bool = false
     @State var controlKey: String = ""
+
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         Group {
@@ -34,89 +35,8 @@ struct TerminalView: View {
                                 updateTerminalSize()
                             }
                             .padding(r.size.width > 600 ? 8 : 2)
-                        ScrollView(.horizontal) {
-                            HStack(spacing: 5) {
-                                Group {
-                                    makeKeyboardFloatingButton("trash") {
-                                        guard !context.closed else {
-                                            return
-                                        }
-                                        UIBridge.requiresConfirmation(
-                                            message: "Are you sure you want to close this session?"
-                                        ) { yes in
-                                            if yes { context.processShutdown() }
-                                        }
-                                    }
-                                    .foregroundColor(.red)
-                                    makeKeyboardFloatingButton("doc.on.clipboard") {
-                                        guard let str = UIPasteboard.general.string else {
-                                            UIBridge.presentError(with: "Empty pasteboard")
-                                            return
-                                        }
-                                        UIBridge.requiresConfirmation(
-                                            message: "Are you sure you want to paste following string?\n\n\(str)"
-                                        ) { yes in
-                                            if yes { self.safeWrite(str) }
-                                        }
-                                    }
-                                }
-                                Divider().frame(height: 20)
-                                Group {
-                                    makeKeyboardFloatingButton("arrow.right.to.line.compact") {
-                                        safeWriteBase64("CQ==")
-                                    }
-                                    makeKeyboardFloatingButton("control") {
-                                        controlKey = "C"
-                                        openControlKeyPopover = true
-                                    }
-                                    .popover(isPresented: $openControlKeyPopover) {
-                                        HStack(spacing: 2) {
-                                            Text("Ctrl + ")
-                                            TextField("Key To Send", text: $controlKey, onCommit: {
-                                                sendCtrl()
-                                            })
-                                            .disableAutocorrection(true)
-                                            .textInputAutocapitalization(.never)
-                                            .onChange(of: controlKey) { newValue in
-                                                guard let f = newValue.uppercased().last else {
-                                                    if !controlKey.isEmpty { controlKey = "" }
-                                                    return
-                                                }
-                                                if controlKey != String(f) {
-                                                    controlKey = String(f)
-                                                }
-                                            }
-                                            Button {
-                                                sendCtrl()
-                                            } label: {
-                                                Image(systemName: "return")
-                                            }
-                                        }
-                                        .font(.system(size: 14, weight: .semibold, design: .rounded))
-                                        .padding()
-                                        .frame(width: 200, height: 40)
-                                    }
-                                    makeKeyboardFloatingButton("escape") {
-                                        safeWriteBase64("Gw==")
-                                    }
-                                }
-                                Divider().frame(height: 20)
-                                Group {
-                                    makeKeyboardFloatingButton("arrow.left.circle.fill") {
-                                        safeWriteBase64("G1tE")
-                                    }
-                                    makeKeyboardFloatingButton("arrow.right.circle.fill") {
-                                        safeWriteBase64("G1tD")
-                                    }
-                                    makeKeyboardFloatingButton("arrow.up.circle.fill") {
-                                        safeWriteBase64("G1tB")
-                                    }
-                                    makeKeyboardFloatingButton("arrow.down.circle.fill") {
-                                        safeWriteBase64("G1tC")
-                                    }
-                                }
-                            }
-                            .padding()
+                        if !context.destroyedSession {
+                            buttonGroup
                         }
                     }
                 }
@@ -124,12 +44,111 @@ struct TerminalView: View {
                 PlaceholderView("Terminal Transfer To Another Window", img: .emptyWindow)
             }
         }
+        .disabled(context.destroyedSession)
         .onAppear {
             debugPrint("set interface token \(interfaceToken)")
             context.interfaceToken = interfaceToken
         }
-        .navigationTitle(context.title)
+        .navigationTitle(context.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    var buttonGroup: some View {
+        ScrollView(.horizontal) {
+            HStack(spacing: 5) {
+                Group {
+                    if context.closed {
+                        makeKeyboardFloatingButton("arrow.counterclockwise", disableWhenClosed: false) {
+                            DispatchQueue.global().async {
+                                context.putInformation("[i] Reconnect will use the information you provide previously,")
+                                context.putInformation("    if the machine was edited, create a new terminal.")
+                                context.processBootstrap()
+                            }
+                        }
+                    }
+                    makeKeyboardFloatingButton("trash", disableWhenClosed: false) {
+                        if context.closed {
+                            TerminalManager.shared.end(for: context.id)
+                            presentationMode.wrappedValue.dismiss()
+                            context.destroyedSession = true
+                        } else {
+                            UIBridge.requiresConfirmation(
+                                message: "Are you sure you want to close this session?"
+                            ) { yes in
+                                if yes { context.processShutdown() }
+                            }
+                        }
+                    }
+                    .foregroundColor(.red)
+                    makeKeyboardFloatingButton("doc.on.clipboard") {
+                        guard let str = UIPasteboard.general.string else {
+                            UIBridge.presentError(with: "Empty Pasteboard")
+                            return
+                        }
+                        UIBridge.requiresConfirmation(
+                            message: "Are you sure you want to paste following string?\n\n\(str)"
+                        ) { yes in
+                            if yes { self.safeWrite(str) }
+                        }
+                    }
+                }
+                Divider().frame(height: 20)
+                Group {
+                    makeKeyboardFloatingButton("arrow.right.to.line.compact") {
+                        safeWriteBase64("CQ==")
+                    }
+                    makeKeyboardFloatingButton("control") {
+                        openControlKeyPopover = true
+                    }
+                    .popover(isPresented: $openControlKeyPopover) {
+                        HStack(spacing: 2) {
+                            Text("Ctrl + ")
+                            TextField("Key To Send", text: $controlKey)
+                                .disableAutocorrection(true)
+                                .onChange(of: controlKey) { newValue in
+                                    guard let f = newValue.uppercased().last else {
+                                        if !controlKey.isEmpty { controlKey = "" }
+                                        return
+                                    }
+                                    if controlKey != String(f) {
+                                        controlKey = String(f)
+                                    }
+                                }
+                                .onSubmit {
+                                    sendCtrl()
+                                }
+                            Button {
+                                sendCtrl()
+                            } label: {
+                                Image(systemName: "return")
+                            }
+                        }
+                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+                        .padding()
+                        .frame(width: 200, height: 40)
+                    }
+                    makeKeyboardFloatingButton("escape") {
+                        safeWriteBase64("Gw==")
+                    }
+                }
+                Divider().frame(height: 20)
+                Group {
+                    makeKeyboardFloatingButton("arrow.left.circle.fill") {
+                        safeWriteBase64("G1tE")
+                    }
+                    makeKeyboardFloatingButton("arrow.right.circle.fill") {
+                        safeWriteBase64("G1tD")
+                    }
+                    makeKeyboardFloatingButton("arrow.up.circle.fill") {
+                        safeWriteBase64("G1tB")
+                    }
+                    makeKeyboardFloatingButton("arrow.down.circle.fill") {
+                        safeWriteBase64("G1tC")
+                    }
+                }
+            }
+            .padding()
+        }
     }
 
     func sendCtrl() {
@@ -183,18 +202,18 @@ struct TerminalView: View {
         context.insertBuffer(str)
     }
 
-    func makeKeyboardFloatingButton(_ image: String, block: @escaping () -> Void) -> some View {
+    func makeKeyboardFloatingButton(_ image: String, disableWhenClosed: Bool = true, block: @escaping () -> Void) -> some View {
         Button {
-            guard !context.closed else { return }
+            if context.closed, disableWhenClosed { return }
             block()
         } label: {
             Image(systemName: image)
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
                 .frame(width: 20, height: 20)
         }
-//        .buttonStyle(.bordered)
+        .buttonStyle(.bordered)
         .animation(.spring(), value: context.interfaceDisabled)
-        .disabled(context.interfaceDisabled)
+        .disabled(disableWhenClosed && context.interfaceDisabled)
     }
 
     func updateTerminalSize() {

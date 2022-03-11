@@ -39,7 +39,7 @@ struct WelcomeView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 128, height: 128)
 
-            Text("Quick Connect")
+            Text("Quick Connect (Identity Requires Auto Auth)")
                 .font(.system(.headline, design: .rounded))
 
             VStack(alignment: .leading, spacing: 4) {
@@ -97,7 +97,8 @@ struct WelcomeView: View {
                 }
             }
 
-            Toggle("Store Session", isOn: $store.saveTemporarySession)
+            Toggle("Record Command", isOn: $store.saveTemporarySession)
+                .font(.system(.headline, design: .rounded))
         }
         .sheet(isPresented: $openThanksView, onDismiss: nil) {
             ThanksView()

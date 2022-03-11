@@ -32,10 +32,13 @@
       location = "group:External/NSRemoteShell">
    </FileRef>
    <FileRef
-      location = "group:Foundation/SymbolPicker">
+      location = "group:Foundation/SPIndicator">
    </FileRef>
    <FileRef
-      location = "group:Foundation/SwiftUIPolyfill">
+      location = "group:Foundation/StripedTextTable">
+   </FileRef>
+   <FileRef
+      location = "group:Foundation/SymbolPicker">
    </FileRef>
    <FileRef
       location = "group:External/XTerminalUI">

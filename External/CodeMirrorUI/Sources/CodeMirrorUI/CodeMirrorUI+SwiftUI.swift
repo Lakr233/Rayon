@@ -30,7 +30,7 @@ import SwiftUI
         public func setDocumentData(_ data: String) {
             correspondingView.setDocumentData(data)
         }
-        
+
         public func setDocumentFont(size: Int) {
             correspondingView.setDocumentFont(size: size)
         }
@@ -59,7 +59,7 @@ import SwiftUI
         public func setDocumentData(_ data: String) {
             correspondingView.setDocumentData(data)
         }
-        
+
         public func setDocumentFont(size: Int) {
             correspondingView.setDocumentFont(size: size)
         }

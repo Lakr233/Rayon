@@ -16,11 +16,10 @@ struct mRayonApp: App {
 
     init() {
         #if DEBUG
-            NSLog(CommandLine.arguments.joined(separator: "\n"))
+            NSLog("\nCommand Arguments:\n" + CommandLine.arguments.joined(separator: "\n"))
         #endif
-        RayonStore.setPresentError { error in
-            UIBridge.presentError(with: error)
-        }
+
+        _ = LogRedirect.shared
         _ = RayonStore.shared
 
         NSLog("static main completed")
@@ -32,9 +31,17 @@ struct mRayonApp: App {
                 .environmentObject(store)
                 .onAppear {
                     // optimize later on flight exp
-                    _ = SCodeEditor()
-                    _ = STerminalView()
+                    let editor = SCodeEditor()
+                    let xterm = STerminalView()
                     checkAgreement()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        withExtendedLifetime(editor) {
+                            debugPrint("editor \(editor) prewarm done")
+                        }
+                        withExtendedLifetime(xterm) {
+                            debugPrint("xterm \(xterm) prewarm done")
+                        }
+                    }
                 }
                 .onChange(of: store.licenseAgreed) { _ in
                     checkAgreement()

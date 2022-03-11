@@ -64,6 +64,7 @@ class TerminalManager: ObservableObject {
         if let index = index {
             let context = sessionContexts.remove(at: index)
             context.processShutdown()
+            context.shell.destroyPermanently()
         }
     }
 
@@ -72,12 +73,14 @@ class TerminalManager: ObservableObject {
         if let index = index {
             let context = sessionContexts.remove(at: index)
             context.processShutdown()
+            context.shell.destroyPermanently()
         }
     }
 
     func closeAll() {
         for context in sessionContexts {
             context.processShutdown()
+            context.shell.destroyPermanently()
         }
         sessionContexts = []
     }

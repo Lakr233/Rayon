@@ -118,6 +118,7 @@ class PortForwardBackend: ObservableObject {
             let context = container.remove(at: index)
             DispatchQueue.global().async {
                 context.shell.requestDisconnectAndWait()
+                context.shell.destroyPermanently()
             }
         }
     }

@@ -21,7 +21,7 @@ func mainActor(delay: Double = 0, run: @escaping () -> Void) {
 
 enum UIBridge {
     static func sendPasteboard(str: String) {
-        debugPrint("\(#function) \(str)")
+        presentSuccess(with: "Pasteboard Sent")
         UIPasteboard.general.string = str
     }
 

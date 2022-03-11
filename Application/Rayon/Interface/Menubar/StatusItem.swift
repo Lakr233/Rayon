@@ -141,6 +141,7 @@ class MenubarStatusItem: NSObject, Identifiable {
         representedShell = nil
         DispatchQueue.global().async {
             shell?.requestDisconnectAndWait()
+            shell?.destroyPermanently()
         }
         loopContinue = false
         eventMonitor = nil

@@ -43,7 +43,7 @@ struct MachineView: View {
             } else {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
-                        Label("\(content.count) machine(s) available, long press for option.", systemImage: "server.rack")
+                        Label("\(content.count) machine(s) available, tap for option.", systemImage: "server.rack")
                             .font(.system(.footnote, design: .rounded))
                         Divider()
                         LazyVGrid(columns: columns, alignment: .leading, spacing: 10) {

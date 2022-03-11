@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-import SwiftUIPolyfill
 
 struct LicenseView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 Divider().hidden()
-                CopyableText(loadLicense())
+                Text(loadLicense())
+                    .textSelection(.enabled)
                     .font(.system(.caption, design: .monospaced))
             }
             .padding(.bottom)

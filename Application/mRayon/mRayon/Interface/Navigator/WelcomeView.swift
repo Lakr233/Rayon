@@ -9,35 +9,11 @@ import Colorful
 import RayonModule
 import SwiftUI
 
-@available(iOS 15.0, *)
-struct WelcomeViewModifier15: ViewModifier {
-    let parent: WelcomeView
-    @FocusState var textFieldIsFocused: Bool
-
-    func body(content: Content) -> some View {
-        content
-            .onSubmit {
-                parent.beginQuickConnect()
-            }
-            .focused($textFieldIsFocused)
-            .onChange(of: textFieldIsFocused, perform: { newValue in
-                // Autofill "ssh " if the text field is empty.
-                if newValue, parent.quickConnect.isEmpty {
-                    parent.quickConnect = "ssh "
-                }
-            })
-    }
-
-    init(parent: WelcomeView) {
-        self.parent = parent
-    }
-}
-
 struct WelcomeView: View {
     @EnvironmentObject var store: RayonStore
 
-    @State public var quickConnect: String = ""
-
+    @State var quickConnect: String = ""
+    @FocusState var textFieldIsFocused: Bool
     @State var buttonDisabled: Bool = true
     @State var suggestion: String? = nil
 
@@ -62,31 +38,36 @@ struct WelcomeView: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    if #available(iOS 15.0, *) {
-                        TextField("ssh root@www.example.com -p 22 ↵", text: $quickConnect)
-                            .modifier(WelcomeViewModifier15(parent: self))
-                    } else {
-                        TextField("ssh root@www.example.com -p 22 ↵", text: $quickConnect, onCommit: beginQuickConnect)
-                    }
+                    TextField("ssh root@www.example.com -p 22 ↵", text: $quickConnect)
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                        .focused($textFieldIsFocused)
+                        .font(.system(.headline, design: .rounded))
+                        .onChange(of: quickConnect, perform: { newValue in
+                            if newValue.hasPrefix("ssh ssh ") {
+                                // user pasting command
+                                quickConnect.removeFirst("ssh ".count)
+                            }
+                            buttonDisabled = SSHCommandReader(command: newValue) == nil
+                            refreshSuggestion()
+                        })
+                        .onChange(of: textFieldIsFocused, perform: { newValue in
+                            // Autofill "ssh " if the text field is empty.
+                            if newValue, quickConnect.isEmpty {
+                                quickConnect = "ssh "
+                            }
+                        })
+                        .onSubmit {
+                            beginQuickConnect()
+                        }
+                        .padding(6)
+                        .background(
+                            Rectangle()
+                                .foregroundColor(.black.opacity(0.1))
+                                .cornerRadius(4)
+                        )
                 }
-                .textFieldStyle(PlainTextFieldStyle())
-                .textInputAutocapitalization(.never)
-                .disableAutocorrection(true)
-                .font(.system(.headline, design: .rounded))
-                .onChange(of: quickConnect, perform: { newValue in
-                    if newValue.hasPrefix("ssh ssh ") {
-                        // user pasting command
-                        quickConnect.removeFirst("ssh ".count)
-                    }
-                    buttonDisabled = SSHCommandReader(command: newValue) == nil
-                    refreshSuggestion()
-                })
-                .padding(6)
-                .background(
-                    Rectangle()
-                        .foregroundColor(.black.opacity(0.1))
-                        .cornerRadius(4)
-                )
                 .frame(maxWidth: 400)
 
                 if suggestion != nil {
@@ -116,7 +97,25 @@ struct WelcomeView: View {
         .navigationTitle("Connect")
         .padding()
         .expended()
-        .background(StarLinkView().ignoresSafeArea())
+        .background(
+            Group {
+                if !store.reducedViewEffects {
+                    StarLinkView().ignoresSafeArea()
+                }
+            }
+        )
+        .background(
+            Group {
+                if !store.reducedViewEffects {
+                    ColorfulView(
+                        colors: [Color.accentColor],
+                        colorCount: 16
+                    )
+                    .ignoresSafeArea()
+                    .opacity(0.25)
+                }
+            }
+        )
         .overlay(
             VStack {
                 Spacer()
@@ -166,11 +165,67 @@ struct WelcomeView: View {
         }
     }
 
-    public func beginQuickConnect() {
+    private func beginQuickConnect() {
         guard let command = SSHCommandReader(command: quickConnect) else {
             return
         }
         TerminalManager.shared.begin(for: command)
+    }
+}
+
+struct JustWelcomeView: View {
+    @EnvironmentObject var store: RayonStore
+
+    var version: String {
+        var ret = "Version: " +
+            (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")
+            + " Build: " +
+            (Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")
+        #if DEBUG
+            ret += " DEBUG"
+        #endif
+        return ret
+    }
+
+    var body: some View {
+        VStack(alignment: .center, spacing: 10) {
+            Image("Avatar")
+                .antialiased(true)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 128, height: 128)
+        }
+        .padding()
+        .expended()
+        .background(
+            Group {
+                if !store.reducedViewEffects {
+                    StarLinkView().ignoresSafeArea()
+                }
+            }
+        )
+        .background(
+            Group {
+                if !store.reducedViewEffects {
+                    ColorfulView(
+                        colors: [Color.accentColor],
+                        colorCount: 16
+                    )
+                    .ignoresSafeArea()
+                    .opacity(0.25)
+                }
+            }
+        )
+        .overlay(
+            VStack {
+                Spacer()
+                Text(version)
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .opacity(0.5)
+                Spacer()
+                    .frame(height: 20)
+            }
+        )
     }
 }
 

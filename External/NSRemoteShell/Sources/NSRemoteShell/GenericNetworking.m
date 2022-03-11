@@ -18,7 +18,11 @@
     hints.ai_family = PF_UNSPEC;        // PF_INET if you want only IPv4 addresses
     hints.ai_protocol = IPPROTO_TCP;
     struct addrinfo *addrs, *addr;
-    getaddrinfo([candidateHost UTF8String], NULL, &hints, &addrs);
+    @try {
+        getaddrinfo([candidateHost UTF8String], NULL, &hints, &addrs);
+    } @catch (NSException *exception) {
+        return candidateHostData;
+    }
     for (addr = addrs; addr; addr = addr->ai_next) {
         char host[NI_MAXHOST];
         getnameinfo(addr->ai_addr, addr->ai_addrlen, host, sizeof(host), NULL, 0, NI_NUMERICHOST);

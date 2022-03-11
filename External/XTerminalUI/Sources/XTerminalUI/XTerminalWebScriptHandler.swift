@@ -53,7 +53,7 @@ class XTerminalWebScriptHandler: NSObject, WKScriptMessageHandler {
             return nil
         }
     }
-    
+
     deinit {
         debugPrint("\(self) __deinit__")
         onBellChain = nil

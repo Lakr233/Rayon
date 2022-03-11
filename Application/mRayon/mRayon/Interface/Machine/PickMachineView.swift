@@ -11,19 +11,23 @@ import SwiftUI
 struct PickMachineView: View {
     @StateObject var store = RayonStore.shared
 
+    let canSelectMany: Bool
+
     @Binding var selection: [RDMachine.ID]
     @State var rawSelection: [RDMachine.ID] = []
 
-    init(selection: Binding<[RDMachine.ID]>) {
+    init(selection: Binding<[RDMachine.ID]>, canSelectMany: Bool = true) {
         _selection = selection
+        self.canSelectMany = canSelectMany
     }
 
     private var completion: (([RDMachine.ID]) -> Void)?
 
     /// MAKE SURE THIS VIEW IS NOT DISMISSABLE BY DRAG
     /// - Parameter completion: only called when touch checkmark button
-    init(completion: @escaping (([RDMachine.ID]) -> Void)) {
+    init(completion: @escaping (([RDMachine.ID]) -> Void), canSelectMany _: Bool = true) {
         self.completion = completion
+        canSelectMany = true
         _selection = Binding<[RDMachine.ID]> { [] } set: { _ in }
     }
 
@@ -112,10 +116,14 @@ struct PickMachineView: View {
     }
 
     func toggleSelection(for mid: RDMachine.ID) {
-        if let index = rawSelection.firstIndex(of: mid) {
-            rawSelection.remove(at: index)
+        if canSelectMany {
+            if let index = rawSelection.firstIndex(of: mid) {
+                rawSelection.remove(at: index)
+            } else {
+                rawSelection.append(mid)
+            }
         } else {
-            rawSelection.append(mid)
+            rawSelection = [mid]
         }
     }
 }

@@ -7,7 +7,6 @@
 
 import RayonModule
 import SwiftUI
-import SwiftUIPolyfill
 
 struct EditIdentityView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -28,6 +27,8 @@ struct EditIdentityView: View {
     @State var group: String = ""
     @State var autoAuth: Bool = true
 
+    @State var showPassword = false
+
     var body: some View {
         List {
             Section {
@@ -41,9 +42,27 @@ struct EditIdentityView: View {
             }
 
             Section {
-                SecureField("Password", text: $password)
-                    .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
+                if showPassword {
+                    TextField("Password", text: $password)
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                    Button {
+                        showPassword = false
+                    } label: {
+                        Label("Hide Password", systemImage: "eye.slash")
+                    }
+                } else {
+                    SecureField("Password", text: $password)
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                    Button {
+                        RayonUtil.deviceOwnershipAuthenticate { success in
+                            if success { showPassword = true }
+                        }
+                    } label: {
+                        Label("Show Password", systemImage: "eye")
+                    }
+                }
             } header: {
                 Label("Password", systemImage: "key")
             } footer: {
@@ -198,7 +217,7 @@ struct EditIdentityView: View {
 
     func loadPrivateKey(url: URL) {
         guard let data = try? String(contentsOfFile: url.path) else {
-            UIBridge.presentError(with: "Unable to get key from file")
+            UIBridge.presentError(with: "Unable to read")
             return
         }
         loadPrivateKey(str: data)
@@ -206,7 +225,7 @@ struct EditIdentityView: View {
 
     func loadPublicKey(url: URL) {
         guard let data = try? String(contentsOfFile: url.path) else {
-            UIBridge.presentError(with: "Unable to get key from file")
+            UIBridge.presentError(with: "Unable to read")
             return
         }
         loadPublicKey(str: data)
@@ -214,7 +233,7 @@ struct EditIdentityView: View {
 
     func loadPrivateKey(str: String?) {
         guard let str = str else {
-            UIBridge.presentError(with: "Unable to get key from pasteboard")
+            UIBridge.presentError(with: "Unable to read")
             return
         }
         if str.contains("PRIVATE KEY") {
@@ -230,7 +249,7 @@ struct EditIdentityView: View {
 
     func loadPublicKey(str: String?) {
         guard let str = str else {
-            UIBridge.presentError(with: "Unable to get key from pasteboard")
+            UIBridge.presentError(with: "Unable to read")
             return
         }
         if str.contains("ssh-") {
@@ -256,7 +275,7 @@ struct EditIdentityView: View {
 
     func completeSheet() {
         guard !username.isEmpty else {
-            UIBridge.presentError(with: "Username can not be empty")
+            UIBridge.presentError(with: "Empty Username")
             return
         }
 

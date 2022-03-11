@@ -33,7 +33,7 @@ class TerminalManager: ObservableObject {
         }
         let machine = RayonStore.shared.machineGroup[machineId]
         guard machine.isNotPlaceholder() else {
-            UIBridge.presentError(with: "Malformed application memory")
+            UIBridge.presentError(with: "Unknown Bad Data")
             return
         }
         let object = TerminalContext(machine: machine)
@@ -69,6 +69,7 @@ class TerminalManager: ObservableObject {
             guard let index = index else { return }
             let term = terminals.remove(at: index)
             term.processShutdown()
+            term.destroyedSession = true
         }
     }
 }

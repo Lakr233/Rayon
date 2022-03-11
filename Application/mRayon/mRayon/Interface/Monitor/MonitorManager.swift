@@ -21,23 +21,23 @@ class MonitorManager: ObservableObject {
         assert(Thread.isMainThread, "access to monitors property requires main thread")
         debugPrint("\(self) \(#function) \(machineId)")
         for monitor in monitors where monitor.machine.id == machineId {
-            UIBridge.presentError(with: "Another monitor is already running on this server")
+            UIBridge.presentError(with: "Already Running")
             return
         }
         let machine = RayonStore.shared.machineGroup[machineId]
         guard machine.isNotPlaceholder() else {
-            UIBridge.presentError(with: "Malformed application memory")
+            UIBridge.presentError(with: "Unknown Bad Data")
             return
         }
         guard let aid = machine.associatedIdentity,
               let uid = UUID(uuidString: aid)
         else {
-            UIBridge.presentError(with: "Associated identity is required for monitoring")
+            UIBridge.presentError(with: "No Identity")
             return
         }
         let identity = RayonStore.shared.identityGroup[uid]
         guard !identity.username.isEmpty else {
-            UIBridge.presentError(with: "Malformed application memory")
+            UIBridge.presentError(with: "Unknown Bad Data")
             return
         }
         let context = MonitorContext(machine: machine, identity: identity)

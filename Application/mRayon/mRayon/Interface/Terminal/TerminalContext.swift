@@ -14,7 +14,32 @@ import XTerminalUI
 
 class TerminalContext: ObservableObject, Identifiable, Equatable {
     var id: UUID = .init()
-    var title: String = ""
+
+    var navigationTitle: String {
+        switch remoteType {
+        case .machine: return machine.shortDescription(withComment: false)
+        case .command: return command?.command ?? "Unknown Command"
+        }
+    }
+
+    var firstConnect = true
+    @Published var destroyedSession = false {
+        didSet {
+            if destroyedSession {
+                shell.destroyPermanently()
+            }
+        }
+    }
+
+    @Published var navigationSubtitle: String = ""
+
+    private var title: String = "" {
+        didSet {
+            mainActor {
+                self.navigationSubtitle = self.title
+            }
+        }
+    }
 
     enum RemoteType {
         case machine
@@ -25,7 +50,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
 
     let machine: RDMachine
     let command: SSHCommandReader?
-    var shell: NSRemoteShell
+    var shell: NSRemoteShell = .init()
 
     // MARK: - SHELL CONTEXT
 
@@ -56,6 +81,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
     func insertBuffer(_ str: String) {
         bufferAccessLock.lock()
         defer { bufferAccessLock.unlock() }
+        guard !closed else { return }
         _dataBuffer += str
         TerminalContext.queue.async { [weak self] in
             self?.shell.explicitRequestStatusPickup()
@@ -64,7 +90,9 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
 
     var continueDecision: Bool = true {
         didSet {
-            interfaceDisabled = !continueDecision
+            mainActor {
+                self.interfaceDisabled = !self.continueDecision
+            }
         }
     }
 
@@ -82,13 +110,8 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
         command = nil
         remoteType = .machine
         title = machine.name
-        shell = .init()
-            .setupConnectionHost(machine.remoteAddress)
-            .setupConnectionPort(NSNumber(value: Int(machine.remotePort) ?? 0))
-            .setupConnectionTimeout(6)
         TerminalContext.queue.async {
             self.processBootstrap()
-            self.processShutdown()
         }
     }
 
@@ -103,23 +126,53 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
         self.command = command
         title = command.command
         remoteType = .machine
-        shell = .init()
-            .setupConnectionHost(machine.remoteAddress)
-            .setupConnectionPort(NSNumber(value: Int(machine.remotePort) ?? 0))
-            .setupConnectionTimeout(6)
         TerminalContext.queue.async {
             self.processBootstrap()
-            self.processShutdown()
         }
+    }
+
+    func setupShellData() {
+        shell
+            .setupConnectionHost(machine.remoteAddress)
+            .setupConnectionPort(NSNumber(value: Int(machine.remotePort) ?? 0))
+            .setupConnectionTimeout(RayonStore.shared.timeoutNumber)
     }
 
     static func == (lhs: TerminalContext, rhs: TerminalContext) -> Bool {
         lhs.id == rhs.id
     }
 
+    func putInformation(_ str: String) {
+        termInterface.write(str + "\r\n")
+    }
+
     func processBootstrap() {
+        defer {
+            mainActor { self.processShutdown(exitFromShell: true) }
+        }
+
+        mainActor {
+            guard self.firstConnect else {
+                return
+            }
+            guard RayonStore.shared.openInterfaceAutomatically else { return }
+            let host = UIHostingController(
+                rootView: DefaultPresent(context: self)
+            )
+            host.isModalInPresentation = true
+            host.modalTransitionStyle = .coverVertical
+            host.modalPresentationStyle = .formSheet
+            host.preferredContentSize = preferredPopOverSize
+            UIWindow.shutUpKeyWindow?
+                .topMostViewController?
+                .present(next: host)
+        }
+
+        setupShellData()
+
         debugPrint("\(self) \(#function) \(machine.id)")
-        // enter loop
+        putInformation("[*] Creating Connection")
+        continueDecision = true
 
         termInterface
             .setupBellChain {
@@ -128,49 +181,35 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
             .setupBufferChain { [weak self] buffer in
                 self?.insertBuffer(buffer)
             }
-
-        var alertRef: UIAlertController?
-        defer { mainActor { alertRef?.dismiss(animated: true, completion: nil) } }
-
-        mainActor {
-            let alert = UIAlertController(
-                title: "⏳",
-                message: "Creating terminal connection...",
-                preferredStyle: .alert
-            )
-            alertRef = alert
-            UIWindow.shutUpKeyWindow?.topMostViewController?.present(alert, animated: true, completion: nil)
-        }
+            .setupTitleChain { [weak self] str in
+                self?.title = str
+            }
+            .setupSizeChain { [weak self] size in
+                self?.termianlSize = size
+            }
 
         shell.requestConnectAndWait()
 
         guard shell.isConnected else {
-            mainActor {
-                alertRef?.dismiss(animated: true, completion: nil)
-            }
-            mainActor(delay: 0.5) {
-                UIBridge.presentError(with: "Failed to create connection")
-                TerminalManager.shared.end(for: self.id)
-            }
+            putInformation("Unable to connect for \(machine.remoteAddress):\(machine.remotePort)")
             return
         }
 
         if let rid = machine.associatedIdentity {
             guard let uid = UUID(uuidString: rid) else {
-                UIBridge.presentError(with: "Malformed machine data")
-                TerminalManager.shared.end(for: id)
+                putInformation("Malformed machine data")
                 return
             }
             let identity = RayonStore.shared.identityGroup[uid]
             guard !identity.username.isEmpty else {
-                UIBridge.presentError(with: "Malformed identity data")
-                TerminalManager.shared.end(for: id)
+                putInformation("Malformed identity data")
                 return
             }
             identity.callAuthenticationWith(remote: shell)
         } else {
             var previousUsername: String?
             for identity in RayonStore.shared.identityGroupForAutoAuth {
+                putInformation("[i] trying to authenticate with \(identity.shortDescription())")
                 if let prev = previousUsername, prev != identity.username {
                     shell.requestDisconnectAndWait()
                     shell.requestConnectAndWait()
@@ -181,23 +220,20 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
                     break
                 }
             }
-            if !shell.isAuthenicated,
-               let identity = RayonUtil.selectIdentity()
-            {
-                RayonStore.shared
-                    .identityGroup[identity]
-                    .callAuthenticationWith(remote: shell)
-            }
-        }
-
-        mainActor {
-            alertRef?.dismiss(animated: true, completion: nil)
-            alertRef = nil
+            putInformation("")
+            // user may get confused if multiple session opened the picker
+//                if !shell.isAuthenicated,
+//                   let identity = RayonUtil.selectIdentity()
+//                {
+//                    RayonStore.shared
+//                        .identityGroup[identity]
+//                        .callAuthenticationWith(remote: shell)
+//                }
         }
 
         guard shell.isConnected, shell.isAuthenicated else {
-            UIBridge.presentError(with: "Failed to authenticate connection", delay: 1)
-            TerminalManager.shared.end(for: id)
+            putInformation("Failed to authenticate connection")
+            putInformation("Did you forget to add identity or enable auto authentication?")
             return
         }
 
@@ -210,22 +246,6 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
                 read.lastBanner = self.shell.remoteBanner ?? "No Banner"
                 RayonStore.shared.machineGroup[self.machine.id] = read
             }
-        }
-
-        termInterface.write("[*] Creating Connection\r\n\r\n")
-
-        mainActor(delay: 0.5) {
-            guard RayonStore.shared.openInterfaceAutomatically else { return }
-            let host = UIHostingController(
-                rootView: DefaultPresent(context: self)
-            )
-            host.isModalInPresentation = true
-            host.modalTransitionStyle = .coverVertical
-            host.modalPresentationStyle = .formSheet
-            host.preferredContentSize = preferredPopOverSize
-            UIWindow.shutUpKeyWindow?
-                .topMostViewController?
-                .present(next: host)
         }
 
         shell.open(withTerminal: "xterm") { [weak self] in
@@ -248,21 +268,25 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
             self?.continueDecision ?? false
         }
 
-        termInterface.write("\r\n\r\n[*] Connection Closed ") // <- ending " " = make indicator greater again
-
         // leave loop
         debugPrint("\(self) \(#function) defer \(machine.id)")
 
         processShutdown()
     }
 
-    func processShutdown() {
-        mainActor {
-            self.continueDecision = false
+    func processShutdown(exitFromShell: Bool = false) {
+        firstConnect = false
+        if exitFromShell {
+            putInformation("")
+            putInformation("[*] Connection Closed")
         }
+        if let lastError = shell.getLastError() {
+            putInformation("[i] Last Error Provided By Backend")
+            putInformation("    " + lastError)
+        }
+        continueDecision = false
         TerminalContext.queue.async {
             self.shell.requestDisconnectAndWait()
-            self.shell = .init()
         }
     }
 }

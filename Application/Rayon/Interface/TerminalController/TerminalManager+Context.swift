@@ -17,7 +17,7 @@ extension TerminalManager {
 
         var navigationTitle: String {
             switch remoteType {
-            case .machine: return machine.shortDescription()
+            case .machine: return machine.shortDescription(withComment: false)
             case .command: return command?.command ?? "Unknown Command"
             }
         }
@@ -72,6 +72,7 @@ extension TerminalManager {
         func insertBuffer(_ str: String) {
             bufferAccessLock.lock()
             defer { bufferAccessLock.unlock() }
+            guard !closed else { return }
             _dataBuffer += str
             Context.queue.async { [weak self] in
                 self?.shell.explicitRequestStatusPickup()
@@ -206,6 +207,7 @@ extension TerminalManager {
 
             guard shell.isConnected, shell.isAuthenicated else {
                 putInformation("Failed to authenticate connection")
+                putInformation("Did you forget to add identity or enable auto authentication?")
                 return
             }
 
