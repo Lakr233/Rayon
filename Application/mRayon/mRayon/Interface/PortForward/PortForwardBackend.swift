@@ -78,7 +78,7 @@ class PortForwardBackend: ObservableObject {
                 putHint("failed authenticate")
                 return
             }
-            putHint("forward running")
+            putHint("opening channel")
             switch info.forwardOrientation {
             case .listenRemote:
                 shell.createPortForward(
@@ -86,6 +86,8 @@ class PortForwardBackend: ObservableObject {
                     withForwardTargetHost: info.targetHost,
                     withForwardTargetPort: NSNumber(value: info.targetPort)
                 ) {
+                    self.putHint("forward running")
+                } withContinuationHandler: {
                     true // we are using shell.disconnect for shutdown
                 }
             case .listenLocal:
@@ -94,6 +96,8 @@ class PortForwardBackend: ObservableObject {
                     withForwardTargetHost: info.targetHost,
                     withForwardTargetPort: NSNumber(value: info.targetPort)
                 ) {
+                    self.putHint("forward running")
+                } withContinuationHandler: {
                     true // we are using shell.disconnect for shutdown
                 }
             }

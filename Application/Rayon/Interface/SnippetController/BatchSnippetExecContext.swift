@@ -180,10 +180,12 @@ class BatchSnippetExecContext: ObservableObject {
             }
             return
         }
-        shell.executeRemote(
-            snippet.code,
-            withExecTimeout: 0
-        ) { output in
+        shell.beginExecute(
+            withCommand: snippet.code,
+            withTimeout: 0
+        ) {
+            debugPrint("channel begin")
+        } withOutput: { output in
             // because the output is picked up by xterm, we need to replace \n to \r\n
             let output = output
                 .replacingOccurrences(of: "\n", with: "\r\n") // \n -> \r\n, \r\n -> \r\r\n

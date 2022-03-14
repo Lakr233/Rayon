@@ -84,7 +84,7 @@ class PortForwardBackend: ObservableObject {
                 self.putHint(for: context.info.id, with: "failed authenticate")
                 return
             }
-            self.putHint(for: context.info.id, with: "forward running")
+            self.putHint(for: context.info.id, with: "opening channel")
             switch context.info.forwardOrientation {
             case .listenRemote:
                 context.shell.createPortForward(
@@ -92,6 +92,8 @@ class PortForwardBackend: ObservableObject {
                     withForwardTargetHost: context.info.targetHost,
                     withForwardTargetPort: NSNumber(value: context.info.targetPort)
                 ) {
+                    PortForwardBackend.shared.putHint(for: context.info.id, with: "forward running")
+                } withContinuationHandler: {
                     true // we are using shell.disconnect for shutdown
                 }
             case .listenLocal:
@@ -100,6 +102,8 @@ class PortForwardBackend: ObservableObject {
                     withForwardTargetHost: context.info.targetHost,
                     withForwardTargetPort: NSNumber(value: context.info.targetPort)
                 ) {
+                    PortForwardBackend.shared.putHint(for: context.info.id, with: "forward running")
+                } withContinuationHandler: {
                     true // we are using shell.disconnect for shutdown
                 }
             }

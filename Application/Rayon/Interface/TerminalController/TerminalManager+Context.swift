@@ -222,16 +222,18 @@ extension TerminalManager {
                 }
             }
 
-            shell.open(withTerminal: "xterm") { [weak self] in
+            shell.begin(withTerminalType: "xterm") {
+                debugPrint("channel open")
+            } withTerminalSize: { [weak self] in
                 var size = self?.termianlSize ?? Context.defaultTerminalSize
                 if size.width < 8 || size.height < 8 {
                     // something went wrong
                     size = Context.defaultTerminalSize
                 }
                 return size
-            } withWriteData: { [weak self] in
+            } withWriteDataBuffer: { [weak self] in
                 self?.getBuffer() ?? ""
-            } withOutput: { [weak self] output in
+            } withOutputDataBuffer: { [weak self] output in
                 let sem = DispatchSemaphore(value: 0)
                 mainActor {
                     self?.termInterface.write(output)

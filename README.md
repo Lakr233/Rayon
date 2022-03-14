@@ -16,6 +16,7 @@ A server monitor tool for linux based machines using remote proc file system wit
 - [x] Linux proc file system status information
 - [x] authenticate with password, key, etc...
 - [x] terminal with xterm support
+- [x] Port Forward support
 - [x] code snippet with batch execution
 - [x] Nvidia GPU status monitor
 - [x] Running cat for macOS app

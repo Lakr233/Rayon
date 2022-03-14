@@ -55,27 +55,31 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark execution
 
-- (instancetype)executeRemote:(NSString*)command
-             withExecTimeout:(NSNumber*)timeoutSecond
-                  withOutput:(nullable void (^)(NSString*))responseDataBlock
-     withContinuationHandler:(nullable BOOL (^)(void))continuationBlock;
+- (int)beginExecuteWithCommand:(NSString*)withCommand
+                   withTimeout:(NSNumber*)withTimeoutSecond
+                  withOnCreate:(dispatch_block_t)withOnCreate
+                    withOutput:(nullable void (^)(NSString*))withOutput
+       withContinuationHandler:(nullable BOOL (^)(void))withContinuationBlock;
 
-- (instancetype)openShellWithTerminal:(nullable NSString*)terminalType
-                     withTerminalSize:(nullable CGSize (^)(void))requestTerminalSize
-                        withWriteData:(nullable NSString* (^)(void))requestWriteData
-                           withOutput:(void (^)(NSString * _Nonnull))responseDataBlock
-              withContinuationHandler:(BOOL (^)(void))continuationBlock;
+- (instancetype)beginShellWithTerminalType:(nullable NSString*)withTerminalType
+                              withOnCreate:(dispatch_block_t)withOnCreate
+                          withTerminalSize:(nullable CGSize (^)(void))withRequestTerminalSize
+                       withWriteDataBuffer:(nullable NSString* (^)(void))withWriteDataBuffer
+                      withOutputDataBuffer:(void (^)(NSString * _Nonnull))withOutputDataBuffer
+                   withContinuationHandler:(BOOL (^)(void))withContinuationBlock;
 
 #pragma mark port map
 
 - (instancetype)createPortForwardWithLocalPort:(NSNumber*)localPort
                          withForwardTargetHost:(NSString*)targetHost
                          withForwardTargetPort:(NSNumber*)targetPort
+                                  withOnCreate:(dispatch_block_t)withOnCreate
                        withContinuationHandler:(BOOL (^)(void))continuationBlock;
 
 - (instancetype)createPortForwardWithRemotePort:(NSNumber*)remotePort
                           withForwardTargetHost:(NSString*)targetHost
                           withForwardTargetPort:(NSNumber*)targetPort
+                                   withOnCreate:(dispatch_block_t)withOnCreate
                         withContinuationHandler:(BOOL (^)(void))continuationBlock;
 
 #pragma mark destory

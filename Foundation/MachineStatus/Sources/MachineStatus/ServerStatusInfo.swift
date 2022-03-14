@@ -71,9 +71,10 @@ public class ServerStatus: ObservableObject, Equatable {
             return ""
         }
         var result = ""
-        shell.executeRemote(
-            command.rawValue,
-            withExecTimeout: NSNumber(value: 0),
+        shell.beginExecute(
+            withCommand: command.rawValue,
+            withTimeout: NSNumber(value: 0),
+            withOnCreate: {},
             withOutput: { result.append($0) },
             withContinuationHandler: nil
         )
