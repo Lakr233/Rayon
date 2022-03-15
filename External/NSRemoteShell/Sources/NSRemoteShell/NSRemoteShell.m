@@ -20,32 +20,34 @@
 
 @interface NSRemoteShell ()
 
-@property(nonatomic, assign) BOOL destroyed;
+@property (nonatomic, readwrite, assign) BOOL destroyed;
 
-@property(nonatomic, nonnull, strong) TSEventLoop *associatedLoop;
+@property (nonatomic, readonly, nonnull, strong) TSEventLoop *associatedLoop;
 
-@property(nonatomic, nonnull, strong) NSString *remoteHost;
-@property(nonatomic, nonnull, strong) NSNumber *remotePort;
-@property(nonatomic, nonnull, strong) NSNumber *operationTimeout;
+@property (nonatomic, readwrite, nonnull, strong) NSString *remoteHost;
+@property (nonatomic, readwrite, nonnull, strong) NSNumber *remotePort;
+@property (nonatomic, readwrite, nonnull, strong) NSNumber *operationTimeout;
 
-@property(nonatomic, readwrite, nullable, strong) NSString *resolvedRemoteIpAddress;
-@property(nonatomic, readwrite, nullable, strong) NSString *remoteBanner;
-@property(nonatomic, readwrite, nullable, strong) NSString *remoteFingerPrint;
-@property(nonatomic, readwrite, nullable, strong) NSString *lastError;
+@property (nonatomic, readwrite, nullable, strong) NSString *resolvedRemoteIpAddress;
+@property (nonatomic, readwrite, nullable, strong) NSString *remoteBanner;
+@property (nonatomic, readwrite, nullable, strong) NSString *remoteFingerPrint;
+@property (nonatomic, readwrite, nullable, strong) NSString *lastError;
 
-@property(nonatomic, readwrite, getter=isConnected) BOOL connected;
-@property(nonatomic, readwrite, getter=isAuthenicated) BOOL authenticated;
+@property (nonatomic, readwrite, getter=isConnected) BOOL connected;
+@property (nonatomic, readwrite, getter=isConnectedSFTP) BOOL connectedSFTP;
+@property (nonatomic, readwrite, getter=isAuthenicated) BOOL authenticated;
 
-@property(nonatomic, readwrite, assign) int associatedSocket;
-@property(nonatomic, nullable, assign) LIBSSH2_SESSION *associatedSession;
-@property(nonatomic, nullable, strong) dispatch_source_t associatedSocketSource;
+@property (nonatomic, readwrite, assign) int associatedSocket;
+@property (nonatomic, readwrite, nullable, assign) LIBSSH2_SESSION *associatedSession;
+@property (nonatomic, readwrite, nullable, assign) LIBSSH2_SFTP *associatedSFTP;
+@property (nonatomic, readwrite, nullable, strong) dispatch_source_t associatedSocketSource;
 
-@property(nonatomic, nonnull, strong) NSMutableArray<id<NSRemoteOperableObject>> *operableObjects;
-@property(nonatomic, nonnull, strong) NSMutableArray *requestInvokations;
-@property(nonatomic, nonnull, strong) NSLock *requestLoopLock;
+@property (nonatomic, readwrite, nonnull, strong) NSMutableArray<id<NSRemoteOperableObject>> *operableObjects;
+@property (nonatomic, readwrite, nonnull, strong) NSMutableArray *requestInvokations;
+@property (nonatomic, readwrite, nonnull, strong) NSLock *requestLoopLock;
 
-@property(nonatomic) unsigned keepAliveAttampt;
-@property(nonatomic, nullable, strong) NSDate *keepAliveLastSuccessAttampt;
+@property (nonatomic, readwrite, assign) unsigned keepAliveAttampt;
+@property (nonatomic, readwrite, nullable, strong) NSDate *keepAliveLastSuccessAttampt;
 
 @end
 
@@ -68,6 +70,7 @@
         _lastError = NULL;
         _associatedSocket = NULL;
         _associatedSession = NULL;
+        _associatedSFTP = NULL;
         _operableObjects = [[NSMutableArray alloc] init];
         _requestInvokations = [[NSMutableArray alloc] init];
         _requestLoopLock = [[NSLock alloc] init];
@@ -79,8 +82,10 @@
 - (void)dealloc {
     self.destroyed = YES;
     NSLog(@"shell object at %p deallocating", self);
-    [self uncheckedConcurrencyDisconnect];
+    [self.requestLoopLock lock];
+    [self unsafeDisconnect];
     [self.associatedLoop destroyLoop];
+    [self.requestLoopLock unlock];
 }
 
 - (void)destroyPermanently {
@@ -90,21 +95,21 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         [self.requestLoopLock lock];
         [self.associatedLoop destroyLoop];
-        [self uncheckedConcurrencyDisconnect];
+        [self unsafeDisconnect];
         // so there won't be any connect request semaphore f***ing us
         for (dispatch_block_t invocation in self.requestInvokations) {
             if (invocation) { invocation(); }
         }
         // call again to make sure no connect invocation
-        [self uncheckedConcurrencyDisconnect];
+        [self unsafeDisconnect];
         [self.requestInvokations removeAllObjects];
         // and no more semaphore sitting there in sub channels
         for (id<NSRemoteOperableObject> object in [self.operableObjects copy]) {
-            [object uncheckedConcurrencyDisconnectAndPrepareForRelease];
+            [object unsafeDisconnectAndPrepareForRelease];
         }
         [self.operableObjects removeAllObjects];
         // should cancel any source
-        [self uncheckedConcurrencyDispatchSourceMakeDecision];
+        [self unsafeDispatchSourceMakeDecision];
         [self.requestLoopLock unlock];
     });
 }
@@ -148,27 +153,27 @@
             if (invocation) { invocation(); }
         }
         [self.requestInvokations removeAllObjects];
-        [self uncheckedConcurrencyKeepAliveCheck];
-        [self uncheckedConcurrencyDispatchSourceMakeDecision];
+        [self unsafeKeepAliveCheck];
+        [self unsafeDispatchSourceMakeDecision];
         NSMutableArray *newArray = [[NSMutableArray alloc] init];
         for (id<NSRemoteOperableObject> object in [self.operableObjects copy]) {
 #define NSRemoteOperableObjectCheck(OBJECT) \
 do { \
 if (!(OBJECT)) { continue; } \
-if (![(OBJECT) uncheckedConcurrencyInsanityCheckAndReturnDidSuccess]) { \
-[(OBJECT) uncheckedConcurrencyDisconnectAndPrepareForRelease]; \
+if (![(OBJECT) unsafeInsanityCheckAndReturnDidSuccess]) { \
+[(OBJECT) unsafeDisconnectAndPrepareForRelease]; \
 continue; \
 } \
 } while (0);
             NSRemoteOperableObjectCheck(object);
-            [object uncheckedConcurrencyCallNonblockingOperations];
+            [object unsafeCallNonblockingOperations];
             NSRemoteOperableObjectCheck(object);
             [newArray addObject:object];
         }
         self.operableObjects = newArray;
-        [self uncheckedConcurrencyDispatchSourceMakeDecision];
+        [self unsafeDispatchSourceMakeDecision];
     }
-    [self uncheckedConcurrencyReadLastError];
+    [self unsafeReadLastError];
     [self.requestLoopLock unlock];
 }
 
@@ -180,45 +185,43 @@ continue; \
 
 // MARK: - API
 
-- (instancetype)requestConnectAndWait {
+- (void)requestConnectAndWait {
     if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
         id block = [^{
-            [magic uncheckedConcurrencyConnect];
+            [magic unsafeConnect];
             DISPATCH_SEMAPHORE_CHECK_SIGNLE(sem);
         } copy];
         [self.requestInvokations addObject:block];
     }
     [self explicitRequestStatusPickup];
     MakeDispatchSemaphoreWait(sem)
-    return self;
 }
 
-- (instancetype)requestDisconnectAndWait {
+- (void)requestDisconnectAndWait {
     if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
         id block = [^{
-            [magic uncheckedConcurrencyDisconnect];
+            [magic unsafeDisconnect];
             DISPATCH_SEMAPHORE_CHECK_SIGNLE(sem);
         } copy];
         [self.requestInvokations addObject:block];
     }
     [self.associatedLoop explicitRequestHandle];
     dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-    return self;
 }
 
-- (instancetype)authenticateWith:(NSString *)username andPassword:(NSString *)password {
+- (void)authenticateWith:(NSString *)username andPassword:(NSString *)password {
     if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
         id block = [^{
-            [magic uncheckedConcurrencyAuthenticateWith:username
+            [magic unsafeAuthenticateWith:username
                                             andPassword:password];
             DISPATCH_SEMAPHORE_CHECK_SIGNLE(sem);
         } copy];
@@ -226,16 +229,15 @@ continue; \
     }
     [self.associatedLoop explicitRequestHandle];
     MakeDispatchSemaphoreWait(sem)
-    return self;
 }
 
-- (instancetype)authenticateWith:(NSString *)username andPublicKey:(NSString *)publicKey andPrivateKey:(NSString *)privateKey andPassword:(NSString *)password {
+- (void)authenticateWith:(NSString *)username andPublicKey:(NSString *)publicKey andPrivateKey:(NSString *)privateKey andPassword:(NSString *)password {
     if (self.destroyed) return;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
         id block = [^{
-            [magic uncheckedConcurrencyAuthenticateWith:username
+            [magic unsafeAuthenticateWith:username
                                            andPublicKey:publicKey
                                           andPrivateKey:privateKey
                                             andPassword:password];
@@ -245,7 +247,6 @@ continue; \
     }
     [self.associatedLoop explicitRequestHandle];
     MakeDispatchSemaphoreWait(sem)
-    return self;
 }
 
 - (int)beginExecuteWithCommand:(NSString*)withCommand
@@ -260,7 +261,7 @@ continue; \
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
         id block = [^{
-            [magic uncheckedConcurrencyExecuteRemote:withCommand
+            [magic unsafeExecuteRemote:withCommand
                                      withExecTimeout:withTimeoutSecond
                                         withOnCreate:withOnCreate
                                           withOutput:withOutput
@@ -275,7 +276,7 @@ continue; \
     return exitCode;
 }
 
-- (instancetype)beginShellWithTerminalType:(nullable NSString*)withTerminalType
+- (void)beginShellWithTerminalType:(nullable NSString*)withTerminalType
                               withOnCreate:(dispatch_block_t)withOnCreate
                           withTerminalSize:(nullable CGSize (^)(void))withRequestTerminalSize
                        withWriteDataBuffer:(nullable NSString* (^)(void))withWriteDataBuffer
@@ -287,7 +288,7 @@ continue; \
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
         id block = [^{
-            [magic uncheckedConcurrencyOpenShellWithTerminal:withTerminalType
+            [magic unsafeOpenShellWithTerminal:withTerminalType
                                             withTerminalSize:withRequestTerminalSize
                                                withWriteData:withWriteDataBuffer
                                                   withOutput:withOutputDataBuffer
@@ -299,10 +300,9 @@ continue; \
     }
     [self.associatedLoop explicitRequestHandle];
     dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-    return self;
 }
 
-- (instancetype)createPortForwardWithLocalPort:(NSNumber *)localPort
+- (void)createPortForwardWithLocalPort:(NSNumber *)localPort
                          withForwardTargetHost:(NSString *)targetHost
                          withForwardTargetPort:(NSNumber *)targetPort
                                   withOnCreate:(dispatch_block_t)withOnCreate
@@ -313,7 +313,7 @@ continue; \
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
         id block = [^{
-            [magic uncheckedConcurrencyCreatePortForwardWithLocalPort:localPort
+            [magic unsafeCreatePortForwardWithLocalPort:localPort
                                                 withForwardTargetHost:targetHost
                                                 withForwardTargetPort:targetPort
                                                          withOnCreate:withOnCreate
@@ -324,10 +324,9 @@ continue; \
     }
     [self.associatedLoop explicitRequestHandle];
     dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-    return self;
 }
 
-- (instancetype)createPortForwardWithRemotePort:(NSNumber *)remotePort
+- (void)createPortForwardWithRemotePort:(NSNumber *)remotePort
                           withForwardTargetHost:(NSString *)targetHost
                           withForwardTargetPort:(NSNumber *)targetPort
                                    withOnCreate:(dispatch_block_t)withOnCreate
@@ -338,7 +337,7 @@ continue; \
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
         id block = [^{
-            [magic uncheckedConcurrencyCreatePortForwardWithRemotePort:remotePort
+            [magic unsafeCreatePortForwardWithRemotePort:remotePort
                                                  withForwardTargetHost:targetHost
                                                  withForwardTargetPort:targetPort
                                                           withOnCreate:withOnCreate
@@ -349,7 +348,72 @@ continue; \
     }
     [self.associatedLoop explicitRequestHandle];
     dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-    return self;
+}
+
+- (void)requestConnectSFTPAndWait {
+    if (self.destroyed) return;
+    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+    __weak typeof(self) magic = self;
+    @synchronized (self.requestInvokations) {
+        id block = [^{
+            [magic unsafeConnectSFTPWithCompleteBlock:^{
+                DISPATCH_SEMAPHORE_CHECK_SIGNLE(sem);
+            }];
+        } copy];
+        [self.requestInvokations addObject:block];
+    }
+    [self.associatedLoop explicitRequestHandle];
+    MakeDispatchSemaphoreWait(sem);
+}
+- (void)requestDisconnectSFTPAndWait {
+    if (self.destroyed) return;
+    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+    __weak typeof(self) magic = self;
+    @synchronized (self.requestInvokations) {
+        id block = [^{
+            [self unsafeSFTPCloseFor:self.associatedSFTP];
+            self.associatedSFTP = NULL;
+            self.connectedSFTP = NO;
+            DISPATCH_SEMAPHORE_CHECK_SIGNLE(sem);
+        } copy];
+        [self.requestInvokations addObject:block];
+    }
+    [self.associatedLoop explicitRequestHandle];
+    MakeDispatchSemaphoreWait(sem);
+}
+
+- (nullable NSArray<NSRemoteFile *> *)requestFileListAt:(NSString *)atDirPath {
+    if (self.destroyed) return;
+    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+    __weak typeof(self) magic = self;
+    __block NSArray<NSRemoteFile*>* result = NULL;
+    @synchronized (self.requestInvokations) {
+        id block = [^{
+            result = [magic unsafeGetDirFileListAt:atDirPath];
+            DISPATCH_SEMAPHORE_CHECK_SIGNLE(sem);
+        } copy];
+        [self.requestInvokations addObject:block];
+    }
+    [self.associatedLoop explicitRequestHandle];
+    MakeDispatchSemaphoreWait(sem);
+    return result;
+}
+
+- (nullable NSRemoteFile *)requestFileInfoAt:(NSString *)atPath {
+    if (self.destroyed) return;
+    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+    __weak typeof(self) magic = self;
+    __block NSRemoteFile *result = NULL;
+    @synchronized (self.requestInvokations) {
+        id block = [^{
+            result = [magic unsafeGetFileInfo:atPath];
+            DISPATCH_SEMAPHORE_CHECK_SIGNLE(sem);
+        } copy];
+        [self.requestInvokations addObject:block];
+    }
+    [self.associatedLoop explicitRequestHandle];
+    MakeDispatchSemaphoreWait(sem);
+    return result;
 }
 
 // MARK: - HELPER
@@ -368,8 +432,8 @@ continue; \
 
 // MARK: - UNCHECKED CONCURRENCY
 
-- (void)uncheckedConcurrencyConnect {
-    [self uncheckedConcurrencyDisconnect];
+- (void)unsafeConnect {
+    [self unsafeDisconnect];
     
     int sock = [GenericNetworking createSocketWithTargetHost:self.remoteHost
                                               withTargetPort:self.remotePort
@@ -384,13 +448,12 @@ continue; \
     
     LIBSSH2_SESSION *constructorSession = libssh2_session_init_ex(0, 0, 0, (__bridge void *)(self));
     if (!constructorSession) {
-        [self uncheckedConcurrencyDisconnect];
+        [self unsafeDisconnect];
         return;
     }
     self.associatedSession = constructorSession;
     
-    [self uncheckedConcurrencySessionSetTimeoutWith:constructorSession
-                                    andTimeoutValue:[self.operationTimeout doubleValue]];
+    libssh2_session_set_timeout(constructorSession, [self.operationTimeout doubleValue] * 1000);
     
     libssh2_session_set_blocking(constructorSession, 0);
     BOOL sessionHandshakeComplete = NO;
@@ -408,7 +471,7 @@ continue; \
         break;
     }
     if (!sessionHandshakeComplete) {
-        [self uncheckedConcurrencyDisconnect];
+        [self unsafeDisconnect];
         return;
     }
     
@@ -436,28 +499,31 @@ continue; \
     // we are responsible for sending the keep alive packet
     // we set the interval value as smallest
     // so wont case other problem (not 1 but 2)
-    libssh2_keepalive_config(constructorSession, 1, 2);
+    libssh2_keepalive_config(constructorSession, 0, 2);
     
     self.connected = YES;
     NSLog(@"constructed libssh2 session to %@ with %@", self.remoteHost, self.resolvedRemoteIpAddress);
 }
 
-- (void)uncheckedConcurrencyDisconnect {
+- (void)unsafeDisconnect {
     for (id<NSRemoteOperableObject> object in [self.operableObjects copy]) {
-        if (object) { [object uncheckedConcurrencyDisconnectAndPrepareForRelease]; }
+        if (object) { [object unsafeDisconnectAndPrepareForRelease]; }
     }
     self.operableObjects = [[NSMutableArray alloc] init];
     
-    [self uncheckedConcurrencySessionCloseFor:self.associatedSession];
+    [self unsafeSFTPCloseFor:self.associatedSFTP];
+    self.associatedSFTP = NULL;
+    self.connectedSFTP = NO;
+    
+    [self unsafeSessionCloseFor:self.associatedSession];
     self.associatedSession = NULL;
+    self.connected = NO;
+    self.authenticated = NO;
     
     if (self.associatedSocket) {
         [GenericNetworking destroyNativeSocket:self.associatedSocket];
     }
     self.associatedSocket = NULL;
-    
-    self.connected = NO;
-    self.authenticated = NO;
     
     self.resolvedRemoteIpAddress = NULL;
     self.remoteBanner = NULL;
@@ -467,10 +533,10 @@ continue; \
     self.keepAliveLastSuccessAttampt = NULL;
     
     // any error occurred during connect will result disconnect
-    [self uncheckedConcurrencyReadLastError];
+    [self unsafeReadLastError];
 }
 
-- (void)uncheckedConcurrencyDispatchSourceMakeDecision {
+- (void)unsafeDispatchSourceMakeDecision {
     if ([self.operableObjects count] > 0) {
         if (!self.associatedSocketSource) {
             dispatch_source_t socketDataSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ,
@@ -479,7 +545,7 @@ continue; \
                                                                         dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
             if (!socketDataSource) {
                 NSLog(@"failed to create dispatch source for socket");
-                [self uncheckedConcurrencyDisconnect];
+                [self unsafeDisconnect];
                 return;
             }
             dispatch_source_set_event_handler(socketDataSource, ^{
@@ -496,7 +562,7 @@ continue; \
     }
 }
 
-- (void)uncheckedConcurrencyKeepAliveCheck {
+- (void)unsafeKeepAliveCheck {
     // some ssh impl wont accept keep alive if not and may break connection
     if (!(self.isConnected && self.isAuthenicated)) {
         return;
@@ -523,14 +589,14 @@ continue; \
         // treat anything else as error and close if retry too much times
         if (self.keepAliveAttampt > KEEPALIVE_ERROR_TOLERANCE_MAX_RETRY) {
             NSLog(@"shell object at %p closing session due to broken pipe", self);
-            [self uncheckedConcurrencyDisconnect];
+            [self unsafeDisconnect];
             return;
         }
         return;
     }
 }
 
-- (void)uncheckedConcurrencyReadLastError {
+- (void)unsafeReadLastError {
     if (!self.associatedSession) { return; }
     int rv = libssh2_session_last_errno(self.associatedSession);
     if (rv == 0 || rv == LIBSSH2_ERROR_EAGAIN) {
@@ -548,34 +614,45 @@ continue; \
     }
 }
 
-- (void)uncheckedConcurrencySessionCloseFor:(LIBSSH2_SESSION*)session {
+- (void)unsafeSFTPCloseFor:(LIBSSH2_SFTP*)sftp {
+    if (!sftp) return;
+    while (libssh2_sftp_shutdown(sftp) == LIBSSH2_ERROR_EAGAIN) {};
+}
+
+- (void)unsafeSessionCloseFor:(LIBSSH2_SESSION*)session {
     if (!session) return;
     while (libssh2_session_disconnect(session, "closed by client") == LIBSSH2_ERROR_EAGAIN) {};
     while (libssh2_session_free(session) == LIBSSH2_ERROR_EAGAIN) {};
-    self.associatedSession = NULL;
 }
 
-- (void)uncheckedConcurrencySessionSetTimeoutWith:(LIBSSH2_SESSION*)session
-                                  andTimeoutValue:(double)timeoutValue {
-    if (!session) return;
-    libssh2_session_set_timeout(session, timeoutValue);
-}
-
-- (BOOL)uncheckedConcurrencyValidateSession {
+- (BOOL)unsafeValidateSession {
     do {
         if (!self.associatedSocket) { break; }
         if (!self.associatedSession) { break; }
         if (!self.connected) { break; }
         return YES;
     } while (0);
-    [self uncheckedConcurrencyDisconnect];
+    [self unsafeDisconnect];
     return NO;
 }
 
-- (void)uncheckedConcurrencyAuthenticateWith:(NSString *)username
+- (BOOL)unsafeValidateSessionSFTP {
+    do {
+        if (!self.associatedSocket) { break; }
+        if (!self.associatedSession) { break; }
+        if (!self.connected) { break; }
+        if (!self.isAuthenicated) { break; }
+        if (!self.associatedSFTP) { break; }
+        return YES;
+    } while (0);
+    [self unsafeDisconnect];
+    return NO;
+}
+
+- (void)unsafeAuthenticateWith:(NSString *)username
                                  andPassword:(NSString *)password {
-    if (![self uncheckedConcurrencyValidateSession]) {
-        [self uncheckedConcurrencyDisconnect];
+    if (![self unsafeValidateSession]) {
+        [self unsafeDisconnect];
         return;
     }
     if (self.authenticated) {
@@ -591,19 +668,19 @@ continue; \
         authenticated = (rc == 0);
         break;
     }
-    [self uncheckedConcurrencyReadLastError];
+    [self unsafeReadLastError];
     if (authenticated) {
         self.authenticated = YES;
         NSLog(@"authenticate success");
     }
 }
 
-- (void)uncheckedConcurrencyAuthenticateWith:(NSString *)username
+- (void)unsafeAuthenticateWith:(NSString *)username
                                 andPublicKey:(NSString *)publicKey
                                andPrivateKey:(NSString *)privateKey
                                  andPassword:(NSString *)password {
-    if (![self uncheckedConcurrencyValidateSession]) {
-        [self uncheckedConcurrencyDisconnect];
+    if (![self unsafeValidateSession]) {
+        [self unsafeDisconnect];
         return;
     }
     if (self.authenticated) {
@@ -623,14 +700,14 @@ continue; \
         authenticated = (rc == 0);
         break;
     }
-    [self uncheckedConcurrencyReadLastError];
+    [self unsafeReadLastError];
     if (authenticated) {
         self.authenticated = YES;
         NSLog(@"authenticate success");
     }
 }
 
-- (void)uncheckedConcurrencyExecuteRemote:(NSString *)command
+- (void)unsafeExecuteRemote:(NSString *)command
                           withExecTimeout:(NSNumber *)timeoutSecond
                              withOnCreate:(dispatch_block_t)withOnCreate
                                withOutput:(void (^)(NSString * _Nonnull))responseDataBlock
@@ -640,8 +717,8 @@ continue; \
 {
     if (exitCode) { *exitCode = 0; }
     
-    if (![self uncheckedConcurrencyValidateSession]) {
-        [self uncheckedConcurrencyDisconnect];
+    if (![self unsafeValidateSession]) {
+        [self unsafeDisconnect];
         DISPATCH_SEMAPHORE_CHECK_SIGNLE(completionSemaphore);
         return;
     }
@@ -669,7 +746,7 @@ continue; \
         }
         break;
     }
-    [self uncheckedConcurrencyReadLastError];
+    [self unsafeReadLastError];
     if (!channel) {
         NSLog(@"failed to allocate channel");
         DISPATCH_SEMAPHORE_CHECK_SIGNLE(completionSemaphore);
@@ -686,7 +763,7 @@ continue; \
         break;
     }
     if (!channelStartupCompleted) {
-        [channelObject uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        [channelObject unsafeDisconnectAndPrepareForRelease];
         DISPATCH_SEMAPHORE_CHECK_SIGNLE(completionSemaphore);
         return;
     }
@@ -709,15 +786,15 @@ continue; \
     if (withOnCreate) { withOnCreate(); }
 }
 
-- (void)uncheckedConcurrencyOpenShellWithTerminal:(nullable NSString*)terminalType
+- (void)unsafeOpenShellWithTerminal:(nullable NSString*)terminalType
                                  withTerminalSize:(nullable CGSize (^)(void))requestTerminalSize
                                     withWriteData:(nullable NSString* (^)(void))requestWriteData
                                        withOutput:(void (^)(NSString * _Nonnull))responseDataBlock
                                      withOnCreate:(dispatch_block_t)withOnCreate
                           withContinuationHandler:(BOOL (^)(void))continuationBlock
                           withCompletionSemaphore:(dispatch_semaphore_t)completionSemaphore {
-    if (![self uncheckedConcurrencyValidateSession]) {
-        [self uncheckedConcurrencyDisconnect];
+    if (![self unsafeValidateSession]) {
+        [self unsafeDisconnect];
         DISPATCH_SEMAPHORE_CHECK_SIGNLE(completionSemaphore);
         return;
     }
@@ -744,7 +821,7 @@ continue; \
         }
         break;
     }
-    [self uncheckedConcurrencyReadLastError];
+    [self unsafeReadLastError];
     if (!channel) {
         NSLog(@"failed to allocate channel");
         DISPATCH_SEMAPHORE_CHECK_SIGNLE(completionSemaphore);
@@ -771,13 +848,13 @@ continue; \
         }
         if (!requestedPty) {
             NSLog(@"failed to request pty");
-            [channelObject uncheckedConcurrencyDisconnectAndPrepareForRelease];
+            [channelObject unsafeDisconnectAndPrepareForRelease];
             DISPATCH_SEMAPHORE_CHECK_SIGNLE(completionSemaphore);
             return;
         }
     } while (0);
     
-    [channelObject uncheckedConcurrencyChannelTerminalSizeUpdate];
+    [channelObject unsafeChannelTerminalSizeUpdate];
     
     do {
         BOOL channelStartupCompleted = NO;
@@ -788,7 +865,7 @@ continue; \
             break;
         }
         if (!channelStartupCompleted) {
-            [channelObject uncheckedConcurrencyDisconnectAndPrepareForRelease];
+            [channelObject unsafeDisconnectAndPrepareForRelease];
             DISPATCH_SEMAPHORE_CHECK_SIGNLE(completionSemaphore);
             return;
         }
@@ -804,7 +881,7 @@ continue; \
     if (withOnCreate) { withOnCreate(); }
 }
 
-- (void)uncheckedConcurrencyCreatePortForwardWithLocalPort:(NSNumber *)localPort
+- (void)unsafeCreatePortForwardWithLocalPort:(NSNumber *)localPort
                                      withForwardTargetHost:(NSString *)targetHost
                                      withForwardTargetPort:(NSNumber *)targetPort
                                               withOnCreate:(dispatch_block_t)withOnCreate
@@ -822,8 +899,8 @@ continue; \
         return;
     }
     
-    if (![self uncheckedConcurrencyValidateSession]) {
-        [self uncheckedConcurrencyDisconnect];
+    if (![self unsafeValidateSession]) {
+        [self unsafeDisconnect];
         DISPATCH_SEMAPHORE_CHECK_SIGNLE(completionSemaphore);
         return;
     }
@@ -861,7 +938,7 @@ continue; \
     if (withOnCreate) { withOnCreate(); }
 }
 
-- (void)uncheckedConcurrencyCreatePortForwardWithRemotePort:(NSNumber *)remotePort
+- (void)unsafeCreatePortForwardWithRemotePort:(NSNumber *)remotePort
                                       withForwardTargetHost:(NSString *)targetHost
                                       withForwardTargetPort:(NSNumber *)targetPort
                                                withOnCreate:(dispatch_block_t)withOnCreate
@@ -879,8 +956,8 @@ continue; \
         return;
     }
     
-    if (![self uncheckedConcurrencyValidateSession]) {
-        [self uncheckedConcurrencyDisconnect];
+    if (![self unsafeValidateSession]) {
+        [self unsafeDisconnect];
         DISPATCH_SEMAPHORE_CHECK_SIGNLE(completionSemaphore);
         return;
     }
@@ -909,12 +986,12 @@ continue; \
         long rc = libssh2_session_last_errno(session);
         // it's a bug
         // looks like libssh2 reading with dirty memory data
-        if (rc == LIBSSH2_ERROR_EAGAIN || rc == LIBSSH2_ERROR_REQUEST_DENIED) {
+        if (rc == LIBSSH2_ERROR_EAGAIN) {
             continue;
         }
         break;
     }
-    [self uncheckedConcurrencyReadLastError];
+    [self unsafeReadLastError];
     if (!listener) {
         DISPATCH_SEMAPHORE_CHECK_SIGNLE(completionSemaphore);
         NSLog(@"libssh2_channel_forward_listen_ex was not able to receive listener");
@@ -936,6 +1013,202 @@ continue; \
     
     [self.operableObjects addObject:operator];
     if (withOnCreate) { withOnCreate(); }
+}
+
+- (void)unsafeConnectSFTPWithCompleteBlock:(dispatch_block_t)withComplete {
+    if (![self unsafeValidateSession]) {
+        [self unsafeDisconnect];
+        if (withComplete) withComplete();
+        return;
+    }
+    if (!self.authenticated) {
+        if (withComplete) withComplete();
+        return;
+    }
+    LIBSSH2_SESSION *session = self.associatedSession;
+    LIBSSH2_SFTP *sftp = NULL;
+    
+    NSDate *date = [[NSDate alloc] initWithTimeIntervalSinceNow:[self.operationTimeout intValue]];
+    while (true) {
+        if ([date timeIntervalSinceNow] < 0) {
+            libssh2_session_set_last_error(self.associatedSession, LIBSSH2_ERROR_TIMEOUT, NULL);
+            break;
+        }
+        LIBSSH2_SFTP *sftpBuilder = libssh2_sftp_init(session);
+        if (sftpBuilder) {
+            sftp = sftpBuilder;
+            break;
+        }
+        long rc = libssh2_session_last_errno(session);
+        if (rc == LIBSSH2_ERROR_EAGAIN) {
+            continue;
+        }
+        break;
+    }
+    [self unsafeReadLastError];
+    if (!sftp) {
+        if (withComplete) withComplete();
+        NSLog(@"libssh2_sftp_init was not able to receive session");
+        return;
+    }
+    
+    self.associatedSFTP = sftp;
+    self.connectedSFTP = YES;
+    NSLog(@"libssh2_sftp_init success");
+    if (withComplete) withComplete();
+}
+
+- (nullable LIBSSH2_SFTP_HANDLE*)unsafeSFTPOpenDirHandlerWithSession:(LIBSSH2_SESSION*)session
+                                                            withSFTP:(LIBSSH2_SFTP*)sftp
+                                                            withPath:(NSString*)path
+{
+    LIBSSH2_SFTP_HANDLE *handler = NULL;
+    NSDate *date = [[NSDate alloc] initWithTimeIntervalSinceNow:[self.operationTimeout intValue]];
+    while (true) {
+        if ([date timeIntervalSinceNow] < 0) {
+            libssh2_session_set_last_error(session, LIBSSH2_ERROR_TIMEOUT, NULL);
+            break;
+        }
+        LIBSSH2_SFTP_HANDLE *handlerBuilder = libssh2_sftp_opendir(sftp, [path UTF8String]);
+        if (handlerBuilder) {
+            handler = handlerBuilder;
+            break;
+        }
+        long rc = libssh2_session_last_errno(session);
+        if (rc == LIBSSH2_ERROR_EAGAIN) {
+            continue;
+        }
+        break;
+    }
+    [self unsafeReadLastError];
+    return handler;
+}
+
+- (nullable LIBSSH2_SFTP_HANDLE*)unsafeSFTPOpenFileHandlerWithSession:(LIBSSH2_SESSION*)session
+                                                             withSFTP:(LIBSSH2_SFTP*)sftp
+                                                             withPath:(NSString*)path
+                                                             withFlag:(unsigned long)flags
+                                                             withMode:(long)mode
+{
+    LIBSSH2_SFTP_HANDLE *handler = NULL;
+    NSDate *date = [[NSDate alloc] initWithTimeIntervalSinceNow:[self.operationTimeout intValue]];
+    while (true) {
+        if ([date timeIntervalSinceNow] < 0) {
+            libssh2_session_set_last_error(session, LIBSSH2_ERROR_TIMEOUT, NULL);
+            break;
+        }
+        LIBSSH2_SFTP_HANDLE *handlerBuilder = libssh2_sftp_open(sftp, [path UTF8String], flags, mode);
+        if (handlerBuilder) {
+            handler = handlerBuilder;
+            break;
+        }
+        long rc = libssh2_session_last_errno(session);
+        if (rc == LIBSSH2_ERROR_EAGAIN) {
+            continue;
+        }
+        break;
+    }
+    [self unsafeReadLastError];
+    return handler;
+}
+
+- (nullable NSArray<NSRemoteFile*>*)unsafeGetDirFileListAt:(NSString*)withDirPath {
+    if (![self unsafeValidateSessionSFTP]) { return NULL; }
+    LIBSSH2_SESSION *session = self.associatedSession;
+    LIBSSH2_SFTP *sftp = self.associatedSFTP;
+    LIBSSH2_SFTP_HANDLE *handle = [self unsafeSFTPOpenDirHandlerWithSession:session
+                                                                   withSFTP:sftp
+                                                                   withPath:withDirPath];
+    if (!handle) {
+        NSLog(@"SFTP failed to open handler for dir: %@", withDirPath);
+        return NULL;
+    }
+
+    NSArray *ignoredFiles = @[@".", @".."];
+    NSMutableArray *contents = [NSMutableArray array];
+
+    int rc = 0;
+    do {
+        char buffer[512];
+        memset(buffer, 0, sizeof(buffer));
+        LIBSSH2_SFTP_ATTRIBUTES fileAttributes = { 0 };
+        NSDate *date = [[NSDate alloc] initWithTimeIntervalSinceNow:[self.operationTimeout intValue]];
+        while (true) {
+            if ([date timeIntervalSinceNow] < 0) {
+                libssh2_session_set_last_error(session, LIBSSH2_ERROR_TIMEOUT, NULL);
+                break;
+            }
+            rc = libssh2_sftp_readdir(handle, buffer, sizeof(buffer), &fileAttributes);
+            if (rc >= 0) { break; } // read success
+            if (rc == LIBSSH2_ERROR_EAGAIN) { continue; } // go around
+            break;
+        }
+        if (rc > 0) {
+            NSString *fileName = [[NSString alloc] initWithBytes:buffer length:rc encoding:NSUTF8StringEncoding];
+            if (![ignoredFiles containsObject:fileName]) {
+                // Append a "/" at the end of all directories
+                NSRemoteFile *file = [[NSRemoteFile alloc] initWithFilename:fileName];
+                [file populateAttributes:fileAttributes];
+                [contents addObject:file];
+            }
+        }
+    } while (rc > 0);
+
+    if (rc < 0) {
+        NSLog(@"SFTP failed to open handler for dir: %@", withDirPath);
+        return NULL;
+    }
+    while (libssh2_sftp_closedir(handle) == LIBSSH2_ERROR_EAGAIN) {};
+    [contents sortUsingDescriptors: @[
+        [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]
+    ]];
+    return contents;
+}
+
+- (nullable NSRemoteFile*)unsafeGetFileInfo:(NSString*)atPath
+{
+    if (![self unsafeValidateSessionSFTP]) { return NULL; }
+    LIBSSH2_SESSION *session = self.associatedSession;
+    LIBSSH2_SFTP *sftp = self.associatedSFTP;
+    LIBSSH2_SFTP_HANDLE *handle = [self unsafeSFTPOpenFileHandlerWithSession:session
+                                                                    withSFTP:sftp
+                                                                    withPath:atPath
+                                                                    withFlag:LIBSSH2_FXF_READ
+                                                                    withMode:0];
+    if (!handle) {
+        NSLog(@"SFTP failed to open handler for file: %@", atPath);
+        return NULL;
+    }
+
+    LIBSSH2_SFTP_ATTRIBUTES fileAttributes;
+    BOOL statSuccess = NO;
+    NSDate *date = [[NSDate alloc] initWithTimeIntervalSinceNow:[self.operationTimeout intValue]];
+    while (true) {
+        if ([date timeIntervalSinceNow] < 0) {
+            libssh2_session_set_last_error(session, LIBSSH2_ERROR_TIMEOUT, NULL);
+            break;
+        }
+        ssize_t rc = libssh2_sftp_fstat(handle, &fileAttributes);
+        if (rc == LIBSSH2_ERROR_EAGAIN) {
+            continue;
+        }
+        if (rc == 0) {
+            statSuccess = YES;
+            break;
+        }
+        break;
+    }
+    if (!statSuccess) {
+        NSLog(@"SFTP failed to call fstat for file: %@", atPath);
+        return NULL;
+    }
+    
+    NSRemoteFile *file = [[NSRemoteFile alloc] initWithFilename:atPath.lastPathComponent];
+    [file populateAttributes:fileAttributes];
+    
+    while (libssh2_sftp_closedir(handle) == LIBSSH2_ERROR_EAGAIN) {};
+    
+    return file;
 }
 
 @end

@@ -120,7 +120,7 @@
                 close(forwardsock);
                 continue;
             }
-            NSLog(@"created socket %d", forwardsock);
+            NSLog(@"created socket %d to address %s", forwardsock, str);
             return forwardsock;
         } else if ([candidateHostData length] == sizeof(struct sockaddr_in6)) {
             struct sockaddr_in6 address6;
@@ -144,7 +144,7 @@
                 close(forwardsock);
                 continue;
             }
-            NSLog(@"created socket %d", forwardsock);
+            NSLog(@"created socket %d to address %s", forwardsock, str);
             return forwardsock;
         } else {
             NSLog(@"unrecognized address candidate size");

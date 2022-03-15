@@ -151,11 +151,12 @@ struct MachineCreateView: View {
             mainActorProgressView(show: true)
 
             func createRemote() -> NSRemoteShell {
-                NSRemoteShell()
+                let shell = NSRemoteShell()
                     .setupConnectionHost(serverLocation)
                     .setupConnectionPort(NSNumber(value: Int(serverPort) ?? 0))
                     .setupConnectionTimeout(RayonStore.shared.timeoutNumber)
-                    .requestConnectAndWait()
+                shell.requestConnectAndWait()
+                return shell
             }
 
             var remote = createRemote()
@@ -206,7 +207,7 @@ struct MachineCreateView: View {
                 .setupConnectionHost(serverLocation)
                 .setupConnectionPort(NSNumber(value: Int(serverPort) ?? 0))
                 .setupConnectionTimeout(RayonStore.shared.timeoutNumber)
-                .requestConnectAndWait()
+            remote.requestConnectAndWait()
             identity.callAuthenticationWith(remote: remote)
             debugPrint(remote.isAuthenicated)
             guard remote.isAuthenicated else {

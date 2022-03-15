@@ -49,7 +49,7 @@
 - (void)setForwardCompleted:(BOOL)channelCompleted {
     if (_forwardCompleted != channelCompleted) {
         _forwardCompleted = channelCompleted;
-        [self uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        [self unsafeDisconnectAndPrepareForRelease];
     }
 }
 
@@ -66,15 +66,15 @@
     return YES;
 }
 
-- (void)uncheckedConcurrencyCallNonblockingOperations {
+- (void)unsafeCallNonblockingOperations {
     if (self.forwardCompleted) { return; }
     if (![self seatbeltCheckPassed]) { return; }
-    [self uncheckedConcurrencyListenerAccept];
-    [self uncheckedConcurrencyProcessAllSocket];
-    [self uncheckedConcurrencyChannelShouldTerminate];
+    [self unsafeListenerAccept];
+    [self unsafeProcessAllSocket];
+    [self unsafeChannelShouldTerminate];
 }
 
-- (void)uncheckedConcurrencyListenerAccept {
+- (void)unsafeListenerAccept {
     LIBSSH2_CHANNEL *channel = libssh2_channel_forward_accept(self.representedListener);
     if (!channel) {
         int rc = libssh2_session_last_errno(self.representedSession);
@@ -95,16 +95,16 @@
     [self.forwardSocketPair addObject:pair];
 }
 
-- (void)uncheckedConcurrencyProcessAllSocket {
+- (void)unsafeProcessAllSocket {
     NSMutableArray *newArray = [[NSMutableArray alloc] init];
     for (NSRemoteChannelSocketPair *pair in self.forwardSocketPair) {
-        if (![pair uncheckedConcurrencyInsanityCheckAndReturnDidSuccess]) {
-            [pair uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        if (![pair unsafeInsanityCheckAndReturnDidSuccess]) {
+            [pair unsafeDisconnectAndPrepareForRelease];
             continue;
         }
-        [pair uncheckedConcurrencyCallNonblockingOperations];
-        if (![pair uncheckedConcurrencyInsanityCheckAndReturnDidSuccess]) {
-            [pair uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        [pair unsafeCallNonblockingOperations];
+        if (![pair unsafeInsanityCheckAndReturnDidSuccess]) {
+            [pair unsafeDisconnectAndPrepareForRelease];
             continue;
         }
         [newArray addObject:pair];
@@ -112,7 +112,7 @@
     self.forwardSocketPair = newArray;
 }
 
-- (BOOL)uncheckedConcurrencyChannelShouldTerminate {
+- (BOOL)unsafeChannelShouldTerminate {
     do {
         if (self.continuationDecisionBlock && !self.continuationDecisionBlock()) {
             break;
@@ -123,7 +123,7 @@
     return YES;
 }
 
-- (BOOL)uncheckedConcurrencyInsanityCheckAndReturnDidSuccess {
+- (BOOL)unsafeInsanityCheckAndReturnDidSuccess {
     do {
         if (self.forwardCompleted) { break; }
         if (![self seatbeltCheckPassed]) { break; }
@@ -132,7 +132,7 @@
     return NO;
 }
 
-- (void)uncheckedConcurrencyDisconnectAndPrepareForRelease {
+- (void)unsafeDisconnectAndPrepareForRelease {
     if (!self.forwardCompleted) { self.forwardCompleted = YES; }
     if (!self.representedSession) { return; }
     if (!self.representedListener) { return; }
@@ -141,7 +141,7 @@
     self.representedListener = NULL;
     while (libssh2_channel_forward_cancel(listener) == LIBSSH2_ERROR_EAGAIN) {};
     for (NSRemoteChannelSocketPair *pair in self.forwardSocketPair) {
-        [pair uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        [pair unsafeDisconnectAndPrepareForRelease];
     }
     self.forwardSocketPair = [[NSMutableArray alloc] init];
     if (self.terminationBlock) { self.terminationBlock(); }

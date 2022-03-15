@@ -57,7 +57,7 @@
 - (void)setForwardCompleted:(BOOL)channelCompleted {
     if (_forwardCompleted != channelCompleted) {
         _forwardCompleted = channelCompleted;
-        [self uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        [self unsafeDisconnectAndPrepareForRelease];
     }
 }
 
@@ -67,24 +67,24 @@
     return YES;
 }
 
-- (void)uncheckedConcurrencyCallNonblockingOperations {
+- (void)unsafeCallNonblockingOperations {
     if (self.forwardCompleted) { return; }
     if (![self seatbeltCheckPassed]) { return; }
-    [self uncheckedConcurrencyChannelMainSocketAccept];
-    [self uncheckedConcurrencyProcessAllSocket];
-    [self uncheckedConcurrencyChannelShouldTerminate];
+    [self unsafeChannelMainSocketAccept];
+    [self unsafeProcessAllSocket];
+    [self unsafeChannelShouldTerminate];
 }
 
-- (void)uncheckedConcurrencyProcessAllSocket {
+- (void)unsafeProcessAllSocket {
     NSMutableArray *newArray = [[NSMutableArray alloc] init];
     for (NSRemoteChannelSocketPair *pair in self.forwardSocketPair) {
-        if (![pair uncheckedConcurrencyInsanityCheckAndReturnDidSuccess]) {
-            [pair uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        if (![pair unsafeInsanityCheckAndReturnDidSuccess]) {
+            [pair unsafeDisconnectAndPrepareForRelease];
             continue;
         }
-        [pair uncheckedConcurrencyCallNonblockingOperations];
-        if (![pair uncheckedConcurrencyInsanityCheckAndReturnDidSuccess]) {
-            [pair uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        [pair unsafeCallNonblockingOperations];
+        if (![pair unsafeInsanityCheckAndReturnDidSuccess]) {
+            [pair unsafeDisconnectAndPrepareForRelease];
             continue;
         }
         [newArray addObject:pair];
@@ -92,7 +92,7 @@
     self.forwardSocketPair = newArray;
 }
 
-- (void)uncheckedConcurrencyChannelMainSocketAccept {
+- (void)unsafeChannelMainSocketAccept {
     while (1) {
         struct sockaddr_in peeraddr;
         socklen_t peeraddrlen = sizeof(peeraddr);
@@ -125,7 +125,7 @@
         if (!channel) {
             NSLog(@"accepted connection failed to open channel");
             close(forwardsock);
-            [self uncheckedConcurrencyDisconnectAndPrepareForRelease];
+            [self unsafeDisconnectAndPrepareForRelease];
             return;
         }
         NSLog(@"created channel for forward socket %d %p", forwardsock, channel);
@@ -135,7 +135,7 @@
     }
 }
 
-- (BOOL)uncheckedConcurrencyChannelShouldTerminate {
+- (BOOL)unsafeChannelShouldTerminate {
     do {
         if (self.continuationDecisionBlock && !self.continuationDecisionBlock()) {
             break;
@@ -146,7 +146,7 @@
     return YES;
 }
 
-- (BOOL)uncheckedConcurrencyInsanityCheckAndReturnDidSuccess {
+- (BOOL)unsafeInsanityCheckAndReturnDidSuccess {
     do {
         if (self.forwardCompleted) { break; }
         if (![self seatbeltCheckPassed]) { break; }
@@ -155,7 +155,7 @@
     return NO;
 }
 
-- (void)uncheckedConcurrencyDisconnectAndPrepareForRelease {
+- (void)unsafeDisconnectAndPrepareForRelease {
     if (!self.forwardCompleted) { self.forwardCompleted = YES; }
     if (!self.representedSession) { return; }
     if (!self.representedSocket) { return; }
@@ -164,7 +164,7 @@
     self.representedSession = NULL;
     self.representedSocket = NULL;
     for (NSRemoteChannelSocketPair *pair in self.forwardSocketPair) {
-        [pair uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        [pair unsafeDisconnectAndPrepareForRelease];
     }
     self.forwardSocketPair = [[NSMutableArray alloc] init];
     if (self.terminationBlock) { self.terminationBlock(); }

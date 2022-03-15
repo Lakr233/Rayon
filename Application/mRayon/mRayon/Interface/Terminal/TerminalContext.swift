@@ -83,9 +83,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
         defer { bufferAccessLock.unlock() }
         guard !closed else { return }
         _dataBuffer += str
-        TerminalContext.queue.async { [weak self] in
-            self?.shell.explicitRequestStatusPickup()
-        }
+        shell.explicitRequestStatusPickup()
     }
 
     var continueDecision: Bool = true {
@@ -100,17 +98,12 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
 
     let termInterface: STerminalView = .init()
 
-    private static let queue = DispatchQueue(
-        label: "wiki.qaq.terminal",
-        attributes: .concurrent
-    )
-
     init(machine: RDMachine) {
         self.machine = machine
         command = nil
         remoteType = .machine
         title = machine.name
-        TerminalContext.queue.async {
+        DispatchQueue.global().async {
             self.processBootstrap()
         }
     }
@@ -126,7 +119,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
         self.command = command
         title = command.command
         remoteType = .machine
-        TerminalContext.queue.async {
+        DispatchQueue.global().async {
             self.processBootstrap()
         }
     }
@@ -289,8 +282,9 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
             putInformation("    " + lastError)
         }
         continueDecision = false
-        TerminalContext.queue.async {
-            self.shell.requestDisconnectAndWait()
+        let shell = shell
+        DispatchQueue.global().async { [weak shell] in
+            shell?.requestDisconnectAndWait()
         }
     }
 }

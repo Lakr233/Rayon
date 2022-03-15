@@ -8,11 +8,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 
+#import "NSRemoteFile.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NSRemoteShell : NSObject
 
 @property (nonatomic, readonly, getter=isConnected) BOOL connected;
+@property (nonatomic, readonly, getter=isConnectedSFTP) BOOL connectedSFTP;
 @property (nonatomic, readonly, getter=isAuthenicated) BOOL authenticated;
 
 @property (nonatomic, readonly, strong) NSString *remoteHost;
@@ -37,14 +40,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark connection
 
-- (instancetype)requestConnectAndWait;
-- (instancetype)requestDisconnectAndWait;
+- (void)requestConnectAndWait;
+- (void)requestDisconnectAndWait;
 
 #pragma mark authenticate
 
-- (instancetype)authenticateWith:(NSString *)username
+- (void)authenticateWith:(NSString *)username
                      andPassword:(NSString *)password;
-- (instancetype)authenticateWith:(NSString *)username
+- (void)authenticateWith:(NSString *)username
                     andPublicKey:(nullable NSString *)publicKey
                    andPrivateKey:(NSString *)privateKey
                      andPassword:(nullable NSString *)password;
@@ -61,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
                     withOutput:(nullable void (^)(NSString*))withOutput
        withContinuationHandler:(nullable BOOL (^)(void))withContinuationBlock;
 
-- (instancetype)beginShellWithTerminalType:(nullable NSString*)withTerminalType
+- (void)beginShellWithTerminalType:(nullable NSString*)withTerminalType
                               withOnCreate:(dispatch_block_t)withOnCreate
                           withTerminalSize:(nullable CGSize (^)(void))withRequestTerminalSize
                        withWriteDataBuffer:(nullable NSString* (^)(void))withWriteDataBuffer
@@ -70,17 +73,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark port map
 
-- (instancetype)createPortForwardWithLocalPort:(NSNumber*)localPort
+- (void)createPortForwardWithLocalPort:(NSNumber*)localPort
                          withForwardTargetHost:(NSString*)targetHost
                          withForwardTargetPort:(NSNumber*)targetPort
                                   withOnCreate:(dispatch_block_t)withOnCreate
                        withContinuationHandler:(BOOL (^)(void))continuationBlock;
 
-- (instancetype)createPortForwardWithRemotePort:(NSNumber*)remotePort
+- (void)createPortForwardWithRemotePort:(NSNumber*)remotePort
                           withForwardTargetHost:(NSString*)targetHost
                           withForwardTargetPort:(NSNumber*)targetPort
                                    withOnCreate:(dispatch_block_t)withOnCreate
                         withContinuationHandler:(BOOL (^)(void))continuationBlock;
+
+#pragma mark sftp
+
+- (void)requestConnectSFTPAndWait;
+- (void)requestDisconnectSFTPAndWait;
+- (nullable NSArray<NSRemoteFile*>*)requestFileListAt:(NSString*)atDirPath;
+- (nullable NSRemoteFile*)requestFileInfoAt:(NSString*)atPath;
 
 #pragma mark destory
 

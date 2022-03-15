@@ -32,7 +32,7 @@
 
 /*
  the interval for sending keep alive packet, count in second
- [NSRemoteShell uncheckedConcurrencyKeepAliveCheck] will skip
+ [NSRemoteShell unsafeKeepAliveCheck] will skip
  if last success attempt was within the interval
  */
 #define KEEPALIVE_INTERVAL 1
@@ -87,13 +87,13 @@
 // used in event loop call, it's time to handle operations inside this object
 // eg: NSRemoteChannel should read/write to socket, set changes and do anything else
 // is designed to be thread safe when calling
-- (void)uncheckedConcurrencyCallNonblockingOperations;
+- (void)unsafeCallNonblockingOperations;
 
 // used to evaluate if this object should be close and release
 // if a check failed, disconnect is immediately called
-- (BOOL)uncheckedConcurrencyInsanityCheckAndReturnDidSuccess;
+- (BOOL)unsafeInsanityCheckAndReturnDidSuccess;
 
 // shutdown any associated resources and will soon be release
-- (void)uncheckedConcurrencyDisconnectAndPrepareForRelease;
+- (void)unsafeDisconnectAndPrepareForRelease;
 
 @end

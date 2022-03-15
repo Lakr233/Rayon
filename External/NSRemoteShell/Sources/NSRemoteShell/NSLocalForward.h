@@ -26,9 +26,9 @@ typedef BOOL (^NSRemoteChannelContinuationBlock)(void);
 - (void)onTermination:(dispatch_block_t)terminationHandler;
 - (void)setContinuationChain:(NSRemoteChannelContinuationBlock)continuation;
 
-- (void)uncheckedConcurrencyCallNonblockingOperations;
-- (BOOL)uncheckedConcurrencyInsanityCheckAndReturnDidSuccess;
-- (void)uncheckedConcurrencyDisconnectAndPrepareForRelease;
+- (void)unsafeCallNonblockingOperations;
+- (BOOL)unsafeInsanityCheckAndReturnDidSuccess;
+- (void)unsafeDisconnectAndPrepareForRelease;
 
 @end
 

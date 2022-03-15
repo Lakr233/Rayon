@@ -21,13 +21,13 @@
     return self;
 }
 
-- (void)uncheckedConcurrencyCallNonblockingOperations {
+- (void)unsafeCallNonblockingOperations {
     if (self.completed) { return; }
     if (![self seatbeltCheckPassed]) { return; }
-    [self uncheckedConcurrencyProcessReadWrite];
+    [self unsafeProcessReadWrite];
 }
 
-- (void)uncheckedConcurrencyProcessReadWrite {
+- (void)unsafeProcessReadWrite {
     do {
         long len = 0;
         char buf[BUFFER_SIZE];
@@ -72,7 +72,7 @@
 - (void)setCompleted:(BOOL)completed {
     if (_completed != completed) {
         _completed = completed;
-        [self uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        [self unsafeDisconnectAndPrepareForRelease];
     }
 }
 
@@ -82,7 +82,7 @@
     return YES;
 }
 
-- (BOOL)uncheckedConcurrencyInsanityCheckAndReturnDidSuccess {
+- (BOOL)unsafeInsanityCheckAndReturnDidSuccess {
     do {
         if (self.completed) { break; }
         if (![self seatbeltCheckPassed]) { break; }
@@ -92,7 +92,7 @@
     return NO;
 }
 
-- (void)uncheckedConcurrencyDisconnectAndPrepareForRelease {
+- (void)unsafeDisconnectAndPrepareForRelease {
     if (!self.completed) { self.completed = YES; }
     if (!self.channel) { return; }
     if (!self.socket) { return; }

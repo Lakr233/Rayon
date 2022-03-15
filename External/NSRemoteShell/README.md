@@ -60,12 +60,12 @@ There is two authenticate method provided. Authenticate is required after connec
 For various session property, see property list.
 
 ```
-@property(nonatomic, readwrite, nullable, strong) NSString *resolvedRemoteIpAddress;
-@property(nonatomic, readwrite, nullable, strong) NSString *remoteBanner;
-@property(nonatomic, readwrite, nullable, strong) NSString *remoteFingerPrint;
+@property (nonatomic, readwrite, nullable, strong) NSString *resolvedRemoteIpAddress;
+@property (nonatomic, readwrite, nullable, strong) NSString *remoteBanner;
+@property (nonatomic, readwrite, nullable, strong) NSString *remoteFingerPrint;
 
-@property(nonatomic, readwrite, getter=isConnected) BOOL connected;
-@property(nonatomic, readwrite, getter=isAuthenicated) BOOL authenticated;
+@property (nonatomic, readwrite, getter=isConnected) BOOL connected;
+@property (nonatomic, readwrite, getter=isAuthenicated) BOOL authenticated;
 ```
 
 Request either command channel or shell channel with designated API, and do not access unexposed values. It may break the ARC or crash the app.
@@ -107,7 +107,7 @@ We implemented thread safe by using NSEventLoop to serialize single NSRemoteShel
 The event loop will guarantee status pickup is thread safe, called several times per second. To improve the performance and user experience, we use a dispatch source of your session's socket to trigger the event loop handler when you have at least one channel opened when data arrived. Check following code to see how it works.
 
 ```
-- (void)uncheckedConcurrencyDispatchSourceMakeDecision
+- (void)unsafeDispatchSourceMakeDecision
 ```
 
 All event loop will call a NSRemoteShell objects' handleRequestsIfNeeded method, we deal with control blocks first, and then iterate over all channel to see if data available.
@@ -127,7 +127,7 @@ ARC will take place to disconnect if a shell object is no longer holds. You can 
 ```
 - (void)dealloc {
     NSLog(@"shell object at %p deallocating", self);
-    [self uncheckedConcurrencyDisconnect];
+    [self unsafeDisconnect];
 }
 ```
 

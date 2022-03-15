@@ -47,7 +47,7 @@
 
 - (void)dealloc {
     NSLog(@"channel object at %p deallocating", self);
-    [self uncheckedConcurrencyDisconnectAndPrepareForRelease];
+    [self unsafeDisconnectAndPrepareForRelease];
 }
 
 // MARK: - SETUP
@@ -90,7 +90,7 @@
 - (void)setChannelCompleted:(BOOL)channelCompleted {
     if (_channelCompleted != channelCompleted) {
         _channelCompleted = channelCompleted;
-        [self uncheckedConcurrencyDisconnectAndPrepareForRelease];
+        [self unsafeDisconnectAndPrepareForRelease];
     }
 }
 
@@ -102,7 +102,7 @@
     return YES;
 }
 
-- (void)uncheckedConcurrencyChannelRead {
+- (void)unsafeChannelRead {
     char buffer[BUFFER_SIZE];
     char errorBuffer[BUFFER_SIZE];
     memset(buffer, 0, sizeof(buffer));
@@ -125,7 +125,7 @@
     }
 }
 
-- (void)uncheckedConcurrencyChannelWrite {
+- (void)unsafeChannelWrite {
     if (!self.requestDataBlock) {
         return;
     }
@@ -139,7 +139,7 @@
         return;
     }
     while (true) {
-        if ([self uncheckedConcurrencyChannelShouldTerminate]) {
+        if ([self unsafeChannelShouldTerminate]) {
             break;
         }
         // Actual number of bytes written or negative on failure.
@@ -160,7 +160,7 @@
     }
 }
 
-- (BOOL)uncheckedConcurrencyChannelShouldTerminate {
+- (BOOL)unsafeChannelShouldTerminate {
     do {
         if (self.scheduledTermination && [self.scheduledTermination timeIntervalSinceNow] < 0) {
             NSLog(@"channel terminating due to timeout schedule");
@@ -182,7 +182,7 @@
     return YES;
 }
 
-- (void)uncheckedConcurrencyChannelTerminalSizeUpdate {
+- (void)unsafeChannelTerminalSizeUpdate {
     // may called from outside
     if (![self seatbeltCheckPassed]) { return; }
     if (!self.requestTerminalSizeBlock) {
@@ -205,16 +205,16 @@
     }
 }
 
-- (void)uncheckedConcurrencyCallNonblockingOperations {
+- (void)unsafeCallNonblockingOperations {
     if (self.channelCompleted) { return; }
     if (![self seatbeltCheckPassed]) { return; }
-    [self uncheckedConcurrencyChannelRead];
-    [self uncheckedConcurrencyChannelTerminalSizeUpdate];
-    [self uncheckedConcurrencyChannelWrite];
-    [self uncheckedConcurrencyChannelShouldTerminate];
+    [self unsafeChannelRead];
+    [self unsafeChannelTerminalSizeUpdate];
+    [self unsafeChannelWrite];
+    [self unsafeChannelShouldTerminate];
 }
 
-- (BOOL)uncheckedConcurrencyInsanityCheckAndReturnDidSuccess {
+- (BOOL)unsafeInsanityCheckAndReturnDidSuccess {
     do {
         if (self.channelCompleted) { break; }
         if (![self seatbeltCheckPassed]) { break; }
@@ -223,7 +223,7 @@
     return NO;
 }
 
-- (void)uncheckedConcurrencyDisconnectAndPrepareForRelease {
+- (void)unsafeDisconnectAndPrepareForRelease {
     if (!self.channelCompleted) { self.channelCompleted = YES; }
     if (!self.representedSession) { return; }
     if (!self.representedChannel) { return; }

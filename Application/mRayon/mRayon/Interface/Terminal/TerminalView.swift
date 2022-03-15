@@ -68,9 +68,8 @@ struct TerminalView: View {
                     }
                     makeKeyboardFloatingButton("trash", disableWhenClosed: false) {
                         if context.closed {
-                            TerminalManager.shared.end(for: context.id)
                             presentationMode.wrappedValue.dismiss()
-                            context.destroyedSession = true
+                            TerminalManager.shared.end(for: context.id)
                         } else {
                             UIBridge.requiresConfirmation(
                                 message: "Are you sure you want to close this session?"

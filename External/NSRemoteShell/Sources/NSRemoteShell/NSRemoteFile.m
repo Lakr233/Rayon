@@ -25,7 +25,7 @@
 - (instancetype)initWithFilename:(NSString *)filename {
     self = [super init];
     if (self) {
-        _name = @"";
+        _name = filename;
         _size = @(0);
         _isDirectory = NO;
         _modificationDate = [[NSDate alloc] init];
