@@ -29,7 +29,7 @@ NSObject *activity = NULL;
 
 #endif
 
-__attribute__((constructor)) void libssh2_constructor() {
+__attribute__((constructor)) void libssh2_constructor(void) {
     int ret = libssh2_init(0); // flag 1 == no crypto
     if (ret == 0) {
         kLIBSSH2_CONSTRUCTOR_SUCCESS = 1;
@@ -40,7 +40,7 @@ __attribute__((constructor)) void libssh2_constructor() {
 #endif
 }
 
-__attribute__((destructor)) void libssh2_destructor() {
+__attribute__((destructor)) void libssh2_destructor(void) {
     if (kLIBSSH2_CONSTRUCTOR_SUCCESS) {
         libssh2_exit();
     }

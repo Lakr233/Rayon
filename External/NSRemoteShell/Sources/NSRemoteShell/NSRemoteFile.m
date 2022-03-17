@@ -11,7 +11,9 @@
 
 @property (nonatomic, readwrite, nonnull, strong) NSString *name;
 @property (nonatomic, readwrite, nullable, strong) NSNumber *size;
+@property (nonatomic, readwrite, assign) BOOL isRegularFile;
 @property (nonatomic, readwrite, assign) BOOL isDirectory;
+@property (nonatomic, readwrite, assign) BOOL isLink;
 @property (nonatomic, readwrite, nullable, strong) NSDate *modificationDate;
 @property (nonatomic, readwrite, nullable, strong) NSDate *lastAccess;
 @property (nonatomic, readwrite, assign) unsigned long ownerUID;
@@ -28,6 +30,7 @@
         _name = filename;
         _size = @(0);
         _isDirectory = NO;
+        _isLink = NO;
         _modificationDate = [[NSDate alloc] init];
         _lastAccess = [[NSDate alloc] init];
         _ownerUID = 0;
@@ -37,6 +40,24 @@
     return self;
 }
 
+- (BOOL)isEqual:(NSRemoteFile*)object {
+    if (self == object) { return YES; }
+    do {
+        if (![self.name isEqualToString:object.name]) { break; }
+        if (self.size != object.size) { break; }
+        if (self.isRegularFile != object.isRegularFile) { break; }
+        if (self.isDirectory != object.isDirectory) { break; }
+        if (self.isLink != object.isLink) { break; }
+        if (![self.modificationDate isEqualToDate:object.modificationDate]) { break; }
+        if (![self.lastAccess isEqualToDate:object.lastAccess]) { break; }
+        if (self.ownerUID != object.ownerUID) { break; }
+        if (self.ownerGID != object.ownerGID) { break; }
+        if (![self.permissionDescription isEqualToString:object.permissionDescription]) { break; }
+        return YES;
+    } while (false);
+    return NO;
+}
+
 - (void)populateAttributes:(LIBSSH2_SFTP_ATTRIBUTES)fileAttributes {
     self.modificationDate = [NSDate dateWithTimeIntervalSince1970:fileAttributes.mtime];
     self.lastAccess = [NSDate dateWithTimeIntervalSinceNow:fileAttributes.atime];
@@ -44,7 +65,9 @@
     self.ownerUID = fileAttributes.uid;
     self.ownerGID = fileAttributes.gid;
     self.permissionDescription = [self permissionDescriptionForMode:fileAttributes.permissions];
+    self.isRegularFile = LIBSSH2_SFTP_S_ISREG(fileAttributes.permissions);
     self.isDirectory = LIBSSH2_SFTP_S_ISDIR(fileAttributes.permissions);
+    self.isLink = LIBSSH2_SFTP_S_ISLNK(fileAttributes.permissions);
 }
 
 - (NSString *)permissionDescriptionForMode:(unsigned long)mode {

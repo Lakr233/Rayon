@@ -14,7 +14,9 @@
 
 @property (nonatomic, readonly, nonnull, strong) NSString *name;
 @property (nonatomic, readonly, nullable, strong) NSNumber *size;
+@property (nonatomic, readonly, assign) BOOL isRegularFile;
 @property (nonatomic, readonly, assign) BOOL isDirectory;
+@property (nonatomic, readonly, assign) BOOL isLink;
 @property (nonatomic, readonly, nullable, strong) NSDate *modificationDate;
 @property (nonatomic, readonly, nullable, strong) NSDate *lastAccess;
 @property (nonatomic, readonly, assign) unsigned long ownerUID;

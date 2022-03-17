@@ -11,18 +11,14 @@
 
 + (NSArray *)resolveIpAddressesFor:(NSString*)candidateHost
 {
-	if (!candidateHost) return [[NSArray alloc] init];
+    if (!candidateHost) return [[NSArray alloc] init];
     NSArray<NSData*> *candidateHostData = [[NSArray alloc] init];
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = PF_UNSPEC;        // PF_INET if you want only IPv4 addresses
     hints.ai_protocol = IPPROTO_TCP;
     struct addrinfo *addrs, *addr;
-    @try {
-        getaddrinfo([candidateHost UTF8String], NULL, &hints, &addrs);
-    } @catch (NSException *exception) {
-        return candidateHostData;
-    }
+    getaddrinfo([candidateHost UTF8String], NULL, &hints, &addrs);
     for (addr = addrs; addr; addr = addr->ai_next) {
         char host[NI_MAXHOST];
         getnameinfo(addr->ai_addr, addr->ai_addrlen, host, sizeof(host), NULL, 0, NI_NUMERICHOST);
@@ -49,9 +45,9 @@
 {
     if (![GenericNetworking isValidateWithPort:localPort]) {
         NSLog(@"invalid port %@", [localPort stringValue]);
-        return;
+        return 0;
     }
-
+    
     int port = [localPort intValue];
     struct sockaddr_in server4;
     int socket_desc4 = socket(AF_INET, SOCK_STREAM, 0);
@@ -93,7 +89,7 @@
                    withTargetPort:(NSNumber *)targetPort
              requireNonblockingIO:(BOOL)useNonblocking
 {
-    if (![self isValidateWithPort:targetPort]) { return; }
+    if (![self isValidateWithPort:targetPort]) { return 0; }
     int candidatePort = [targetPort intValue];
     NSArray *addrData = [self resolveIpAddressesFor:targetHost];
     if (!addrData) { return 0; }

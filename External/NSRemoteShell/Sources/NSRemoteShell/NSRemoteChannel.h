@@ -27,7 +27,7 @@ typedef CGSize (^NSRemoteChannelTerminalSizeBlock)(void);
 @property (nonatomic, readonly, assign) int exitStatus;
 
 - (instancetype)initWithRepresentedSession:(LIBSSH2_SESSION*)representedSession
-                    withRepresentedChanel:(LIBSSH2_CHANNEL*)representedChannel;
+                     withRepresentedChanel:(LIBSSH2_CHANNEL*)representedChannel;
 
 - (void)onTermination:(dispatch_block_t)terminationHandler;
 

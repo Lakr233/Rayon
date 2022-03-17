@@ -71,6 +71,7 @@ struct LogView: View {
             controller.reversed = true
             controller.allowTrash = false
             controller.allowSearch = true
+            controller.allowMultiline = true
             controller.pullToReload = true
             controller.tapToCopy = false
             controller.pressToCopy = true

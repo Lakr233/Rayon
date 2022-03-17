@@ -55,10 +55,10 @@
     [self.associatedRunLoop addPort:self.associatedPort forMode:NSRunLoopCommonModes];
     
     self.associatedTimer = [[NSTimer alloc] initWithFireDate: [[NSDate alloc] init]
-                            interval:0.1
-                            target:self selector:@selector(associatedLoopHandler)
-                            userInfo:NULL
-                            repeats:YES];
+                                                    interval:0.1
+                                                      target:self selector:@selector(associatedLoopHandler)
+                                                    userInfo:NULL
+                                                     repeats:YES];
     [self.associatedRunLoop addTimer:self.associatedTimer forMode:NSRunLoopCommonModes];
     [self.associatedRunLoop run];
     NSLog(@"thread %@ exiting", [[NSThread currentThread] name]);

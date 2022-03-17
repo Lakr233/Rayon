@@ -162,7 +162,7 @@
     int socket = self.representedSocket;
     [GenericNetworking destroyNativeSocket:socket];
     self.representedSession = NULL;
-    self.representedSocket = NULL;
+    self.representedSocket = 0;
     for (NSRemoteChannelSocketPair *pair in self.forwardSocketPair) {
         [pair unsafeDisconnectAndPrepareForRelease];
     }

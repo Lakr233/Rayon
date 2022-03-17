@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSRemoteShell : NSObject
 
 @property (nonatomic, readonly, getter=isConnected) BOOL connected;
-@property (nonatomic, readonly, getter=isConnectedSFTP) BOOL connectedSFTP;
+@property (nonatomic, readonly, getter=isConnectedSFTP) BOOL connectedFileTransfer;
 @property (nonatomic, readonly, getter=isAuthenicated) BOOL authenticated;
 
 @property (nonatomic, readonly, strong) NSString *remoteHost;
@@ -46,11 +46,11 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark authenticate
 
 - (void)authenticateWith:(NSString *)username
-                     andPassword:(NSString *)password;
+             andPassword:(NSString *)password;
 - (void)authenticateWith:(NSString *)username
-                    andPublicKey:(nullable NSString *)publicKey
-                   andPrivateKey:(NSString *)privateKey
-                     andPassword:(nullable NSString *)password;
+            andPublicKey:(nullable NSString *)publicKey
+           andPrivateKey:(NSString *)privateKey
+             andPassword:(nullable NSString *)password;
 
 #pragma mark helper
 
@@ -65,32 +65,49 @@ NS_ASSUME_NONNULL_BEGIN
        withContinuationHandler:(nullable BOOL (^)(void))withContinuationBlock;
 
 - (void)beginShellWithTerminalType:(nullable NSString*)withTerminalType
-                              withOnCreate:(dispatch_block_t)withOnCreate
-                          withTerminalSize:(nullable CGSize (^)(void))withRequestTerminalSize
-                       withWriteDataBuffer:(nullable NSString* (^)(void))withWriteDataBuffer
-                      withOutputDataBuffer:(void (^)(NSString * _Nonnull))withOutputDataBuffer
-                   withContinuationHandler:(BOOL (^)(void))withContinuationBlock;
+                      withOnCreate:(dispatch_block_t)withOnCreate
+                  withTerminalSize:(nullable CGSize (^)(void))withRequestTerminalSize
+               withWriteDataBuffer:(nullable NSString* (^)(void))withWriteDataBuffer
+              withOutputDataBuffer:(void (^)(NSString * _Nonnull))withOutputDataBuffer
+           withContinuationHandler:(BOOL (^)(void))withContinuationBlock;
 
 #pragma mark port map
 
 - (void)createPortForwardWithLocalPort:(NSNumber*)localPort
-                         withForwardTargetHost:(NSString*)targetHost
-                         withForwardTargetPort:(NSNumber*)targetPort
-                                  withOnCreate:(dispatch_block_t)withOnCreate
-                       withContinuationHandler:(BOOL (^)(void))continuationBlock;
+                 withForwardTargetHost:(NSString*)targetHost
+                 withForwardTargetPort:(NSNumber*)targetPort
+                          withOnCreate:(dispatch_block_t)withOnCreate
+               withContinuationHandler:(BOOL (^)(void))continuationBlock;
 
 - (void)createPortForwardWithRemotePort:(NSNumber*)remotePort
-                          withForwardTargetHost:(NSString*)targetHost
-                          withForwardTargetPort:(NSNumber*)targetPort
-                                   withOnCreate:(dispatch_block_t)withOnCreate
-                        withContinuationHandler:(BOOL (^)(void))continuationBlock;
+                  withForwardTargetHost:(NSString*)targetHost
+                  withForwardTargetPort:(NSNumber*)targetPort
+                           withOnCreate:(dispatch_block_t)withOnCreate
+                withContinuationHandler:(BOOL (^)(void))continuationBlock;
 
 #pragma mark sftp
 
-- (void)requestConnectSFTPAndWait;
-- (void)requestDisconnectSFTPAndWait;
+typedef void (^NSRemoteFileTransferProgressBlock)(NSString *filename, NSProgress *uploadProgress, long bytesPerSecond);
+typedef void (^NSRemoteFileDeleteProgressBlock)(NSString *currentFile);
+
+- (void)requestConnectFileTransferAndWait;
+- (void)requestDisconnectFileTransferAndWait;
 - (nullable NSArray<NSRemoteFile*>*)requestFileListAt:(NSString*)atDirPath;
 - (nullable NSRemoteFile*)requestFileInfoAt:(NSString*)atPath;
+- (BOOL)requestRenameFileAndWait:(NSString*)atPath
+                     withNewPath:(NSString*)newPath;
+- (BOOL)requestUploadForFileAndWait:(NSString*)atPath
+                        toDirectory:(NSString*)toDirectory
+                         onProgress:(NSRemoteFileTransferProgressBlock _Nonnull)onProgress
+            withContinuationHandler:(BOOL (^)(void))continuationBlock;
+- (BOOL)requestDeleteForFileAndWait:(NSString*)atPath
+                  withProgressBlock:(NSRemoteFileDeleteProgressBlock _Nonnull)onProgress
+            withContinuationHandler:(BOOL (^)(void))continuationBlock;
+//- (void)requestDeleteUsingRMCommandForFileAndWait:(NSString*)atPath; // how to escape parameters safely?
+- (BOOL)requestCreateDirAndWait:(NSString*)atPath;
+- (BOOL)requestDownloadFromFileAndWait:(NSString*)atPath
+                           toLocalPath:(NSString*)toPath
+                            onProgress:(NSRemoteFileTransferProgressBlock _Nonnull)onProgress               withContinuationHandler:(BOOL (^)(void))continuationBlock;
 
 #pragma mark destory
 

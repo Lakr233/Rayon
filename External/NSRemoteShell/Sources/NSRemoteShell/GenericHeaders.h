@@ -49,25 +49,25 @@
  DONT USE IN RUNNING SESSION/CHANNEL
  */
 #define DISPATCH_SEMAPHORE_MAX_WAIT 30
-#define MakeDispatchSemaphoreWait(SEM) do { \
-    dispatch_time_t timeout = dispatch_time(DISPATCH_TIME_NOW, DISPATCH_SEMAPHORE_MAX_WAIT * NSEC_PER_SEC); \
-    if (dispatch_semaphore_wait((SEM), timeout)) { \
-        NSLog(@"dispatch semaphore wait timeout for %d second, exiting blocked operation", DISPATCH_SEMAPHORE_MAX_WAIT); \
-    } \
+#define MakeDispatchSemaphoreWaitWithTimeout(SEM) do { \
+dispatch_time_t timeout = dispatch_time(DISPATCH_TIME_NOW, DISPATCH_SEMAPHORE_MAX_WAIT * NSEC_PER_SEC); \
+if (dispatch_semaphore_wait((SEM), timeout)) { \
+NSLog(@"dispatch semaphore wait timeout for %d second, exiting blocked operation", DISPATCH_SEMAPHORE_MAX_WAIT); \
+} \
 } while (0);
 
 #define DISPATCH_SEMAPHORE_CHECK_SIGNLE(SEM) do { \
-    if ((SEM)) { dispatch_semaphore_signal((SEM)); } \
+if ((SEM)) { dispatch_semaphore_signal((SEM)); } \
 } while (0);
 
 /*
  common used libssh2 channel gracefully shutdown all in one
  */
 #define LIBSSH2_CHANNEL_SHUTDOWN(CHANNEL) do { \
-    while (libssh2_channel_send_eof(CHANNEL) == LIBSSH2_ERROR_EAGAIN) {}; \
-    while (libssh2_channel_close(CHANNEL) == LIBSSH2_ERROR_EAGAIN) {}; \
-    while (libssh2_channel_wait_closed(CHANNEL) == LIBSSH2_ERROR_EAGAIN) {}; \
-    while (libssh2_channel_free(CHANNEL) == LIBSSH2_ERROR_EAGAIN) {}; \
+while (libssh2_channel_send_eof(CHANNEL) == LIBSSH2_ERROR_EAGAIN) {}; \
+while (libssh2_channel_close(CHANNEL) == LIBSSH2_ERROR_EAGAIN) {}; \
+while (libssh2_channel_wait_closed(CHANNEL) == LIBSSH2_ERROR_EAGAIN) {}; \
+while (libssh2_channel_free(CHANNEL) == LIBSSH2_ERROR_EAGAIN) {}; \
 } while (0);
 
 /*
@@ -75,9 +75,20 @@
  
  but libssh2 has this defined so might just use 16 to balance
  #define libssh2_channel_forward_listen(session, port) \
-  libssh2_channel_forward_listen_ex((session), NULL, (port), NULL, 16)
+ libssh2_channel_forward_listen_ex((session), NULL, (port), NULL, 16)
  */
 #define SOCKET_QUEUE_MAXSIZE 16
+
+/*
+ represent how much data shall we send per scp request
+ */
+#define SFTP_BUFFER_SIZE (BUFFER_SIZE)
+
+/*
+ represent how deep we can go while using sftp delete
+ used to prevent app from crash
+ */
+#define SFTP_RECURSIVE_DEPTH 20 // don't use our app to do heavy task!
 
 /*
  defines the event loop handler class for NSRemoteShell
