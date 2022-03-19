@@ -25,9 +25,9 @@ struct PickMachineView: View {
 
     /// MAKE SURE THIS VIEW IS NOT DISMISSABLE BY DRAG
     /// - Parameter completion: only called when touch checkmark button
-    init(completion: @escaping (([RDMachine.ID]) -> Void), canSelectMany _: Bool = true) {
+    init(completion: @escaping (([RDMachine.ID]) -> Void), canSelectMany: Bool = true) {
         self.completion = completion
-        canSelectMany = true
+        self.canSelectMany = canSelectMany
         _selection = Binding<[RDMachine.ID]> { [] } set: { _ in }
     }
 

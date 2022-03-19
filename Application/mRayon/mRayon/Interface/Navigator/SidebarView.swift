@@ -14,6 +14,7 @@ struct SidebarView: View {
     @StateObject var monitorManager = MonitorManager.shared
     @StateObject var terminalManager = TerminalManager.shared
     @StateObject var forwardBackend = PortForwardBackend.shared
+    @StateObject var transferBackend = FileTransferManager.shared
 
     var body: some View {
         NavigationView {
@@ -27,6 +28,7 @@ struct SidebarView: View {
             app
             monitor
             terminals
+            transfers
 //            portForward
             if store.storeRecent { recent }
         }
@@ -153,6 +155,37 @@ struct SidebarView: View {
                     .swipeActions {
                         Button {
                             terminalManager.end(for: context.id)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                        .tint(.red)
+                    }
+                }
+            }
+        }
+    }
+
+    var transfers: some View {
+        Section("File Transfer") {
+            if transferBackend.transfers.isEmpty {
+                Button {} label: {
+                    HStack {
+                        Label("No Session", systemImage: "square.dashed")
+                        Spacer()
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+                .expended()
+            } else {
+                ForEach(transferBackend.transfers) { context in
+                    NavigationLink {
+                        FileTransferView(context: context)
+                    } label: {
+                        Label(context.navigationTitle, systemImage: "externaldrive.connected.to.line.below")
+                    }
+                    .swipeActions {
+                        Button {
+                            transferBackend.end(for: context.id)
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }

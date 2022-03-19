@@ -11,6 +11,10 @@ import SwiftUI
 struct SettingView: View {
     @StateObject var store = RayonStore.shared
 
+    #if DEBUG
+        @State var redirectLog = false
+    #endif
+
     var body: some View {
         List {
             Section {
@@ -45,6 +49,17 @@ struct SettingView: View {
             }
 
             Section {
+                #if DEBUG
+                    Toggle("Redirect Log", isOn: $redirectLog)
+                        .onChange(of: redirectLog) { newValue in
+                            UserDefaults.standard.set(newValue, forKey: "wiki.qaq.redirect.diag")
+                            debugPrint("redirectLog set to \(newValue), restart to take effect")
+                        }
+                        .onAppear {
+                            redirectLog = UserDefaults.standard.value(forKey: "wiki.qaq.redirect.diag") as? Bool ?? false
+                        }
+                #endif
+
                 NavigationLink {
                     LogView()
                 } label: {

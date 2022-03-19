@@ -9,6 +9,8 @@ import Colorful
 import RayonModule
 import SwiftUI
 
+private var importData: Data?
+
 struct WelcomeView: View {
     @EnvironmentObject var store: RayonStore
 
@@ -91,6 +93,28 @@ struct WelcomeView: View {
             .disabled(buttonDisabled)
             .buttonStyle(PlainButtonStyle())
             .padding(.top, 10)
+            .onLongPressGesture {
+                print("importer called")
+                guard let paste = UIPasteboard
+                    .general
+                    .string?
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                else {
+                    return
+                }
+                if let data = importData {
+                    let key = paste
+                    print("import key ready, trying import")
+                    importData = nil
+                    RayonStore.overrideImport(from: data, key: key)
+                } else {
+                    guard let data = Data(base64Encoded: paste) else {
+                        return
+                    }
+                    importData = data
+                    print("import data ready, requires key")
+                }
+            }
             Spacer()
                 .frame(height: 40)
         }

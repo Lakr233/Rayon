@@ -31,6 +31,11 @@ struct MachineElementView: View {
                         } label: {
                             Label("Open Terminal", systemImage: "terminal")
                         }
+                        Button {
+                            FileTransferManager.shared.begin(for: machine)
+                        } label: {
+                            Label("Open File Transfer", systemImage: "externaldrive.connected.to.line.below")
+                        }
                     }
 
                     Section {

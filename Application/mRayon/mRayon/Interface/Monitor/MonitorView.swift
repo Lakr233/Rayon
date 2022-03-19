@@ -41,5 +41,6 @@ struct MonitorView: View {
             }
         }
         .navigationTitle("Monitor - \(context.machine.name)")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

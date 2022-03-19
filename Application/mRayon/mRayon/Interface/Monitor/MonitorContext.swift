@@ -126,7 +126,6 @@ extension MonitorContext {
                     }
             }
             .navigationViewStyle(StackNavigationViewStyle())
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

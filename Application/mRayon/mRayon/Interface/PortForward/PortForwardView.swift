@@ -55,7 +55,7 @@ struct PortForwardView: View {
             } else {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
-                        Label("\(content.count) forward(s) available, tap for option.", systemImage: "person.3.fill")
+                        Label("\(content.count) forward(s) available, tap for option.", systemImage: "arrow.left.arrow.right.circle.fill")
                             .font(.system(.footnote, design: .rounded))
                         Divider()
                         LazyVGrid(columns: columns, alignment: .leading, spacing: 10) {

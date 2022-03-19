@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSRemoteShell : NSObject
 
 @property (nonatomic, readonly, getter=isConnected) BOOL connected;
-@property (nonatomic, readonly, getter=isConnectedSFTP) BOOL connectedFileTransfer;
+@property (nonatomic, readonly, getter=isConnectedFileTransfer) BOOL connectedFileTransfer;
 @property (nonatomic, readonly, getter=isAuthenicated) BOOL authenticated;
 
 @property (nonatomic, readonly, strong) NSString *remoteHost;

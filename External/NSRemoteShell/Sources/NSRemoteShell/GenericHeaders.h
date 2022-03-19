@@ -88,7 +88,7 @@ while (libssh2_channel_free(CHANNEL) == LIBSSH2_ERROR_EAGAIN) {}; \
  represent how deep we can go while using sftp delete
  used to prevent app from crash
  */
-#define SFTP_RECURSIVE_DEPTH 20 // don't use our app to do heavy task!
+#define SFTP_RECURSIVE_DEPTH 32 // don't use our app to do heavy task!
 
 /*
  defines the event loop handler class for NSRemoteShell

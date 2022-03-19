@@ -5,7 +5,6 @@
 //  Created by Lakr Aream on 2022/3/3.
 //
 
-import Foundation
 import NSRemoteShell
 import RayonModule
 import SwiftUI
@@ -148,6 +147,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
             guard self.firstConnect else {
                 return
             }
+            self.firstConnect = false
             guard RayonStore.shared.openInterfaceAutomatically else { return }
             let host = UIHostingController(
                 rootView: DefaultPresent(context: self)
@@ -272,7 +272,6 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
     }
 
     func processShutdown(exitFromShell: Bool = false) {
-        firstConnect = false
         if exitFromShell {
             putInformation("")
             putInformation("[*] Connection Closed")
@@ -308,7 +307,6 @@ extension TerminalContext {
                     }
             }
             .navigationViewStyle(StackNavigationViewStyle())
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

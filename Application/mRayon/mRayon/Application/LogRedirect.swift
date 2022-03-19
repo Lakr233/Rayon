@@ -5,7 +5,7 @@
 //  Created by Lakr Aream on 2022/3/14.
 //
 
-import Foundation
+import SwiftUI
 
 class LogRedirect {
     static let shared = LogRedirect()
@@ -35,6 +35,11 @@ class LogRedirect {
         guard let handler = handler, let path = path?.path else {
             return
         }
+        #if DEBUG
+            guard UserDefaults.standard.value(forKey: "wiki.qaq.redirect.diag") as? Bool ?? false else {
+                return
+            }
+        #endif
         debugPrint("calling dup2 on stdout and stderr with \(path)")
         dup2(handler.fileDescriptor, STDOUT_FILENO)
         dup2(handler.fileDescriptor, STDERR_FILENO)

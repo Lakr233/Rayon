@@ -35,7 +35,7 @@
 @property (nonatomic, readwrite, nullable, strong) NSString *lastFileTransferError;
 
 @property (nonatomic, readwrite, getter=isConnected) BOOL connected;
-@property (nonatomic, readwrite, getter=isConnectedSFTP) BOOL connectedFileTransfer;
+@property (nonatomic, readwrite, getter=isConnectedFileTransfer) BOOL connectedFileTransfer;
 @property (nonatomic, readwrite, getter=isAuthenicated) BOOL authenticated;
 
 @property (nonatomic, readwrite, assign) int associatedSocket;
@@ -205,6 +205,18 @@ continue; \
 
 - (void)requestDisconnectAndWait {
     if (self.destroyed) return;
+    
+    /*
+     kill these values so we will clean the things up if in fly
+     especially for file transfer
+     the loop for read and loop for write will check the connectedFileTransfer
+     each time before execution io rw
+     so we won't wait too much time before f**k up
+     */
+    self.connected = NO;
+    self.connectedFileTransfer = NO;
+    self.authenticated = NO;
+    
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     __weak typeof(self) magic = self;
     @synchronized (self.requestInvokations) {
@@ -1387,7 +1399,7 @@ continue; \
     NSURL *remoteFile = [[NSURL alloc] initFileURLWithPath:toDirectory];
     remoteFile = [remoteFile URLByAppendingPathComponent:localFile.lastPathComponent];
     
-    NSLog(@"uploading %@ to %@", localFile.path, remoteFile.path);
+//    NSLog(@"uploading %@ to %@", localFile.path, remoteFile.path);
     
     BOOL isDir = NO;
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:localFile.path isDirectory:&isDir];
@@ -1405,7 +1417,7 @@ continue; \
                                   failureReason:@"this function does not support upload directory"];
         return NO;
     }
-    NSLog(@"requesting upload file at %@ to %@", localFile.path, remoteFile.path);
+//    NSLog(@"requesting upload file at %@ to %@", localFile.path, remoteFile.path);
     FILE *f = fopen([localFile.path UTF8String], "rb");
     if (!f) {
         [self unsafeFileTransferSetErrorForFile:localFile.path pathIsRemote:NO failureReason:@"failed to read"];
@@ -1447,21 +1459,22 @@ continue; \
     NSDate *begin = [[NSDate alloc] init];
     NSDate *previousProgressSent = [[NSDate alloc] initWithTimeIntervalSince1970:0];
     
-    char mem[SFTP_BUFFER_SIZE];
+//    char *buff = (char*)malloc(SFTP_BUFFER_SIZE);
+    char buff[SFTP_BUFFER_SIZE];
     size_t read_size;
     char *ptr;
     NSUInteger sent_size = 0;
     NSUInteger total_size = fi.st_size;
     while (sent_size < total_size) {
-        if (continuationBlock && !continuationBlock()) {
-            break;
-        }
-        memset(mem, 0, sizeof(mem));
-        read_size = fread(mem, 1, sizeof(mem), f);
+        if (continuationBlock && !continuationBlock()) { break; }
+        if (!self.isConnectedFileTransfer) { break; }
+//        memset(buff, 0, SFTP_BUFFER_SIZE);
+        memset(buff, 0, sizeof(buff));
+        read_size = fread(buff, 1, sizeof(buff), f);
         if (read_size <= 0) {
             break; // done or error
         }
-        ptr = mem;
+        ptr = buff;
         long long rc = LIBSSH2_ERROR_EAGAIN;
         // we are not really count the timeout here tho
         while (rc == LIBSSH2_ERROR_EAGAIN || read_size) {
@@ -1491,9 +1504,12 @@ continue; \
             NSProgress *progress = [[NSProgress alloc] init];
             [progress setTotalUnitCount:total_size];
             [progress setCompletedUnitCount:sent_size];
-            onProgress(atPath, progress, speed);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                onProgress(atPath, progress, speed);
+            });
         }
     };
+//    free(buff);
     [self unsafeReadLastError];
     
     if (sent_size < total_size) {
@@ -1504,7 +1520,7 @@ continue; \
     
     fclose(f);
     LIBSSH2_CHANNEL_SHUTDOWN(channel);
-    NSLog(@"upload %@ to %@ done", localFile.path, remoteFile.path);
+//    NSLog(@"upload %@ to %@ done", localFile.path, remoteFile.path);
     if (onProgress) {
         NSProgress *progress = [[NSProgress alloc] init];
         [progress setTotalUnitCount:total_size];
@@ -1514,7 +1530,9 @@ continue; \
         if (interval != 0) {
             speed = sent_size / interval;
         }
-        onProgress(atPath, progress, speed);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            onProgress(atPath, progress, speed);
+        });
     }
     return sent_size == total_size;
 }
@@ -1593,7 +1611,7 @@ continue; \
     if (![self unsafeValidateSessionSFTP]) { return NO; }
     LIBSSH2_SESSION *session = self.associatedSession;
     LIBSSH2_SFTP *sftp = self.associatedFileTransfer;
-    NSLog(@"removing file %@", atPath);
+//    NSLog(@"removing file %@", atPath);
     
     return [self unsafeDeleteRecursivelyForPathAndReturnContinue:atPath
                                                      withSession:session
@@ -1620,7 +1638,7 @@ continue; \
     }
     LIBSSH2_SESSION *session = self.associatedSession;
     LIBSSH2_SFTP *sftp = self.associatedFileTransfer;
-    NSLog(@"creating dir %@", atPath);
+//    NSLog(@"creating dir %@", atPath);
     
     // before we create, ask to check if already exists
     NSRemoteFile *file = [self unsafeGetFileInfo:atPath];
@@ -1689,8 +1707,12 @@ continue; \
                                                      withContinuationHandler:continuationBlock];
             if (!ret) { return NO; }
         }
-        NSLog(@"calling rmdir at %@", atPath);
-        if (onProgress) { onProgress(atPath); }
+//        NSLog(@"calling rmdir at %@", atPath);
+        if (onProgress) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                onProgress(atPath);
+            });
+        }
         NSDate *date = [[NSDate alloc] initWithTimeIntervalSinceNow:[self.operationTimeout intValue]];
         long long rc = 0;
         while (true) {
@@ -1711,8 +1733,12 @@ continue; \
         }
         return YES;
     } else {
-        NSLog(@"calling unlink at %@", atPath);
-        if (onProgress) { onProgress(atPath); }
+//        NSLog(@"calling unlink at %@", atPath);
+        if (onProgress) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                onProgress(atPath);
+            });
+        }
         NSDate *date = [[NSDate alloc] initWithTimeIntervalSinceNow:[self.operationTimeout intValue]];
         long long rc = 0;
         while (true) {
@@ -1744,7 +1770,7 @@ continue; \
     // we are called from ourselves
     NSString *atPath = atFullPath;
     NSURL *localFile = [[NSURL alloc] initFileURLWithPath:toFullPath];
-    NSString *toPath = toFullPath;
+//    NSString *toPath = toFullPath;
     NSURL *remoteFile = [[NSURL alloc] initFileURLWithPath:atFullPath];
     
     //    NSLog(@"%@ to %@", remoteFile.path, localFile.path);
@@ -1764,7 +1790,7 @@ continue; \
         [self unsafeFileTransferSetErrorForFile:atFullPath pathIsRemote:YES failureReason:@"broken connection"];
         return NO;
     }
-    NSLog(@"downloading file %@ to %@", atPath, toPath);
+//    NSLog(@"downloading file %@ to %@", atPath, toPath);
     
     struct stat fi;
     memset(&fi, 0, sizeof(fi));
@@ -1808,13 +1834,14 @@ continue; \
     // do note that the file could be empty
     // fi.st_size may be zero, the entire loop is going to be skipped
     long long recv_size = 0;
+//    char *buff = (char*)malloc(SFTP_BUFFER_SIZE);
     char buff[SFTP_BUFFER_SIZE];
     while (recv_size < fi.st_size) {
-        if (continuationBlock && !continuationBlock()) {
-            break;
-        }
+        if (continuationBlock && !continuationBlock()) { break; }
+        if (!self.isConnectedFileTransfer) { break; }
         long long recv_decision = sizeof(buff);
-        memset(buff, 0, recv_decision);
+//        memset(buff, 0, SFTP_BUFFER_SIZE);
+        memset(buff, 0, sizeof(buff));
         if ((fi.st_size - recv_size) < recv_decision) {
             // do not write over!
             // libssh2_channel_read may have dirty data
@@ -1855,10 +1882,14 @@ continue; \
                 NSProgress *progress = [[NSProgress alloc] init];
                 [progress setTotalUnitCount:fi.st_size];
                 [progress setCompletedUnitCount:recv_size];
-                onProgress(remoteFile.path, progress, speed);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    onProgress(remoteFile.path, progress, speed);
+                });
             }
         }
     }
+//    free(buff);
+    [self unsafeReadLastError];
     if (onProgress) {
         NSProgress *progress = [[NSProgress alloc] init];
         [progress setTotalUnitCount:fi.st_size];
@@ -1868,7 +1899,9 @@ continue; \
         if (interval) {
             speed = recv_size / interval;
         }
-        onProgress(remoteFile.path, progress, speed);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            onProgress(remoteFile.path, progress, speed);
+        });
     }
     if (recv_size != fi.st_size) {
         [self unsafeFileTransferSetErrorForFile:atFullPath
@@ -1936,7 +1969,7 @@ continue; \
             // now because it is a directory, we create one on our local path
             NSURL *localBase = localFile; // don't remove this, it will make code cleaner
             // TODO: Copy All File Attribute
-            NSLog(@"creating dir %@ to %@", remoteFile.path, localBase.path);
+//            NSLog(@"creating dir %@ to %@", remoteFile.path, localBase.path);
             [NSFileManager.defaultManager createDirectoryAtURL:localBase
                                    withIntermediateDirectories:YES
                                                     attributes:NULL
@@ -1998,7 +2031,7 @@ continue; \
     }
     LIBSSH2_SESSION *session = self.associatedSession;
     LIBSSH2_SFTP *sftp = self.associatedFileTransfer;
-    NSLog(@"rename %@ to %@", atPath, newPath);
+//    NSLog(@"rename %@ to %@", atPath, newPath);
     
     NSDate *date = [[NSDate alloc] initWithTimeIntervalSinceNow:[self.operationTimeout intValue]];
     long long rc = 0;

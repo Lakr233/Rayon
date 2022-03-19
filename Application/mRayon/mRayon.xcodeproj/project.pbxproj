@@ -14,6 +14,9 @@
 		500D727127CF40CC00149A43 /* EditIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500D727027CF40CC00149A43 /* EditIdentityView.swift */; };
 		500D727327CF431000149A43 /* IdentityElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500D727227CF431000149A43 /* IdentityElementView.swift */; };
 		500D727527CF43CE00149A43 /* FilePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500D727427CF43CE00149A43 /* FilePicker.swift */; };
+		5013B51527E4B14100EF01C4 /* FileTransferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5013B51427E4B14100EF01C4 /* FileTransferManager.swift */; };
+		5013B51727E4B14800EF01C4 /* FileTransferContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5013B51627E4B14800EF01C4 /* FileTransferContext.swift */; };
+		5013B51927E4B14E00EF01C4 /* FileTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5013B51827E4B14E00EF01C4 /* FileTransferView.swift */; };
 		501B334227DF0DD100EB6261 /* LogRedirect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501B334127DF0DD100EB6261 /* LogRedirect.swift */; };
 		501B334427DF138200EB6261 /* StripedTextTable in Frameworks */ = {isa = PBXBuildFile; productRef = 501B334327DF138200EB6261 /* StripedTextTable */; };
 		501B334827DF16AA00EB6261 /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501B334727DF16AA00EB6261 /* LogView.swift */; };
@@ -24,7 +27,6 @@
 		501FF79B27CEFC6300380D59 /* RayonModule in Frameworks */ = {isa = PBXBuildFile; productRef = 501FF79A27CEFC6300380D59 /* RayonModule */; };
 		501FF79D27CEFC6700380D59 /* Colorful in Frameworks */ = {isa = PBXBuildFile; productRef = 501FF79C27CEFC6700380D59 /* Colorful */; };
 		501FF7A127CEFC9900380D59 /* CodeMirrorUI in Frameworks */ = {isa = PBXBuildFile; productRef = 501FF7A027CEFC9900380D59 /* CodeMirrorUI */; };
-		5047BE9927DCCADB008887A7 /* PortForwardExecView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5047BE9827DCCADB008887A7 /* PortForwardExecView.swift */; };
 		5047BE9B27DCCB76008887A7 /* PortForwardElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5047BE9A27DCCB76008887A7 /* PortForwardElementView.swift */; };
 		5047BE9D27DCCC8B008887A7 /* EditPortForwardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5047BE9C27DCCC8B008887A7 /* EditPortForwardView.swift */; };
 		5047BE9F27DECE48008887A7 /* SPIndicator in Frameworks */ = {isa = PBXBuildFile; productRef = 5047BE9E27DECE48008887A7 /* SPIndicator */; };
@@ -74,6 +76,9 @@
 		500D727027CF40CC00149A43 /* EditIdentityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIdentityView.swift; sourceTree = "<group>"; };
 		500D727227CF431000149A43 /* IdentityElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityElementView.swift; sourceTree = "<group>"; };
 		500D727427CF43CE00149A43 /* FilePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePicker.swift; sourceTree = "<group>"; };
+		5013B51427E4B14100EF01C4 /* FileTransferManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferManager.swift; sourceTree = "<group>"; };
+		5013B51627E4B14800EF01C4 /* FileTransferContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferContext.swift; sourceTree = "<group>"; };
+		5013B51827E4B14E00EF01C4 /* FileTransferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferView.swift; sourceTree = "<group>"; };
 		501B334127DF0DD100EB6261 /* LogRedirect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogRedirect.swift; sourceTree = "<group>"; };
 		501B334727DF16AA00EB6261 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		501FF78727CEFADD00380D59 /* mRayon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mRayon.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,7 +86,6 @@
 		501FF78C27CEFADD00380D59 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		501FF78E27CEFADD00380D59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		501FF79827CEFAFA00380D59 /* mRayon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = mRayon.entitlements; sourceTree = "<group>"; };
-		5047BE9827DCCADB008887A7 /* PortForwardExecView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortForwardExecView.swift; sourceTree = "<group>"; };
 		5047BE9A27DCCB76008887A7 /* PortForwardElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortForwardElementView.swift; sourceTree = "<group>"; };
 		5047BE9C27DCCC8B008887A7 /* EditPortForwardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPortForwardView.swift; sourceTree = "<group>"; };
 		5047BEA027DED78A008887A7 /* PortForwardBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortForwardBackend.swift; sourceTree = "<group>"; };
@@ -149,6 +153,16 @@
 				5082A1DF27D1ED5800C71C0F /* AgreementView.swift */,
 			);
 			path = Generic;
+			sourceTree = "<group>";
+		};
+		5013B51327E4B12800EF01C4 /* FileTransfer */ = {
+			isa = PBXGroup;
+			children = (
+				5013B51427E4B14100EF01C4 /* FileTransferManager.swift */,
+				5013B51627E4B14800EF01C4 /* FileTransferContext.swift */,
+				5013B51827E4B14E00EF01C4 /* FileTransferView.swift */,
+			);
+			path = FileTransfer;
 			sourceTree = "<group>";
 		};
 		501FF77E27CEFADD00380D59 = {
@@ -229,8 +243,9 @@
 				50C90AFD27CF143C00F60B51 /* Snippet */,
 				50C90B0527CF15A500F60B51 /* Identity */,
 				50C90B0A27CF189700F60B51 /* PortForward */,
-				50C90B0B27CF18A100F60B51 /* Terminal */,
 				5082A1C427D09C7F00C71C0F /* Monitor */,
+				50C90B0B27CF18A100F60B51 /* Terminal */,
+				5013B51327E4B12800EF01C4 /* FileTransfer */,
 				50D77BE527D2F0FB00177190 /* Setting */,
 			);
 			path = Interface;
@@ -300,7 +315,6 @@
 				50C90B1427CF18D500F60B51 /* PortForwardView.swift */,
 				5047BE9A27DCCB76008887A7 /* PortForwardElementView.swift */,
 				5047BE9C27DCCC8B008887A7 /* EditPortForwardView.swift */,
-				5047BE9827DCCADB008887A7 /* PortForwardExecView.swift */,
 				5047BEA027DED78A008887A7 /* PortForwardBackend.swift */,
 			);
 			path = PortForward;
@@ -409,11 +423,13 @@
 			files = (
 				5082A1DA27D1B79A00C71C0F /* SnippetExecuteView.swift in Sources */,
 				50C90B0227CF146400F60B51 /* SnippetView.swift in Sources */,
+				5013B51727E4B14800EF01C4 /* FileTransferContext.swift in Sources */,
 				501B334827DF16AA00EB6261 /* LogView.swift in Sources */,
 				5082A1DE27D1ECF300C71C0F /* LicenseView.swift in Sources */,
 				50D3AEF927D0582F0085F899 /* SnippetElementView.swift in Sources */,
 				50C90AF327CF125200F60B51 /* DoubleConfirm.swift in Sources */,
 				50C90AF527CF125200F60B51 /* PresentError.swift in Sources */,
+				5013B51927E4B14E00EF01C4 /* FileTransferView.swift in Sources */,
 				500D726D27CF269700149A43 /* PlaceholderView.swift in Sources */,
 				501FF78D27CEFADD00380D59 /* ContentView.swift in Sources */,
 				5082A1C327D087FB00C71C0F /* Util.swift in Sources */,
@@ -426,6 +442,7 @@
 				500D726A27CF1C0800149A43 /* View.swift in Sources */,
 				5047BE9D27DCCC8B008887A7 /* EditPortForwardView.swift in Sources */,
 				50C90AEC27CF119500F60B51 /* TabsView.swift in Sources */,
+				5013B51527E4B14100EF01C4 /* FileTransferManager.swift in Sources */,
 				5047BEA327DEDB77008887A7 /* SidebarView+Recent.swift in Sources */,
 				50FD853A27D0445D00F6F01A /* EditSnippetView.swift in Sources */,
 				501B334227DF0DD100EB6261 /* LogRedirect.swift in Sources */,
@@ -433,7 +450,6 @@
 				5082A1DC27D1D7DE00C71C0F /* SnippetExecuteContext.swift in Sources */,
 				50C90AF427CF125200F60B51 /* UIBridge.swift in Sources */,
 				500D727327CF431000149A43 /* IdentityElementView.swift in Sources */,
-				5047BE9927DCCADB008887A7 /* PortForwardExecView.swift in Sources */,
 				50D77BE727D2F0FB00177190 /* SettingView.swift in Sources */,
 				50C90B0927CF15F000F60B51 /* WelcomeView.swift in Sources */,
 				501FF78B27CEFADD00380D59 /* mRayonApp.swift in Sources */,
@@ -591,7 +607,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = GXZ23M5TP2;
 				ENABLE_PREVIEWS = YES;
@@ -607,12 +623,13 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.11;
+				MARKETING_VERSION = 1.12;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "QAQ Wiki iOS Wildcard";
@@ -633,7 +650,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = GXZ23M5TP2;
 				ENABLE_PREVIEWS = YES;
@@ -649,12 +666,13 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.11;
+				MARKETING_VERSION = 1.12;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "QAQ Wiki iOS Distribution Wildcard";
