@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
+title: '🪲[BUG] Give a suitable title'
 labels: ''
 assignees: ''
 
