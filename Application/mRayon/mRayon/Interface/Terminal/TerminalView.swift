@@ -207,7 +207,7 @@ struct TerminalView: View {
             block()
         } label: {
             Image(systemName: image)
-                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .font(.system(size: 14, weight: .semibold, design: .rounded))
                 .frame(width: 20, height: 20)
         }
         .buttonStyle(.bordered)

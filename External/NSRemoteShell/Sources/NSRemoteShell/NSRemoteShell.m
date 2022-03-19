@@ -834,11 +834,18 @@ continue; \
     LIBSSH2_SESSION *session = self.associatedSession;
     BOOL authenticated = NO;
     while (true) {
+        const char *name = username ? [username UTF8String] : NULL;
+        unsigned int nl = username ? (unsigned int)strlen(name) : 0;
+        const char *pub = publicKey ? [publicKey UTF8String] : NULL;
+        unsigned int pul = publicKey ? (unsigned int)strlen(pub): 0;
+        const char *pri = privateKey ? [privateKey UTF8String] : NULL;
+        unsigned int prl = privateKey ? (unsigned int)strlen(pri) : 0;
+        const char *pwd = password ? [password UTF8String] : NULL;
         long long rc = libssh2_userauth_publickey_frommemory(session,
-                                                             [username UTF8String], [username length],
-                                                             [publicKey UTF8String] ?: nil, [publicKey length] ?: 0,
-                                                             [privateKey UTF8String] ?: nil, [privateKey length] ?: 0,
-                                                             [password UTF8String]);
+                                                             name, (unsigned int)nl,
+                                                             pub, (unsigned int)pul,
+                                                             pri, (unsigned int)prl,
+                                                             pwd);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
             continue;
         }
@@ -1223,9 +1230,10 @@ continue; \
             libssh2_session_set_last_error(session, LIBSSH2_ERROR_TIMEOUT, NULL);
             break;
         }
+        const char *cpath = [path UTF8String];
         LIBSSH2_SFTP_HANDLE *handlerBuilder = libssh2_sftp_open_ex(sftp,
-                                                                   path.UTF8String,
-                                                                   (unsigned int)path.length,
+                                                                   cpath,
+                                                                   (unsigned int)strlen(cpath),
                                                                    0,
                                                                    0,
                                                                    LIBSSH2_SFTP_OPENDIR);
@@ -1260,9 +1268,19 @@ continue; \
             libssh2_session_set_last_error(session, LIBSSH2_ERROR_TIMEOUT, NULL);
             break;
         }
+        const char *cpath = [path UTF8String];
+        /*
+         by using c path and strlen, utf8 char set with multi length will have the right space
+         
+         (lldb) po [path length];
+         25
+
+         (lldb) po strlen(cpath)
+         29
+         */
         LIBSSH2_SFTP_HANDLE *handlerBuilder = libssh2_sftp_open_ex(sftp,
-                                                                   path.UTF8String,
-                                                                   (unsigned int)path.length,
+                                                                   cpath,
+                                                                   (unsigned int)strlen(cpath),
                                                                    flags,
                                                                    mode,
                                                                    LIBSSH2_SFTP_OPENFILE);
@@ -1660,7 +1678,8 @@ continue; \
         | LIBSSH2_SFTP_S_IXGRP
         | LIBSSH2_SFTP_S_IROTH
         | LIBSSH2_SFTP_S_IXOTH;
-        rc = libssh2_sftp_mkdir_ex(sftp, atPath.UTF8String, (unsigned int)atPath.length, mode);
+        const char *cpath = [atPath UTF8String];
+        rc = libssh2_sftp_mkdir_ex(sftp, cpath, (unsigned int)strlen(cpath), mode);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
             continue;
         }
@@ -1720,7 +1739,8 @@ continue; \
                 libssh2_session_set_last_error(session, LIBSSH2_ERROR_TIMEOUT, NULL);
                 break;
             }
-            rc = libssh2_sftp_rmdir_ex(sftp, atPath.UTF8String, (unsigned int)atPath.length);
+            const char *cpath = [atPath UTF8String];
+            rc = libssh2_sftp_rmdir_ex(sftp, cpath, (unsigned int)strlen(cpath));
             if (rc == LIBSSH2_ERROR_EAGAIN) {
                 continue;
             }
@@ -1746,7 +1766,8 @@ continue; \
                 libssh2_session_set_last_error(session, LIBSSH2_ERROR_TIMEOUT, NULL);
                 break;
             }
-            rc = libssh2_sftp_unlink_ex(sftp, [atPath UTF8String], (unsigned int)atPath.length);
+            const char *cpath = [atPath UTF8String];
+            rc = libssh2_sftp_unlink_ex(sftp, cpath, (unsigned int)strlen(cpath));
             if (rc == LIBSSH2_ERROR_EAGAIN) {
                 continue;
             }
@@ -2044,11 +2065,13 @@ continue; \
         | LIBSSH2_SFTP_RENAME_OVERWRITE
         | LIBSSH2_SFTP_RENAME_ATOMIC
         | LIBSSH2_SFTP_RENAME_NATIVE;
+        const char *acp = [atPath UTF8String];
+        const char *ncp = [newPath UTF8String];
         rc = libssh2_sftp_rename_ex(sftp,
-                                    atPath.UTF8String,
-                                    (unsigned int)(atPath.length),
+                                    acp,
+                                    (unsigned int)strlen(acp),
                                     newPath.UTF8String,
-                                    (unsigned int)(newPath.length),
+                                    (unsigned int)strlen(ncp),
                                     mode);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
             continue;

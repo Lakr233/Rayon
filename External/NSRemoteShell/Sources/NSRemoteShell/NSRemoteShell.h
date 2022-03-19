@@ -55,6 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark helper
 
 - (nullable NSString *)getLastError;
+- (nullable NSString*)getLastFileTransferError;
 
 #pragma mark execution
 

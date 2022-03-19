@@ -9,11 +9,11 @@ import SwiftUI
 
 extension UIBridge {
     static func requiresConfirmation(message: String, confirmation: @escaping (Bool) -> Void) {
-        let alert = UIAlertController(title: "Confirm?", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: "❓", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
             confirmation(false)
         }))
-        alert.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Continue", style: .destructive, handler: { _ in
             confirmation(true)
         }))
         UIWindow.shutUpKeyWindow?.topMostViewController?.present(alert, animated: true, completion: nil)

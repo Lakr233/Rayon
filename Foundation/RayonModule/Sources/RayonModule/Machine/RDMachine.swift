@@ -51,6 +51,15 @@ public struct RDMachine: Codable, Identifiable, Equatable {
     // reserved for future use
     public var attachment: [String: String]
 
+    public var fileTransferLoginPath: String {
+        get {
+            attachment["sftp.login.path", default: "/"]
+        }
+        set {
+            attachment["sftp.login.path"] = newValue
+        }
+    }
+
     // convince
 
     public func isQualifiedForSearch(text: String) -> Bool {

@@ -49,6 +49,16 @@ struct SettingView: View {
             }
 
             Section {
+                Button {
+                    UIBridge.openFileContainer()
+                } label: {
+                    Text("Show App Container")
+                }
+            } header: {
+                Label("DOCUMENT", systemImage: "doc.text.magnifyingglass")
+            }
+
+            Section {
                 #if DEBUG
                     Toggle("Redirect Log", isOn: $redirectLog)
                         .onChange(of: redirectLog) { newValue in

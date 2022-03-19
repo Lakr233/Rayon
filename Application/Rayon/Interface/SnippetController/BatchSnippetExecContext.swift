@@ -185,6 +185,9 @@ class BatchSnippetExecContext: ObservableObject {
             withTimeout: 0
         ) {
             debugPrint("channel begin")
+            self.safeAccess {
+                self.receivedBuffer[machine, default: ""].append("[*] Execute Begin\r\n")
+            }
         } withOutput: { output in
             // because the output is picked up by xterm, we need to replace \n to \r\n
             let output = output

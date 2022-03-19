@@ -46,7 +46,6 @@ class FileTransferManager: ObservableObject {
             get = RayonStore.shared.identityGroup[uid]
         }
         let object = FileTransferContext(machine: machine, identity: get)
-        RayonStore.shared.storeRecentIfNeeded(from: machineId)
         transfers.append(object)
     }
 

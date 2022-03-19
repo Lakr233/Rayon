@@ -26,6 +26,9 @@ struct EditMachineView: View {
     @State var comment = ""
     @State var associatedIdentity: UUID? = nil
 
+    // Extra
+    @State var fileTransferLoginPath: String = "/"
+
     var body: some View {
         List {
             Section {
@@ -82,6 +85,19 @@ struct EditMachineView: View {
 //                    Text("")
 //                }
 
+            Section {
+                HStack {
+                    Text("Login Path: ")
+                    TextField("", text: $fileTransferLoginPath)
+                        .disableAutocorrection(true)
+                        .textInputAutocapitalization(.never)
+                }
+            } header: {
+                Label("SFTP", systemImage: "doc.text.magnifyingglass")
+            } footer: {
+                Text("Customization about SFTP features")
+            }
+
             if let identity = inEditWith?() {
                 Section {
                     Button {
@@ -111,6 +127,7 @@ struct EditMachineView: View {
                     name = read.name
                     group = read.group
                     comment = read.comment
+                    fileTransferLoginPath = read.fileTransferLoginPath
                     if let aid = read.associatedIdentity {
                         associatedIdentity = UUID(uuidString: aid)
                     }
@@ -156,7 +173,7 @@ struct EditMachineView: View {
             id = readId
         }
 
-        let newMachine = RDMachine(
+        var newMachine = RDMachine(
             id: id,
             remoteAddress: remoteAddress,
             remotePort: remotePort,
@@ -165,6 +182,7 @@ struct EditMachineView: View {
             comment: comment,
             associatedIdentity: associatedIdentity?.uuidString
         )
+        newMachine.fileTransferLoginPath = fileTransferLoginPath
         RayonStore.shared.machineGroup.insert(newMachine)
 
         presentationMode.wrappedValue.dismiss()

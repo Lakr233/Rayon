@@ -35,7 +35,7 @@ extension UIBridge {
 //            alert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
 //            UIWindow.shutUpKeyWindow?.topMostViewController?.present(alert, animated: true, completion: nil)
             #if DEBUG
-                if message.count > 20 {
+                if message.count > 25 {
                     fatalError("message too long")
                 }
             #endif

@@ -120,7 +120,7 @@ class SnippetExecuteContext: ObservableObject {
             withCommand: snippet.code,
             withTimeout: 0
         ) {
-            term.write("[*] Execute Begin")
+            term.write("[*] Execute Begin\r\n")
         } withOutput: { output in
             // because the output is picked up by xterm, we need to replace \n to \r\n
             let output = output

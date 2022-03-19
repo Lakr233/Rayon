@@ -26,8 +26,8 @@ git clean -fdx
 git reset --hard
 git pull
 
-npm install
-npm run build
+pnpm install
+pnpm run build
 
 #check if dist exists
 if [ ! -d "dist" ]; then

@@ -152,7 +152,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
             let host = UIHostingController(
                 rootView: DefaultPresent(context: self)
             )
-            host.isModalInPresentation = true
+//            host.isModalInPresentation = true
             host.modalTransitionStyle = .coverVertical
             host.modalPresentationStyle = .formSheet
             host.preferredContentSize = preferredPopOverSize
