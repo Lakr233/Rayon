@@ -15,7 +15,16 @@ class TerminalManager: ObservableObject {
 
     @Published var sessionContexts: [Context] = []
 
-    func createSession(withMachineObject machine: RDMachine) {
+    func createSession(withMachineObject machine: RDMachine, force: Bool = false) {
+        let index = sessionContexts.firstIndex { $0.machine.id == machine.id }
+        if index != nil, !force {
+            UIBridge.requiresConfirmation(message: "A session for \(machine.name) is already in place, are you sure to open another?") { confirmed in
+                if confirmed {
+                    self.createSession(withMachineObject: machine, force: true)
+                }
+            }
+            return
+        }
         let context = Context(machine: machine)
         sessionContexts.append(context)
         RayonStore.shared.storeRecentIfNeeded(from: machine.id)

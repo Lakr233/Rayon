@@ -209,8 +209,8 @@ struct EditIdentityManager: View {
         panel.canChooseFiles = true
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
-        func handle(respnse: NSApplication.ModalResponse) {
-            if respnse == .OK, let url = panel.url {
+        func handle(resp: NSApplication.ModalResponse) {
+            if resp == .OK, let url = panel.url {
                 // panel animation
                 mainActor(delay: 0.5) {
                     onComplete(try? Data(contentsOf: url))
@@ -218,9 +218,9 @@ struct EditIdentityManager: View {
             }
         }
         if let window = NSApplication.shared.keyWindow {
-            panel.beginSheetModal(for: window) { handle(respnse: $0) }
+            panel.beginSheetModal(for: window) { handle(resp: $0) }
         } else {
-            panel.begin { handle(respnse: $0) }
+            panel.begin { handle(resp: $0) }
         }
     }
 }

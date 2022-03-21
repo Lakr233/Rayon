@@ -31,9 +31,12 @@ struct MachineView: View {
                     .opacity(0.05)
                     .roundedCorner()
             )
-            .sheet(isPresented: $openEditSheet, onDismiss: nil, content: {
+            .sheet(isPresented: $openEditSheet) {
                 MachineEditView(inEditWith: machine)
-            })
+            }
+            .onTapGesture(count: 2) {
+                TerminalManager.shared.createSession(withMachineID: machine)
+            }
     }
 
     var contentView: some View {

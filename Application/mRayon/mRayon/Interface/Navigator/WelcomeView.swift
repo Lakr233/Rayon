@@ -40,7 +40,7 @@ struct WelcomeView: View {
 
             Text("Quick Connect (Identity Requires Auto Auth)")
                 .font(.system(.headline, design: .rounded))
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     TextField("ssh root@www.example.com -p 22 ↵", text: $quickConnect)

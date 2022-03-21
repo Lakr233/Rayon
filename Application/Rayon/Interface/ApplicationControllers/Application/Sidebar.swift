@@ -10,7 +10,9 @@ import SwiftUI
 
 struct SidebarView: View {
     @EnvironmentObject var store: RayonStore
-    @EnvironmentObject var terminalManager: TerminalManager
+
+    @StateObject var terminalManager = TerminalManager.shared
+    @StateObject var transferManager = FileTransferManager.shared
 
     var body: some View {
         List {
@@ -21,6 +23,7 @@ struct SidebarView: View {
             }
             manager
             session
+            sftpSession
             if store.storeRecent { recent }
         }
         .navigationTitle("Rayon")
@@ -103,24 +106,26 @@ struct SidebarView: View {
                         }
                     }
                 }
-                Button {
-                    UIBridge.requiresConfirmation(
-                        message: "Are you sure you want to stop all session?")
-                    { confirmed in
-                            guard confirmed else {
-                                return
+                if terminalManager.sessionContexts.count > 1 {
+                    Button {
+                        UIBridge.requiresConfirmation(
+                            message: "Are you sure you want to stop all session?")
+                        { confirmed in
+                                guard confirmed else {
+                                    return
+                                }
+                                terminalManager.closeAll()
                             }
-                            terminalManager.closeAll()
+                    } label: {
+                        HStack {
+                            Label("Stop All", systemImage: "trash")
+                            Spacer()
                         }
-                } label: {
-                    HStack {
-                        Label("Stop All", systemImage: "trash")
-                        Spacer()
+                        .background(Color.accentColor.opacity(0.0001))
                     }
-                    .background(Color.accentColor.opacity(0.0001))
+                    .buttonStyle(PlainButtonStyle())
+                    .expended()
                 }
-                .buttonStyle(PlainButtonStyle())
-                .expended()
             }
             Button {
                 DispatchQueue.global().async {
@@ -128,6 +133,86 @@ struct SidebarView: View {
                     mainActor {
                         for machine in machines {
                             terminalManager.createSession(withMachineID: machine)
+                        }
+                    }
+                }
+            } label: {
+                HStack {
+                    Label("Batch Startup", systemImage: "wind")
+                    Spacer()
+                }
+                .background(Color.accentColor.opacity(0.0001))
+            }
+            .buttonStyle(PlainButtonStyle())
+            .expended()
+        }
+    }
+
+    var sftpSession: some View {
+        Section("File Transfer") {
+            if transferManager.transfers.isEmpty {
+                Button {} label: {
+                    HStack {
+                        Label("No Session", systemImage: "app.dashed")
+                        Spacer()
+                    }
+                    .background(Color.accentColor.opacity(0.0001))
+                }
+                .buttonStyle(PlainButtonStyle())
+                .expended()
+            } else {
+                ForEach(transferManager.transfers) { context in
+                    NavigationLink {
+                        FileTransferView(context: context).requiresFrame()
+                    } label: {
+                        Label(context.navigationTitle, systemImage: "externaldrive.connected.to.line.below")
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .contextMenu {
+                        Button {
+                            if context.isProgressRunning {
+                                UIBridge.requiresConfirmation(
+                                    message: "Progress running, are you sure you want to terminate?"
+                                ) { confirmed in
+                                    if confirmed {
+                                        transferManager.end(for: context.id)
+                                    }
+                                }
+                            } else {
+                                transferManager.end(for: context.id)
+                            }
+                        } label: {
+                            Label("Close Connection", image: "trash")
+                        }
+                    }
+                }
+                if transferManager.transfers.count > 1 {
+                    Button {
+                        UIBridge.requiresConfirmation(
+                            message: "Are you sure you want to stop all session?")
+                        { confirmed in
+                                guard confirmed else {
+                                    return
+                                }
+                                transferManager.transfers.forEach { transferManager.end(for: $0.id) }
+                            }
+                    } label: {
+                        HStack {
+                            Label("Stop All", systemImage: "trash")
+                            Spacer()
+                        }
+                        .background(Color.accentColor.opacity(0.0001))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .expended()
+                }
+            }
+            Button {
+                DispatchQueue.global().async {
+                    let machines = RayonUtil.selectMachine(allowMany: true)
+                    mainActor {
+                        for machine in machines {
+                            transferManager.begin(for: machine)
                         }
                     }
                 }

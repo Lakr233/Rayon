@@ -195,7 +195,7 @@ public class RayonStore: ObservableObject {
             UDDisableConformation = disableConformation
         }
     }
-    
+
     @UserDefaultsWrapper(key: "wiki.qaq.rayon.maxRecentRecordCount", defaultValue: 8)
     public var maxRecentRecordCount: Int
 
@@ -207,7 +207,7 @@ public class RayonStore: ObservableObject {
             )
         }
     }
-    
+
     @UserDefaultsWrapper(key: "wiki.qaq.rayon.terminalFontSize", defaultValue: 14)
     public var UDTerminalFontSize: Int
 

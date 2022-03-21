@@ -18,7 +18,7 @@ struct TerminalView: View {
 
     @State var openControlKeyPopover: Bool = false
     @State var controlKey: String = ""
-    
+
     @StateObject var store = RayonStore.shared
 
     @Environment(\.presentationMode) var presentationMode
@@ -35,6 +35,9 @@ struct TerminalView: View {
                                     return
                                 }
                                 updateTerminalSize()
+                            }
+                            .onAppear {
+                                context.termInterface.setTerminalFontSize(with: store.terminalFontSize)
                             }
                             .onChange(of: store.terminalFontSize) { newValue in
                                 context.termInterface.setTerminalFontSize(with: newValue)

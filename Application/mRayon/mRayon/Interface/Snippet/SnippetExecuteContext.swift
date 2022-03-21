@@ -77,6 +77,7 @@ class SnippetExecuteContext: ObservableObject {
         defer {
             moveToComplete(for: machine.id)
         }
+        term.setTerminalFontSize(with: RayonStore.shared.terminalFontSize)
         term.write("[*] connecting to host...\r\n")
         shell.requestConnectAndWait()
         guard shell.isConnected else {

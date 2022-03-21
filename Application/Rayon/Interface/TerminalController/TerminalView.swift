@@ -11,6 +11,8 @@ import XTerminalUI
 
 struct TerminalView: View {
     @StateObject var context: TerminalManager.Context
+
+    @StateObject var store = RayonStore.shared
     @State var interfaceToken = UUID()
 
     var body: some View {
@@ -18,6 +20,12 @@ struct TerminalView: View {
             if context.interfaceToken == interfaceToken {
                 context.termInterface
                     .padding(4)
+                    .onChange(of: store.terminalFontSize) { newValue in
+                        context.termInterface.setTerminalFontSize(with: newValue)
+                    }
+                    .onAppear {
+                        context.termInterface.setTerminalFontSize(with: store.terminalFontSize)
+                    }
             } else {
                 Text("Terminal Transfer To Another Window")
             }
@@ -27,6 +35,26 @@ struct TerminalView: View {
             context.interfaceToken = interfaceToken
         }
         .toolbar {
+            ToolbarItem {
+                Button {
+                    store.terminalFontSize -= 1
+                } label: {
+                    Label("Decrease Font Size", systemImage: "text.badge.minus")
+                }
+                .disabled(store.terminalFontSize <= 4)
+            }
+            ToolbarItem {
+                Button {
+                    RayonStore.shared.terminalFontSize += 1
+                } label: {
+                    Label("Increase Font Size", systemImage: "text.badge.plus")
+                }
+                .disabled(store.terminalFontSize >= 30)
+            }
+            ToolbarItem { // divider
+                Button {} label: { HStack { Divider().frame(height: 15) } }
+                    .disabled(true)
+            }
             ToolbarItem {
                 Button {
                     if context.closed {

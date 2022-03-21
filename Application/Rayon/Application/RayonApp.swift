@@ -14,7 +14,6 @@ import XTerminalUI
 @main
 struct RayonApp: App {
     @StateObject private var store = RayonStore.shared
-    @StateObject private var terminalManager = TerminalManager.shared
 
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
@@ -32,7 +31,6 @@ struct RayonApp: App {
         WindowGroup {
             MainView()
                 .environmentObject(store)
-                .environmentObject(terminalManager)
         }
         .windowToolbarStyle(.unifiedCompact)
         .commands {

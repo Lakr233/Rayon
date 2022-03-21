@@ -7,9 +7,7 @@
 
 import NSRemoteShell
 import RayonModule
-import SPIndicator
 import SwiftUI
-import UIKit
 
 class FileTransferContext: ObservableObject, Identifiable, Equatable {
     var id: UUID = .init()
@@ -97,21 +95,6 @@ class FileTransferContext: ObservableObject, Identifiable, Equatable {
     }
 
     func processBootstrap() {
-        mainActor {
-            guard self.firstConnect else { return }
-            self.firstConnect = false
-            guard RayonStore.shared.openInterfaceAutomatically else { return }
-            let host = UIHostingController(
-                rootView: DefaultPresent(context: self)
-            )
-//            host.isModalInPresentation = true
-            host.modalTransitionStyle = .coverVertical
-            host.modalPresentationStyle = .formSheet
-            host.preferredContentSize = preferredPopOverSize
-            UIWindow.shutUpKeyWindow?
-                .topMostViewController?
-                .present(next: host)
-        }
         DispatchQueue.global().async {
             self.callConnect()
         }
@@ -372,11 +355,7 @@ class FileTransferContext: ObservableObject, Identifiable, Equatable {
             if done {
                 putInformation("Download Completed")
                 mainActor {
-                    SPIndicator.present(
-                        title: "Download Completed",
-                        message: "You can access it in file.app",
-                        preset: .done
-                    )
+                    // TODO: after download
                 }
             } else {
                 let error = shell.getLastFileTransferError()
@@ -384,29 +363,6 @@ class FileTransferContext: ObservableObject, Identifiable, Equatable {
                 print("SFTP \(machine.name) Error: \(error ?? "Unknown")")
             }
             loadCurrentFileList()
-        }
-    }
-}
-
-extension FileTransferContext {
-    struct DefaultPresent: View {
-        let context: FileTransferContext
-        @Environment(\.presentationMode) var presentationMode
-
-        var body: some View {
-            NavigationView {
-                FileTransferView(context: context)
-                    .toolbar {
-                        ToolbarItem {
-                            Button {
-                                presentationMode.wrappedValue.dismiss()
-                            } label: {
-                                Image(systemName: "arrow.down.right.and.arrow.up.left")
-                            }
-                        }
-                    }
-            }
-            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
 }

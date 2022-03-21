@@ -28,6 +28,10 @@
 		505E762B27B4ECFC008D80F6 /* MachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505E762927B4ECFC008D80F6 /* MachineView.swift */; };
 		505E762E27B4FFA9008D80F6 /* MachineEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505E762C27B4FFA9008D80F6 /* MachineEditView.swift */; };
 		505E763127B5053B008D80F6 /* AlignedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505E762F27B5053B008D80F6 /* AlignedLabel.swift */; };
+		505FCE4027E831AA002A6B1D /* FileTransferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505FCE3C27E831AA002A6B1D /* FileTransferManager.swift */; };
+		505FCE4127E831AA002A6B1D /* FileTransferContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505FCE3D27E831AA002A6B1D /* FileTransferContext.swift */; };
+		505FCE4227E831AA002A6B1D /* FileTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505FCE3E27E831AA002A6B1D /* FileTransferView.swift */; };
+		505FCE4527E87A72002A6B1D /* FileTransferView+RemoteFileElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505FCE4427E87A72002A6B1D /* FileTransferView+RemoteFileElement.swift */; };
 		5068AB2327B557A000564D1D /* SnippetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5068AB2127B557A000564D1D /* SnippetView.swift */; };
 		5068AB2927B580C600564D1D /* Generic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5068AB2727B580C600564D1D /* Generic.swift */; };
 		5068E44C27CE3AAE00F8B770 /* RayonModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5068E44B27CE3AAE00F8B770 /* RayonModule */; };
@@ -95,6 +99,10 @@
 		505E762927B4ECFC008D80F6 /* MachineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineView.swift; sourceTree = "<group>"; };
 		505E762C27B4FFA9008D80F6 /* MachineEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineEditView.swift; sourceTree = "<group>"; };
 		505E762F27B5053B008D80F6 /* AlignedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignedLabel.swift; sourceTree = "<group>"; };
+		505FCE3C27E831AA002A6B1D /* FileTransferManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferManager.swift; sourceTree = "<group>"; };
+		505FCE3D27E831AA002A6B1D /* FileTransferContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferContext.swift; sourceTree = "<group>"; };
+		505FCE3E27E831AA002A6B1D /* FileTransferView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTransferView.swift; sourceTree = "<group>"; };
+		505FCE4427E87A72002A6B1D /* FileTransferView+RemoteFileElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileTransferView+RemoteFileElement.swift"; sourceTree = "<group>"; };
 		5068AB2127B557A000564D1D /* SnippetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetView.swift; sourceTree = "<group>"; };
 		5068AB2727B580C600564D1D /* Generic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Generic.swift; sourceTree = "<group>"; };
 		5082A1CD27D0E0F300C71C0F /* EULA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = EULA; path = ../../../Resources/EULA; sourceTree = "<group>"; };
@@ -175,6 +183,17 @@
 				5038AAAA27B5297F00BFDF55 /* EditSnippetSheetView.swift */,
 			);
 			path = Snippet;
+			sourceTree = "<group>";
+		};
+		505FCE3B27E831AA002A6B1D /* FileTransferController */ = {
+			isa = PBXGroup;
+			children = (
+				505FCE3C27E831AA002A6B1D /* FileTransferManager.swift */,
+				505FCE3D27E831AA002A6B1D /* FileTransferContext.swift */,
+				505FCE3E27E831AA002A6B1D /* FileTransferView.swift */,
+				505FCE4427E87A72002A6B1D /* FileTransferView+RemoteFileElement.swift */,
+			);
+			path = FileTransferController;
 			sourceTree = "<group>";
 		};
 		5068E44F27CE3C3B00F8B770 /* Menubar */ = {
@@ -258,6 +277,7 @@
 			children = (
 				509F7F9127B2E3C500F28752 /* ApplicationControllers */,
 				5020A65C27D997F400F6EA0D /* TerminalController */,
+				505FCE3B27E831AA002A6B1D /* FileTransferController */,
 				50A8A69C27B83413004F6DDC /* SnippetController */,
 				5068E44F27CE3C3B00F8B770 /* Menubar */,
 				509F7F9227B2E3D100F28752 /* Effects */,
@@ -447,6 +467,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				505FCE4127E831AA002A6B1D /* FileTransferContext.swift in Sources */,
+				505FCE4227E831AA002A6B1D /* FileTransferView.swift in Sources */,
 				50A8A6A327B84317004F6DDC /* BatchSnippetSidebarView.swift in Sources */,
 				501017F127CE621D0079A516 /* EventMonitor.swift in Sources */,
 				509F7FBA27B39BA800F28752 /* DoubleConfirm.swift in Sources */,
@@ -467,6 +489,7 @@
 				50DDB33E27B4009800C471C0 /* IdentityPickerView.swift in Sources */,
 				505E762E27B4FFA9008D80F6 /* MachineEditView.swift in Sources */,
 				505E762B27B4ECFC008D80F6 /* MachineView.swift in Sources */,
+				505FCE4027E831AA002A6B1D /* FileTransferManager.swift in Sources */,
 				5027F25D27B8210300F422BB /* LicenseView.swift in Sources */,
 				50BBA54B27B7F08800CE7BB1 /* MachinePickerView.swift in Sources */,
 				50A8A6A927B84EF9004F6DDC /* BatchTerminalView.swift in Sources */,
@@ -477,6 +500,7 @@
 				505E763127B5053B008D80F6 /* AlignedLabel.swift in Sources */,
 				50FD878827D9CC3300EE3A5C /* PortForwardManager.swift in Sources */,
 				5020A65B27D98B6B00F6EA0D /* TerminalManager.swift in Sources */,
+				505FCE4527E87A72002A6B1D /* FileTransferView+RemoteFileElement.swift in Sources */,
 				509F4E5227B9502500ADAF5C /* AgreementView.swift in Sources */,
 				509F7F7627B2C95F00F28752 /* Sidebar.swift in Sources */,
 				50F64E5F27B3D922008D52FB /* MachineCreateView.swift in Sources */,
@@ -623,7 +647,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 40;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -655,7 +679,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 40;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;

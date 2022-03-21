@@ -23,6 +23,8 @@ struct MachineEditView: View {
 
     @State var openIdentityPicker: Bool = false
 
+    @State var sftpLoginPath: String = "/"
+
     var identityDescription: String {
         if let aid = associatedIdentity {
             return store.identityGroup[aid].shortDescription()
@@ -48,6 +50,7 @@ struct MachineEditView: View {
             generator.group = group
             generator.comment = comment
             generator.associatedIdentity = associatedIdentity?.uuidString
+            generator.fileTransferLoginPath = sftpLoginPath
             store.machineGroup.insert(generator)
             shouldDismiss = true
         }
@@ -58,6 +61,7 @@ struct MachineEditView: View {
             name = read.name
             group = read.group
             comment = read.comment
+            sftpLoginPath = read.fileTransferLoginPath
             if let aid = read.associatedIdentity,
                let auid = UUID(uuidString: aid)
             {
@@ -69,7 +73,7 @@ struct MachineEditView: View {
                 associatedIdentity = rid
             }
         })
-        .frame(width: 600, height: 420)
+        .frame(width: 600)
     }
 
     var sheetBody: some View {
@@ -79,8 +83,6 @@ struct MachineEditView: View {
                 TextField("Name (Optional)", text: $name)
                 AlignedLabel("Group", icon: "square.stack.3d.down.forward")
                 TextField("Default (Optional)", text: $group)
-                AlignedLabel("Comment", icon: "text.bubble")
-                TextField("Comment (Optional)", text: $comment)
             }
             Group {
                 AlignedLabel("Address", icon: "network")
@@ -103,6 +105,14 @@ struct MachineEditView: View {
                         Text("Browse...")
                     }
                 }
+            }
+            Group {
+                AlignedLabel("Comment", icon: "text.bubble")
+                TextField("Comment (Optional)", text: $comment)
+            }
+            Group {
+                AlignedLabel("SFTP Login Path", icon: "point.topleft.down.curvedto.point.bottomright.up.fill")
+                TextField("SFTP Login Path", text: $sftpLoginPath)
             }
             sheetFoot
         }

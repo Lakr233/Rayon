@@ -49,6 +49,13 @@ struct MachineActionView: View {
             }
             .foregroundColor(.accentColor)
             Button {
+                FileTransferManager.shared.begin(for: machine)
+            } label: {
+                Image(systemName: "externaldrive.connected.to.line.below.fill")
+                    .frame(width: 15)
+            }
+            .foregroundColor(.accentColor)
+            Button {
                 beingConnect()
             } label: {
                 Image(systemName: "cable.connector.horizontal")
@@ -62,15 +69,7 @@ struct MachineActionView: View {
     }
 
     func beingConnect() {
-        if TerminalManager.shared.sessionExists(for: machine) {
-            UIBridge.requiresConfirmation(message: "A session is already in place, are you sure to open another?") { confirmed in
-                if confirmed {
-                    TerminalManager.shared.createSession(withMachineID: machine)
-                }
-            }
-        } else {
-            TerminalManager.shared.createSession(withMachineID: machine)
-        }
+        TerminalManager.shared.createSession(withMachineID: machine)
     }
 
     func duplicateButtonTapped() {
