@@ -32,8 +32,10 @@ protocol XTerminal {
     func setupSizeChain(callback: ((CGSize) -> Void)?) -> Self
 
     func write(_ str: String)
-
+    
     func requestTerminalSize() -> CGSize
+    
+    func setTerminalFontSize(with size: Int)
 }
 
 class XTerminalCore: XTerminal {
@@ -152,7 +154,12 @@ class XTerminalCore: XTerminal {
         }
 
         // wait for the webview to load
-        while !associatedWebDelegate.navigateCompleted { usleep(1000) }
+        let begin = Date()
+        while true {
+            if associatedWebDelegate.navigateCompleted { break }
+            if Date().timeIntervalSince(begin) > 5 { break }
+            usleep(1000)
+        }
 
         lock.lock()
         let copy = writeBuffer
@@ -167,29 +174,20 @@ class XTerminalCore: XTerminal {
     func scriptBridgeWrite(_ base64Array: [String], to webView: WKWebView) {
         assert(!Thread.isMainThread)
         for write in base64Array {
-            var attempt = 0
-            var success: Bool = false
-            while !success, attempt < 5 {
-                attempt += 1
-                let sem = DispatchSemaphore(value: 0)
-                DispatchQueue.main.async {
-                    let script = "term.writeBase64('\(write)');"
-                    webView.evaluateJavaScript(script) { _, error in
-                        if let error = error {
-                            debugPrint(error.localizedDescription)
-                            debugPrint(script)
-                        } else {
-                            success = true
-                        }
-                        sem.signal()
-                    }
-                }
-                _ = sem.wait(timeout: .now() + 1)
-                usleep(1000)
-            }
+            let script = "term.writeBase64('\(write)');"
+            webView.evaluateJavascriptWithRetry(javascript: script)
         }
     }
 
+    func setTerminalFontSize(with size: Int) {
+        DispatchQueue.global().async {
+            let script = "window.setTheme({fontSize: \(size)})"
+            self.associatedWebView.evaluateJavascriptWithRetry(javascript: script)
+            let fit = "window.fit()"
+            self.associatedWebView.evaluateJavascriptWithRetry(javascript: fit)
+        }
+    }
+    
     func requestTerminalSize() -> CGSize {
         assert(!Thread.isMainThread, "\(#function) could not be called from main thread")
         let group = DispatchGroup()

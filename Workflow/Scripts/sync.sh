@@ -98,12 +98,14 @@ PROHIBIT_FILE_LIST=(
     "External/NSRemoteShell/.gitmodules"
     "External/NSRemoteShell/External/CSSH/.git"
     "External/XTerminalUI/.git"
+
+    "Workflow/Certificates/"
 )
 
 # remove prohibited files
 for file in "${PROHIBIT_FILE_LIST[@]}"; do
     echo "removing $TARGET_DIR/$file"
-    rm -rf "$TARGET_DIR/$file"
+    rm -rf "${TARGET_DIR:?}/$file"
 done
 
 # get current commit hash

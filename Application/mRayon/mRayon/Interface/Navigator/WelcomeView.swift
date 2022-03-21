@@ -38,6 +38,9 @@ struct WelcomeView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 128, height: 128)
 
+            Text("Quick Connect (Identity Requires Auto Auth)")
+                .font(.system(.headline, design: .rounded))
+            
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     TextField("ssh root@www.example.com -p 22 ↵", text: $quickConnect)

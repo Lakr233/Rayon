@@ -23,7 +23,7 @@ struct SettingView: View {
                         .font(.system(.headline, design: .rounded))
                     Text("This option will remove the confirmation alert, use with caution.")
                         .font(.system(.subheadline, design: .rounded))
-                    Toggle("Store Recent", isOn: $store.storeRecent)
+                    Toggle("Record Recent", isOn: $store.storeRecent)
                         .font(.system(.headline, design: .rounded))
                     Text("This option will save several most recent used machine.")
                         .font(.system(.subheadline, design: .rounded))

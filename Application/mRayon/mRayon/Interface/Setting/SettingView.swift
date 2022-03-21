@@ -30,7 +30,7 @@ struct SettingView: View {
             }
 
             Section {
-                Toggle("Store Recent", isOn: $store.storeRecent)
+                Toggle("Record Recent", isOn: $store.storeRecent)
                 Stepper(
                     "Timeout: \(store.timeout)",
                     value: $store.timeout,
@@ -44,6 +44,12 @@ struct SettingView: View {
             Section {
                 Toggle("Open at Connect", isOn: $store.openInterfaceAutomatically)
                 Toggle("Reduced Effects", isOn: $store.reducedViewEffects)
+                Stepper(
+                    "Terminal Font Size: \(store.terminalFontSize)",
+                    value: $store.terminalFontSize,
+                    in: 5 ... 30,
+                    step: 1
+                ) { _ in }
             } header: {
                 Label("Interface", systemImage: "arrow.right")
             }

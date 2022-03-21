@@ -1,57 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width height=device-height initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-
-    <style>
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        width: 100vw;
-        overflow: auto;
-      }
-
-      ::-webkit-scrollbar {
-        height: 0;
-        width: 0;
-      }
-
-      .xterm {
-        position: relative;
-        user-select: none;
-        -ms-user-select: none;
-        -webkit-user-select: none;
-      }
-
-      .search-bar-wrapper {
-        display: none;
-      }
-
-      .search-bar-wrapper.active {
-        display: block;
-      }
-    </style>
-    <script type="module" crossorigin src="./assets/index.7714f4b2.js"></script>
-    <link rel="modulepreload" href="./assets/vendor.8b40df0a.js">
-    <link rel="stylesheet" href="./assets/index.315a4331.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>Solid App</title>
+    <script type="module" crossorigin src="./assets/index.adb95c95.js"></script>
+    <link rel="modulepreload" href="./assets/vendor.c5a571c2.js">
+    <link rel="stylesheet" href="./assets/index.30a47723.css">
   </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
 
-  <body style="background-color: transparent">
-    <div class="search-bar-wrapper absolute right-4 top-4 z-10">
-      <input
-        type="text"
-        id="search-bar"
-        class="bg-gray-200 dark:bg-gray-600 rounded-lg text-dark-800 dark:text-light-300 focus:outline-light-600 dark:focus:outline-dark-300 px-2 py-1 shadow-light-400 dark:shadow-dark-200"
-      />
-    </div>
-    <div id="terminal" style="height: 100%; width: 100%"></div>
+    
   </body>
-  
 </html>

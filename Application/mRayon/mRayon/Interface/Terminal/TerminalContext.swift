@@ -142,6 +142,8 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
         defer {
             mainActor { self.processShutdown(exitFromShell: true) }
         }
+        
+        termInterface.setTerminalFontSize(with: RayonStore.shared.terminalFontSize)
 
         mainActor {
             guard self.firstConnect else {

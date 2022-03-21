@@ -27,6 +27,7 @@ public class RayonStore: ObservableObject {
         reducedViewEffects = UDReducedViewEffects
         disableConformation = UDDisableConformation
         monitorInterval = UDMonitorInterval
+        terminalFontSize = UDTerminalFontSize
         if timeout <= 0 { timeout = 5 }
 
         if let read = readEncryptedDefault(
@@ -194,7 +195,7 @@ public class RayonStore: ObservableObject {
             UDDisableConformation = disableConformation
         }
     }
-
+    
     @UserDefaultsWrapper(key: "wiki.qaq.rayon.maxRecentRecordCount", defaultValue: 8)
     public var maxRecentRecordCount: Int
 
@@ -204,6 +205,15 @@ public class RayonStore: ObservableObject {
                 to: .recentRecordEncrypted,
                 with: recentRecord
             )
+        }
+    }
+    
+    @UserDefaultsWrapper(key: "wiki.qaq.rayon.terminalFontSize", defaultValue: 14)
+    public var UDTerminalFontSize: Int
+
+    @Published public var terminalFontSize: Int = 14 {
+        didSet {
+            UDTerminalFontSize = terminalFontSize
         }
     }
 

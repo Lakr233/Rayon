@@ -91,6 +91,18 @@ while (libssh2_channel_free(CHANNEL) == LIBSSH2_ERROR_EAGAIN) {}; \
 #define SFTP_RECURSIVE_DEPTH 32 // don't use our app to do heavy task!
 
 /*
+ represent how much time we should sleep before continue next loop
+ 
+ libssh2 with nonblocking mode shall go again immediately
+ when returning LIBSSH2_ERROR_EAGAIN but this may cause extra high cpu usage
+ if network condition is not looking good
+ 
+ a better solution would be use select/poll/epoll to have kernel do it
+ but that is a story for another day :p
+ */
+#define LIBSSH2_CONTINUE_EAGAIN_WAIT 800
+
+/*
  defines the event loop handler class for NSRemoteShell
  */
 @protocol NSRemoteOperableObject

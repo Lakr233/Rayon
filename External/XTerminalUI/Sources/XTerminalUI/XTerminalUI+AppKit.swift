@@ -52,6 +52,10 @@ import Foundation
             associatedCore.write(str)
         }
 
+        public func setTerminalFontSize(with size: Int) {
+            associatedCore.setTerminalFontSize(with: size)
+        }
+
         public func requestTerminalSize() -> CGSize {
             associatedCore.requestTerminalSize()
         }

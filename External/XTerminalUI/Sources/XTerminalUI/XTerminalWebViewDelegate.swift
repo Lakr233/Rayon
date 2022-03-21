@@ -13,9 +13,20 @@ class XTerminalWebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate {
 
     var navigateCompleted: Bool = false
 
-    func webView(_: WKWebView, didFinish _: WKNavigation!) {
+    func webView(_ view: WKWebView, didFinish _: WKNavigation!) {
         debugPrint("\(self) \(#function)")
         navigateCompleted = true
+        
+        #if os(macOS)
+            enableSearch(view: view)
+        #endif
+    }
+    
+    func enableSearch(view: WKWebView) {
+        DispatchQueue.global().async {
+            let script = "window.manager.enableFeature(\"searchBar\")"
+            view.evaluateJavascriptWithRetry(javascript: script)
+        }
     }
 
     deinit {

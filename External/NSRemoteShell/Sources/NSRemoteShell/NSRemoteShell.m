@@ -608,6 +608,7 @@ continue; \
         }
         long rc = libssh2_session_handshake(constructorSession, sock);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         sessionHandshakeComplete = (rc == 0);
@@ -808,6 +809,7 @@ continue; \
     while (true) {
         long long rc = libssh2_userauth_password(session, [username UTF8String], [password UTF8String]);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         authenticated = (rc == 0);
@@ -847,6 +849,7 @@ continue; \
                                                              pri, (unsigned int)prl,
                                                              pwd);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         authenticated = (rc == 0);
@@ -897,6 +900,7 @@ continue; \
         }
         long rc = libssh2_session_last_errno(session);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         break;
@@ -913,7 +917,7 @@ continue; \
     BOOL channelStartupCompleted = NO;
     while (true) {
         long rc = libssh2_channel_exec(channel, [command UTF8String]);
-        if (rc == LIBSSH2_ERROR_EAGAIN) { continue; }
+        if (rc == LIBSSH2_ERROR_EAGAIN) { usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT); continue; }
         channelStartupCompleted = (rc == 0);
         break;
     }
@@ -973,6 +977,7 @@ continue; \
         }
         long rc = libssh2_session_last_errno(session);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         break;
@@ -997,6 +1002,7 @@ continue; \
         while (true) {
             long rc = libssh2_channel_request_pty(channel, [requestPseudoTermial UTF8String]);
             if (rc == LIBSSH2_ERROR_EAGAIN) {
+                usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
                 continue;
             }
             requestedPty = (rc == 0);
@@ -1016,7 +1022,7 @@ continue; \
         BOOL channelStartupCompleted = NO;
         while (true) {
             long rc = libssh2_channel_shell(channel);
-            if (rc == LIBSSH2_ERROR_EAGAIN) { continue; }
+            if (rc == LIBSSH2_ERROR_EAGAIN) { usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT); continue; }
             channelStartupCompleted = (rc == 0);
             break;
         }
@@ -1145,6 +1151,7 @@ continue; \
         // it's a bug
         // looks like libssh2 reading with dirty memory data
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         break;
@@ -1202,6 +1209,7 @@ continue; \
         }
         long rc = libssh2_session_last_errno(session);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         break;
@@ -1244,6 +1252,7 @@ continue; \
         }
         long rc = libssh2_session_last_errno(session);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         break;
@@ -1291,6 +1300,7 @@ continue; \
         }
         long rc = libssh2_session_last_errno(session);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         break;
@@ -1333,7 +1343,7 @@ continue; \
             }
             rc = libssh2_sftp_readdir(handle, buffer, sizeof(buffer), &fileAttributes);
             if (rc >= 0) { break; } // read success
-            if (rc == LIBSSH2_ERROR_EAGAIN) { continue; } // go around
+            if (rc == LIBSSH2_ERROR_EAGAIN) { usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT); continue; } // go around
             break;
         }
         if (rc > 0) {
@@ -1386,6 +1396,7 @@ continue; \
         }
         ssize_t rc = libssh2_sftp_fstat(handle, &fileAttributes);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         if (rc == 0) {
@@ -1464,6 +1475,7 @@ continue; \
         }
         long rc = libssh2_session_last_errno(session);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         break;
@@ -1681,6 +1693,7 @@ continue; \
         const char *cpath = [atPath UTF8String];
         rc = libssh2_sftp_mkdir_ex(sftp, cpath, (unsigned int)strlen(cpath), mode);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         break;
@@ -1742,6 +1755,7 @@ continue; \
             const char *cpath = [atPath UTF8String];
             rc = libssh2_sftp_rmdir_ex(sftp, cpath, (unsigned int)strlen(cpath));
             if (rc == LIBSSH2_ERROR_EAGAIN) {
+                usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
                 continue;
             }
             break;
@@ -1769,6 +1783,7 @@ continue; \
             const char *cpath = [atPath UTF8String];
             rc = libssh2_sftp_unlink_ex(sftp, cpath, (unsigned int)strlen(cpath));
             if (rc == LIBSSH2_ERROR_EAGAIN) {
+                usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
                 continue;
             }
             break;
@@ -1830,6 +1845,7 @@ continue; \
         }
         long long rc = libssh2_session_last_errno(session);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         break;
@@ -2074,6 +2090,7 @@ continue; \
                                     (unsigned int)strlen(ncp),
                                     mode);
         if (rc == LIBSSH2_ERROR_EAGAIN) {
+            usleep(LIBSSH2_CONTINUE_EAGAIN_WAIT);
             continue;
         }
         break;

@@ -44,7 +44,11 @@ import SwiftUI
             correspondingView.setupSizeChain(callback: callback)
             return self
         }
-
+        
+        public func setTerminalFontSize(with size: Int) {
+            correspondingView.setTerminalFontSize(with: size)
+        }
+        
         public func write(_ str: String) {
             correspondingView.write(str)
         }
@@ -91,6 +95,10 @@ import SwiftUI
         public func setupSizeChain(callback: ((CGSize) -> Void)?) -> Self {
             correspondingView.setupSizeChain(callback: callback)
             return self
+        }
+        
+        public func setTerminalFontSize(with size: Int) {
+            correspondingView.setTerminalFontSize(with: size)
         }
 
         public func write(_ str: String) {

@@ -94,35 +94,27 @@ class CodeEditorCore: CodeEditor {
         }
         let base64 = data.base64EncodedString()
         let script = "setText(atob('\(base64)'))"
-        evaluateJavaScript(script, webView: associatedWebView)
-    }
-
-    func evaluateJavaScript(_ script: String, webView: WKWebView) {
         DispatchQueue.global().async {
-            while !self.associatedWebDelegate.navigateCompleted { usleep(1000) }
-            var attempt = 0
-            var success: Bool = false
-            while !success, attempt < 10 {
-                attempt += 1
-                let sem = DispatchSemaphore(value: 0)
-                DispatchQueue.main.async {
-                    webView.evaluateJavaScript(script) { _, error in
-                        if let error = error {
-                            debugPrint(error.localizedDescription)
-                            debugPrint(script)
-                        } else {
-                            success = true
-                        }
-                        sem.signal()
-                    }
-                }
-                _ = sem.wait(timeout: .now() + 0.1)
+            let begin = Date()
+            while true {
+                if self.associatedWebDelegate.navigateCompleted { break }
+                if Date().timeIntervalSince(begin) > 5 { break }
+                usleep(1000)
             }
+            self.associatedWebView.evaluateJavascriptWithRetry(javascript: script)
         }
     }
 
     public func setDocumentFont(size: Int) {
         let script = "window.setSize(\(size))"
-        evaluateJavaScript(script, webView: associatedWebView)
+        DispatchQueue.global().async {
+            let begin = Date()
+            while true {
+                if self.associatedWebDelegate.navigateCompleted { break }
+                if Date().timeIntervalSince(begin) > 5 { break }
+                usleep(1000)
+            }
+            self.associatedWebView.evaluateJavascriptWithRetry(javascript: script)
+        }
     }
 }
