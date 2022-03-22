@@ -77,7 +77,7 @@ Request either command channel or shell channel with designated API, and do not 
      withContinuationHandler:(nullable BOOL (^)(void))continuationBlock;
 
 - (instancetype)openShellWithTerminal:(nullable NSString*)terminalType
-                    withTermianlSize:(nullable CGSize (^)(void))requestTermianlSize
+                    withterminalSize:(nullable CGSize (^)(void))requestterminalSize
                        withWriteData:(nullable NSString* (^)(void))requestWriteData
                           withOutput:(void (^)(NSString * _Nonnull))responseDataBlock
              withContinuationHandler:(BOOL (^)(void))continuationBlock;

@@ -60,7 +60,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
 
     static let defaultTerminalSize = CGSize(width: 80, height: 40)
 
-    var termianlSize: CGSize = defaultTerminalSize {
+    var terminalSize: CGSize = defaultTerminalSize {
         didSet {
             shell.explicitRequestStatusPickup()
         }
@@ -180,7 +180,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
                 self?.title = str
             }
             .setupSizeChain { [weak self] size in
-                self?.termianlSize = size
+                self?.terminalSize = size
             }
 
         shell.requestConnectAndWait()
@@ -248,7 +248,7 @@ class TerminalContext: ObservableObject, Identifiable, Equatable {
         ) {
             debugPrint("channel open")
         } withTerminalSize: { [weak self] in
-            var size = self?.termianlSize ?? TerminalContext.defaultTerminalSize
+            var size = self?.terminalSize ?? TerminalContext.defaultTerminalSize
             if size.width < 8 || size.height < 8 {
                 // something went wrong
                 size = TerminalContext.defaultTerminalSize

@@ -52,7 +52,7 @@ extension TerminalManager {
 
         static let defaultTerminalSize = CGSize(width: 80, height: 40)
 
-        var termianlSize: CGSize = defaultTerminalSize {
+        var terminalSize: CGSize = defaultTerminalSize {
             didSet {
                 shell.explicitRequestStatusPickup()
             }
@@ -159,7 +159,7 @@ extension TerminalManager {
                     self?.title = str
                 }
                 .setupSizeChain { [weak self] size in
-                    self?.termianlSize = size
+                    self?.terminalSize = size
                 }
 
             shell.requestConnectAndWait()
@@ -225,7 +225,7 @@ extension TerminalManager {
             shell.begin(withTerminalType: "xterm") {
                 debugPrint("channel open")
             } withTerminalSize: { [weak self] in
-                var size = self?.termianlSize ?? Context.defaultTerminalSize
+                var size = self?.terminalSize ?? Context.defaultTerminalSize
                 if size.width < 8 || size.height < 8 {
                     // something went wrong
                     size = Context.defaultTerminalSize
