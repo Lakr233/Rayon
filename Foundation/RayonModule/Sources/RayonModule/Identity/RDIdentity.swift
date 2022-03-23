@@ -87,13 +87,13 @@ public struct RDIdentity: Codable, Identifiable, Equatable {
     }
 
     public func callAuthenticationWith(remote: NSRemoteShell) {
-        if remote.isAuthenicated { return }
+        if remote.isAuthenticated { return }
         if privateKey.count > 0 || publicKey.count > 0 {
             remote.authenticate(with: username, andPublicKey: publicKey, andPrivateKey: privateKey, andPassword: password)
         } else {
             remote.authenticate(with: username, andPassword: password)
         }
-        guard remote.isAuthenicated else {
+        guard remote.isAuthenticated else {
             return
         }
         let date = Date()

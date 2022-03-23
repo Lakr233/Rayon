@@ -190,13 +190,13 @@ extension TerminalManager {
                     }
                     previousUsername = identity.username
                     identity.callAuthenticationWith(remote: shell)
-                    if shell.isConnected, shell.isAuthenicated {
+                    if shell.isConnected, shell.isAuthenticated {
                         break
                     }
                 }
                 putInformation("")
                 // user may get confused if multiple session opened the picker
-//                if !shell.isAuthenicated,
+//                if !shell.isAuthenticated,
 //                   let identity = RayonUtil.selectIdentity()
 //                {
 //                    RayonStore.shared
@@ -205,7 +205,7 @@ extension TerminalManager {
 //                }
             }
 
-            guard shell.isConnected, shell.isAuthenicated else {
+            guard shell.isConnected, shell.isAuthenticated else {
                 putInformation("Failed to authenticate connection")
                 putInformation("Did you forget to add identity or enable auto authentication?")
                 return

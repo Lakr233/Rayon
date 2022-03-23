@@ -69,11 +69,11 @@ class MonitorContext: ObservableObject, Identifiable, Equatable {
         while loopContinue {
             mainActor { self.isLoading = true }
             // connect + auth
-            if !(shell.isConnected && shell.isAuthenicated) {
+            if !(shell.isConnected && shell.isAuthenticated) {
                 connectAndAuthenticate()
             }
             // pull down data
-            if shell.isConnected, shell.isAuthenicated {
+            if shell.isConnected, shell.isAuthenticated {
                 mainActor {
                     var read = RayonStore.shared.machineGroup[self.machine.id]
                     if read.isNotPlaceholder() {

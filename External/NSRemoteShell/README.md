@@ -65,7 +65,7 @@ For various session property, see property list.
 @property (nonatomic, readwrite, nullable, strong) NSString *remoteFingerPrint;
 
 @property (nonatomic, readwrite, getter=isConnected) BOOL connected;
-@property (nonatomic, readwrite, getter=isAuthenicated) BOOL authenticated;
+@property (nonatomic, readwrite, getter=isAuthenticated) BOOL authenticated;
 ```
 
 Request either command channel or shell channel with designated API, and do not access unexposed values. It may break the ARC or crash the app.

@@ -67,7 +67,7 @@ public class ServerStatus: ObservableObject, Equatable {
     }
 
     static func downloadResultFrom(shell: NSRemoteShell, command: ScriptCollection) -> String {
-        guard shell.isConnected, shell.isAuthenicated else {
+        guard shell.isConnected, shell.isAuthenticated else {
             return ""
         }
         var result = ""

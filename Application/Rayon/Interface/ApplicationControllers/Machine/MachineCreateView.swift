@@ -174,7 +174,7 @@ struct MachineCreateView: View {
                 }
                 lastLoginUsername = identity.username
                 identity.callAuthenticationWith(remote: remote)
-                if remote.isAuthenicated {
+                if remote.isAuthenticated {
                     mainActorProgressView(show: false)
                     store.registerServer(
                         withAddress: serverLocation,
@@ -209,8 +209,8 @@ struct MachineCreateView: View {
                 .setupConnectionTimeout(RayonStore.shared.timeoutNumber)
             remote.requestConnectAndWait()
             identity.callAuthenticationWith(remote: remote)
-            debugPrint(remote.isAuthenicated)
-            guard remote.isAuthenicated else {
+            debugPrint(remote.isAuthenticated)
+            guard remote.isAuthenticated else {
                 mainActorProgressView(show: false)
                 UIBridge.presentError(with: "Unable to authenticate session")
                 return

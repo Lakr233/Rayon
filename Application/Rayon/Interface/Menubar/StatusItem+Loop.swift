@@ -87,7 +87,7 @@ extension MenubarStatusItem {
         shell.requestConnectAndWait()
         representedShell = shell
         identity.callAuthenticationWith(remote: shell)
-        while loopContinue, shell.isConnected, shell.isAuthenicated {
+        while loopContinue, shell.isConnected, shell.isAuthenticated {
             statusInfo.requestInfoAndWait(with: shell)
             let cpuPercent = statusInfo.processor.summary.sumUsed
             var newSpeed = CatSpeed.broken

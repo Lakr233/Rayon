@@ -173,7 +173,7 @@ class BatchSnippetExecContext: ObservableObject {
             return
         }
         identity.callAuthenticationWith(remote: shell)
-        guard shell.isConnected, shell.isAuthenicated else {
+        guard shell.isConnected, shell.isAuthenticated else {
             debugPrint("auth failed for machine: \(machine)")
             safeAccess {
                 self.receivedBuffer[machine, default: ""].append("\r\n[E] Failed to authenticate for machine: \(machine)\r\n")

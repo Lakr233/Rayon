@@ -107,12 +107,12 @@ class SnippetExecuteContext: ObservableObject {
                 }
                 previousUsername = identity.username
                 identity.callAuthenticationWith(remote: shell)
-                if shell.isConnected, shell.isAuthenicated {
+                if shell.isConnected, shell.isAuthenticated {
                     break
                 }
             }
         }
-        guard shell.isConnected, shell.isAuthenicated else {
+        guard shell.isConnected, shell.isAuthenticated else {
             term.write("[E] failed to authenticate session\r\n")
             reportError()
             return

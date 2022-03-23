@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, getter=isConnected) BOOL connected;
 @property (nonatomic, readonly, getter=isConnectedFileTransfer) BOOL connectedFileTransfer;
-@property (nonatomic, readonly, getter=isAuthenicated) BOOL authenticated;
+@property (nonatomic, readonly, getter=isAuthenticated) BOOL authenticated;
 
 @property (nonatomic, readonly, strong) NSString *remoteHost;
 @property (nonatomic, readonly, strong) NSNumber *remotePort;

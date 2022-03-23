@@ -143,13 +143,13 @@ class FileTransferContext: ObservableObject, Identifiable, Equatable {
                 }
                 previousUsername = identity.username
                 identity.callAuthenticationWith(remote: shell)
-                if shell.isConnected, shell.isAuthenicated {
+                if shell.isConnected, shell.isAuthenticated {
                     break
                 }
             }
         }
 
-        guard shell.isConnected, shell.isAuthenicated else {
+        guard shell.isConnected, shell.isAuthenticated else {
             putInformation("Failed to authenticate connection, did you forget to add identity or enable auto authentication?")
             mainActor { self.processShutdown() }
             return
@@ -186,7 +186,7 @@ class FileTransferContext: ObservableObject, Identifiable, Equatable {
 
     func connectionAvailableCheckPassed() -> Bool {
         guard shell.isConnected,
-              shell.isAuthenicated,
+              shell.isAuthenticated,
               shell.isConnectedFileTransfer
         else {
             processShutdown()

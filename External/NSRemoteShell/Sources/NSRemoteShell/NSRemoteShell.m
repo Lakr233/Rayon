@@ -36,7 +36,7 @@
 
 @property (nonatomic, readwrite, getter=isConnected) BOOL connected;
 @property (nonatomic, readwrite, getter=isConnectedFileTransfer) BOOL connectedFileTransfer;
-@property (nonatomic, readwrite, getter=isAuthenicated) BOOL authenticated;
+@property (nonatomic, readwrite, getter=isAuthenticated) BOOL authenticated;
 
 @property (nonatomic, readwrite, assign) int associatedSocket;
 @property (nonatomic, readwrite, nullable, assign) LIBSSH2_SESSION *associatedSession;
@@ -708,7 +708,7 @@ continue; \
 
 - (void)unsafeKeepAliveCheck {
     // some ssh impl wont accept keep alive if not and may break connection
-    if (!(self.isConnected && self.isAuthenicated)) {
+    if (!(self.isConnected && self.isAuthenticated)) {
         return;
     }
     
@@ -785,7 +785,7 @@ continue; \
         if (!self.associatedSocket) { break; }
         if (!self.associatedSession) { break; }
         if (!self.connected) { break; }
-        if (!self.isAuthenicated) { break; }
+        if (!self.isAuthenticated) { break; }
         if (!self.associatedFileTransfer) { break; }
         return YES;
     } while (0);

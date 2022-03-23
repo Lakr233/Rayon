@@ -80,7 +80,7 @@ class PortForwardBackend: ObservableObject {
                 return
             }
             identity.callAuthenticationWith(remote: context.shell)
-            guard context.shell.isAuthenicated else {
+            guard context.shell.isAuthenticated else {
                 self.putHint(for: context.info.id, with: "failed authenticate")
                 return
             }
