@@ -5,7 +5,7 @@
 //  Created by Lakr Aream on 2022/3/3.
 //
 
-import CodeMirrorUI
+import CodeEditorUI
 import RayonModule
 import SwiftUI
 import SymbolPicker

@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import CodeMirrorUI
+import CodeEditorUI
 import RayonModule
 import SwiftUI
 import XTerminalUI

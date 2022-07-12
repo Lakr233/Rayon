@@ -60,7 +60,7 @@
     self.requestDataBlock = requestData;
 }
 
-- (void)setRecivedDataChain:(NSRemoteChannelReceiveDataBlock _Nonnull)receiveData {
+- (void)setReceivedDataChain:(NSRemoteChannelReceiveDataBlock _Nonnull)receiveData {
     self.receiveDataBlock = receiveData;
 }
 

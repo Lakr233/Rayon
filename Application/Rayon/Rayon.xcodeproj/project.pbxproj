@@ -10,7 +10,6 @@
 		501017EE27CE51270079A516 /* StatusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501017ED27CE51270079A516 /* StatusItem.swift */; };
 		501017F127CE621D0079A516 /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501017F027CE621D0079A516 /* EventMonitor.swift */; };
 		501017F327CE625C0079A516 /* StatusItem+Loop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501017F227CE625C0079A516 /* StatusItem+Loop.swift */; };
-		501FF79F27CEFC8B00380D59 /* CodeMirrorUI in Frameworks */ = {isa = PBXBuildFile; productRef = 501FF79E27CEFC8B00380D59 /* CodeMirrorUI */; };
 		501FF7A527CEFF2300380D59 /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 501FF7A427CEFF2300380D59 /* SymbolPicker */; };
 		5020A65927D9884300F6EA0D /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5020A65827D9884300F6EA0D /* SettingView.swift */; };
 		5020A65B27D98B6B00F6EA0D /* TerminalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5020A65A27D98B6B00F6EA0D /* TerminalManager.swift */; };
@@ -22,6 +21,7 @@
 		5027F25327B81C5200F422BB /* ThanksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5027F25127B81C0100F422BB /* ThanksView.swift */; };
 		5027F25D27B8210300F422BB /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5027F25B27B8210300F422BB /* LicenseView.swift */; };
 		5038AAAC27B5297F00BFDF55 /* EditSnippetSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038AAAA27B5297F00BFDF55 /* EditSnippetSheetView.swift */; };
+		5042072F287D953D00D62044 /* CodeEditorUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5042072E287D953D00D62044 /* CodeEditorUI */; };
 		505E326127D2602600054573 /* XTerminalUI in Frameworks */ = {isa = PBXBuildFile; productRef = 505E326027D2602600054573 /* XTerminalUI */; };
 		505E326527D2625F00054573 /* MachineStatus in Frameworks */ = {isa = PBXBuildFile; productRef = 505E326427D2625F00054573 /* MachineStatus */; };
 		505E326B27D2642C00054573 /* MachineStatusView in Frameworks */ = {isa = PBXBuildFile; productRef = 505E326A27D2642C00054573 /* MachineStatusView */; };
@@ -146,10 +146,10 @@
 			files = (
 				501FF7A527CEFF2300380D59 /* SymbolPicker in Frameworks */,
 				505E326127D2602600054573 /* XTerminalUI in Frameworks */,
+				5042072F287D953D00D62044 /* CodeEditorUI in Frameworks */,
 				505E326527D2625F00054573 /* MachineStatus in Frameworks */,
 				5068E44C27CE3AAE00F8B770 /* RayonModule in Frameworks */,
 				505E326B27D2642C00054573 /* MachineStatusView in Frameworks */,
-				501FF79F27CEFC8B00380D59 /* CodeMirrorUI in Frameworks */,
 				50BBA54F27B8000900CE7BB1 /* Colorful in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -406,11 +406,11 @@
 			packageProductDependencies = (
 				50BBA54E27B8000900CE7BB1 /* Colorful */,
 				5068E44B27CE3AAE00F8B770 /* RayonModule */,
-				501FF79E27CEFC8B00380D59 /* CodeMirrorUI */,
 				501FF7A427CEFF2300380D59 /* SymbolPicker */,
 				505E326027D2602600054573 /* XTerminalUI */,
 				505E326427D2625F00054573 /* MachineStatus */,
 				505E326A27D2642C00054573 /* MachineStatusView */,
+				5042072E287D953D00D62044 /* CodeEditorUI */,
 			);
 			productName = "Rayon (macOS)";
 			productReference = 509F7F3C27B2AF7F00F28752 /* Rayon.app */;
@@ -424,7 +424,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1330;
+				LastUpgradeCheck = 1340;
 				TargetAttributes = {
 					509F7F3B27B2AF7F00F28752 = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -636,6 +636,7 @@
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_SWIFT_SYMBOLS = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Release;
@@ -649,7 +650,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 42;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = GXZ23M5TP2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -663,7 +664,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n.debug;
 				PRODUCT_NAME = Rayon;
 				PROVISIONING_PROFILE_SPECIFIER = "Rayon macOS Development";
@@ -682,7 +683,7 @@
 				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 42;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = GXZ23M5TP2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -696,10 +697,10 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n;
 				PRODUCT_NAME = Rayon;
-				PROVISIONING_PROFILE_SPECIFIER = "Rayon macOS Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "Rayon Distribution";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -730,13 +731,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		501FF79E27CEFC8B00380D59 /* CodeMirrorUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CodeMirrorUI;
-		};
 		501FF7A427CEFF2300380D59 /* SymbolPicker */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SymbolPicker;
+		};
+		5042072E287D953D00D62044 /* CodeEditorUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CodeEditorUI;
 		};
 		505E326027D2602600054573 /* XTerminalUI */ = {
 			isa = XCSwiftPackageProductDependency;

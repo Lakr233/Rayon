@@ -32,7 +32,7 @@ typedef CGSize (^NSRemoteChannelTerminalSizeBlock)(void);
 - (void)onTermination:(dispatch_block_t)terminationHandler;
 
 - (void)setRequestDataChain:(NSRemoteChannelRequestDataBlock _Nonnull)requestData;
-- (void)setRecivedDataChain:(NSRemoteChannelReceiveDataBlock _Nonnull)receiveData;
+- (void)setReceivedDataChain:(NSRemoteChannelReceiveDataBlock _Nonnull)receiveData;
 - (void)setContinuationChain:(NSRemoteChannelContinuationBlock _Nonnull)continuation;
 - (void)setTerminalSizeChain:(NSRemoteChannelTerminalSizeBlock _Nonnull)terminalSize;
 

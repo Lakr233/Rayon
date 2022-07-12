@@ -931,7 +931,7 @@ continue; \
         [channelObject setChannelTimeoutWith:[timeoutSecond doubleValue]];
     }
     
-    if (responseDataBlock) { [channelObject setRecivedDataChain:responseDataBlock]; }
+    if (responseDataBlock) { [channelObject setReceivedDataChain:responseDataBlock]; }
     if (continuationBlock) { [channelObject setContinuationChain:continuationBlock]; }
     
     if (completionSemaphore) {
@@ -992,7 +992,7 @@ continue; \
                                                                    withRepresentedChanel:channel];
     if (requestTerminalSize) { [channelObject setTerminalSizeChain:requestTerminalSize]; }
     if (requestWriteData) { [channelObject setRequestDataChain:requestWriteData]; }
-    if (responseDataBlock) { [channelObject setRecivedDataChain:responseDataBlock]; }
+    if (responseDataBlock) { [channelObject setReceivedDataChain:responseDataBlock]; }
     if (continuationBlock) { [channelObject setContinuationChain:continuationBlock]; }
     
     do {

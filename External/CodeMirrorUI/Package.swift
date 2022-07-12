@@ -4,21 +4,21 @@
 import PackageDescription
 
 let package = Package(
-    name: "CodeMirrorUI",
+    name: "CodeEditorUI",
     platforms: [
-        .iOS(.v13),
+        .iOS(.v14),
         .macOS(.v11),
     ],
     products: [
         .library(
-            name: "CodeMirrorUI",
-            targets: ["CodeMirrorUI"]
+            name: "CodeEditorUI",
+            targets: ["CodeEditorUI"]
         ),
     ],
     targets: [
         .target(
-            name: "CodeMirrorUI",
-            resources: [.copy("ress")]
+            name: "CodeEditorUI",
+            resources: [.copy("webpack")]
         ),
     ]
 )

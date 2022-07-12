@@ -19,12 +19,17 @@ extension WKWebView {
             #endif
         } else {
             var success = false
-            while !success {
+            var maxRetry = 5
+            while !success, maxRetry > 0 {
                 let sem = DispatchSemaphore(value: 0)
                 DispatchQueue.main.async {
                     self.evaluateJavaScript(javascript) { _, error in
                         defer { sem.signal() }
-                        if let error = error {
+                        if let error = error,
+                           // ignore the following error, because it executed fine
+                           // "JavaScript execution returned a result of an unsupported type"
+                           (error as NSError).code != 5
+                        {
                             debugPrint(error.localizedDescription)
                         } else {
                             success = true
@@ -34,6 +39,7 @@ extension WKWebView {
                 sem.wait()
                 if success { return }
                 usleep(1000)
+                maxRetry -= 1
             }
         }
     }

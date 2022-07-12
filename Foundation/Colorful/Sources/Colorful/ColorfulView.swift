@@ -49,7 +49,11 @@ public struct ColorfulView: View {
         assert(colorCompiler.count == colorCount)
         colorElements = colorCompiler
 
-        _randomization = State(initialValue: [PointRandomization](repeating: .init(), count: colorCount))
+        var builder = [PointRandomization]()
+        for _ in 0 ..< colorCount {
+            builder.append(.init())
+        }
+        _randomization = State(initialValue: builder)
     }
 
     #if canImport(AppKit) && !targetEnvironment(macCatalyst)
@@ -93,14 +97,18 @@ public struct ColorfulView: View {
     public var body: some View {
         GeometryReader { reader in
             ZStack {
-                ForEach(obtainRangeAndUpdate(size: reader.size), id: \.self) { idx in
+                ForEach(obtainRangeAndUpdate(size: reader.size)) { configure in
                     Circle()
-                        .foregroundColor(colorElements[idx])
+                        .foregroundColor(configure.color)
                         .opacity(0.5)
-                        .frame(width: randomization[idx].diameter,
-                               height: randomization[idx].diameter)
-                        .offset(x: randomization[idx].offsetX,
-                                y: randomization[idx].offsetY)
+                        .frame(
+                            width: configure.diameter,
+                            height: configure.diameter
+                        )
+                        .offset(
+                            x: configure.offsetX,
+                            y: configure.offsetY
+                        )
                 }
             }
             .frame(width: reader.size.width,
@@ -110,6 +118,9 @@ public struct ColorfulView: View {
         .blur(radius: blurRadius)
         .onReceive(timer) { _ in
             dispatchUpdate()
+        }
+        .onAppear {
+            randomizationStart()
         }
     }
 
@@ -124,20 +135,22 @@ public struct ColorfulView: View {
 
     private func randomizationStart() {
         var randomizationBuilder = [PointRandomization]()
-        while randomizationBuilder.count < randomization.count {
+        for i in 0 ..< randomization.count {
             let randomizationElement: PointRandomization = {
-                var randomization = PointRandomization()
-                randomization.randomizeIn(size: size)
-                return randomization
+                var builder = PointRandomization()
+                builder.randomizeIn(size: size)
+                builder.id = randomization[i].id
+                builder.color = colorElements[i]
+                return builder
             }()
             randomizationBuilder.append(randomizationElement)
         }
         randomization = randomizationBuilder
     }
 
-    private func obtainRangeAndUpdate(size: CGSize) -> Range<Int> {
+    private func obtainRangeAndUpdate(size: CGSize) -> [PointRandomization] {
         issueSizeUpdate(withValue: size)
-        return 0 ..< colorElements.count
+        return randomization
     }
 
     private func issueSizeUpdate(withValue size: CGSize) {

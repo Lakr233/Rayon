@@ -26,7 +26,7 @@
 		501FF78F27CEFADD00380D59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 501FF78E27CEFADD00380D59 /* Assets.xcassets */; };
 		501FF79B27CEFC6300380D59 /* RayonModule in Frameworks */ = {isa = PBXBuildFile; productRef = 501FF79A27CEFC6300380D59 /* RayonModule */; };
 		501FF79D27CEFC6700380D59 /* Colorful in Frameworks */ = {isa = PBXBuildFile; productRef = 501FF79C27CEFC6700380D59 /* Colorful */; };
-		501FF7A127CEFC9900380D59 /* CodeMirrorUI in Frameworks */ = {isa = PBXBuildFile; productRef = 501FF7A027CEFC9900380D59 /* CodeMirrorUI */; };
+		50420731287D967300D62044 /* CodeEditorUI in Frameworks */ = {isa = PBXBuildFile; productRef = 50420730287D967300D62044 /* CodeEditorUI */; };
 		5047BE9B27DCCB76008887A7 /* PortForwardElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5047BE9A27DCCB76008887A7 /* PortForwardElementView.swift */; };
 		5047BE9D27DCCC8B008887A7 /* EditPortForwardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5047BE9C27DCCC8B008887A7 /* EditPortForwardView.swift */; };
 		5047BE9F27DECE48008887A7 /* SPIndicator in Frameworks */ = {isa = PBXBuildFile; productRef = 5047BE9E27DECE48008887A7 /* SPIndicator */; };
@@ -61,63 +61,20 @@
 		50C90B0F27CF18BD00F60B51 /* TerminalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C90B0E27CF18BD00F60B51 /* TerminalManager.swift */; };
 		50C90B1127CF18C100F60B51 /* TerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C90B1027CF18C100F60B51 /* TerminalView.swift */; };
 		50C90B1527CF18D500F60B51 /* PortForwardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C90B1427CF18D500F60B51 /* PortForwardView.swift */; };
-		50D009AB27EACFF90034E8CD /* MachineStatus in Frameworks */ = {isa = PBXBuildFile; productRef = 50D009AA27EACFF90034E8CD /* MachineStatus */; };
-		50D009AD27EACFFC0034E8CD /* MachineStatusView in Frameworks */ = {isa = PBXBuildFile; productRef = 50D009AC27EACFFC0034E8CD /* MachineStatusView */; };
-		50D009AF27EACFFF0034E8CD /* NSRemoteShell in Frameworks */ = {isa = PBXBuildFile; productRef = 50D009AE27EACFFF0034E8CD /* NSRemoteShell */; };
-		50D009B127EAD00B0034E8CD /* RayonModule in Frameworks */ = {isa = PBXBuildFile; productRef = 50D009B027EAD00B0034E8CD /* RayonModule */; };
 		50D3AEF927D0582F0085F899 /* SnippetElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D3AEF827D0582F0085F899 /* SnippetElementView.swift */; };
 		50D3AEFB27D05D6D0085F899 /* EditMachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D3AEFA27D05D6D0085F899 /* EditMachineView.swift */; };
 		50D3AEFD27D063A30085F899 /* PickIdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D3AEFC27D063A30085F899 /* PickIdentityView.swift */; };
 		50D77BE727D2F0FB00177190 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D77BE627D2F0FB00177190 /* SettingView.swift */; };
 		50FD853A27D0445D00F6F01A /* EditSnippetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FD853927D0445D00F6F01A /* EditSnippetView.swift */; };
-		CCFD199C27EACC53005DF0A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCFD199B27EACC53005DF0A6 /* Assets.xcassets */; };
-		CCFD19A227EACC53005DF0A6 /* wRayon WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CCFD19A127EACC53005DF0A6 /* wRayon WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		CCFD19A727EACC53005DF0A6 /* mRayonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD19A627EACC53005DF0A6 /* mRayonApp.swift */; };
-		CCFD19A927EACC53005DF0A6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD19A827EACC53005DF0A6 /* ContentView.swift */; };
-		CCFD19AB27EACC53005DF0A6 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD19AA27EACC53005DF0A6 /* NotificationController.swift */; };
-		CCFD19AD27EACC53005DF0A6 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD19AC27EACC53005DF0A6 /* NotificationView.swift */; };
-		CCFD19AF27EACC53005DF0A6 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFD19AE27EACC53005DF0A6 /* ComplicationController.swift */; };
-		CCFD19B127EACC54005DF0A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCFD19B027EACC54005DF0A6 /* Assets.xcassets */; };
-		CCFD19B427EACC54005DF0A6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCFD19B327EACC54005DF0A6 /* Preview Assets.xcassets */; };
-		CCFD19B927EACC54005DF0A6 /* wRayon.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = CCFD199927EACC52005DF0A6 /* wRayon.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		CCFD19A327EACC53005DF0A6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 501FF77F27CEFADD00380D59 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CCFD19A027EACC53005DF0A6;
-			remoteInfo = "wRayon WatchKit Extension";
-		};
-		CCFD19B727EACC54005DF0A6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 501FF77F27CEFADD00380D59 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CCFD199827EACC52005DF0A6;
-			remoteInfo = wRayon;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
-		CCFD19BD27EACC54005DF0A6 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				CCFD19A227EACC53005DF0A6 /* wRayon WatchKit Extension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		CCFD19C127EACC54005DF0A6 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				CCFD19B927EACC54005DF0A6 /* wRayon.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -178,9 +135,7 @@
 		50D3AEFC27D063A30085F899 /* PickIdentityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickIdentityView.swift; sourceTree = "<group>"; };
 		50D77BE627D2F0FB00177190 /* SettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		50FD853927D0445D00F6F01A /* EditSnippetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSnippetView.swift; sourceTree = "<group>"; };
-		CCFD199927EACC52005DF0A6 /* wRayon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wRayon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCFD199B27EACC53005DF0A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CCFD19A127EACC53005DF0A6 /* wRayon WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wRayon WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCFD19A627EACC53005DF0A6 /* mRayonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mRayonApp.swift; sourceTree = "<group>"; };
 		CCFD19A827EACC53005DF0A6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CCFD19AA27EACC53005DF0A6 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
@@ -200,23 +155,12 @@
 				505E326327D2602E00054573 /* XTerminalUI in Frameworks */,
 				505E326727D2626900054573 /* MachineStatus in Frameworks */,
 				501B334427DF138200EB6261 /* StripedTextTable in Frameworks */,
+				50420731287D967300D62044 /* CodeEditorUI in Frameworks */,
 				5047BE9F27DECE48008887A7 /* SPIndicator in Frameworks */,
 				501FF79D27CEFC6700380D59 /* Colorful in Frameworks */,
 				501B334A27DF1B6F00EB6261 /* SymbolPicker in Frameworks */,
 				505E326927D2642700054573 /* MachineStatusView in Frameworks */,
-				501FF7A127CEFC9900380D59 /* CodeMirrorUI in Frameworks */,
 				501FF79B27CEFC6300380D59 /* RayonModule in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CCFD199E27EACC53005DF0A6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				50D009AF27EACFFF0034E8CD /* NSRemoteShell in Frameworks */,
-				50D009AB27EACFF90034E8CD /* MachineStatus in Frameworks */,
-				50D009B127EAD00B0034E8CD /* RayonModule in Frameworks */,
-				50D009AD27EACFFC0034E8CD /* MachineStatusView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,8 +203,6 @@
 			isa = PBXGroup;
 			children = (
 				501FF78727CEFADD00380D59 /* mRayon.app */,
-				CCFD199927EACC52005DF0A6 /* wRayon.app */,
-				CCFD19A127EACC53005DF0A6 /* wRayon WatchKit Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -469,63 +411,22 @@
 			buildRules = (
 			);
 			dependencies = (
-				CCFD19B827EACC54005DF0A6 /* PBXTargetDependency */,
 			);
 			name = mRayon;
 			packageProductDependencies = (
 				501FF79A27CEFC6300380D59 /* RayonModule */,
 				501FF79C27CEFC6700380D59 /* Colorful */,
-				501FF7A027CEFC9900380D59 /* CodeMirrorUI */,
 				505E326227D2602E00054573 /* XTerminalUI */,
 				505E326627D2626900054573 /* MachineStatus */,
 				505E326827D2642700054573 /* MachineStatusView */,
 				5047BE9E27DECE48008887A7 /* SPIndicator */,
 				501B334327DF138200EB6261 /* StripedTextTable */,
 				501B334927DF1B6F00EB6261 /* SymbolPicker */,
+				50420730287D967300D62044 /* CodeEditorUI */,
 			);
 			productName = mRayon;
 			productReference = 501FF78727CEFADD00380D59 /* mRayon.app */;
 			productType = "com.apple.product-type.application";
-		};
-		CCFD199827EACC52005DF0A6 /* wRayon */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CCFD19BE27EACC54005DF0A6 /* Build configuration list for PBXNativeTarget "wRayon" */;
-			buildPhases = (
-				CCFD199727EACC52005DF0A6 /* Resources */,
-				CCFD19BD27EACC54005DF0A6 /* Embed App Extensions */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				CCFD19A427EACC53005DF0A6 /* PBXTargetDependency */,
-			);
-			name = wRayon;
-			productName = wRayon;
-			productReference = CCFD199927EACC52005DF0A6 /* wRayon.app */;
-			productType = "com.apple.product-type.application.watchapp2";
-		};
-		CCFD19A027EACC53005DF0A6 /* wRayon WatchKit Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CCFD19BA27EACC54005DF0A6 /* Build configuration list for PBXNativeTarget "wRayon WatchKit Extension" */;
-			buildPhases = (
-				CCFD199D27EACC53005DF0A6 /* Sources */,
-				CCFD199E27EACC53005DF0A6 /* Frameworks */,
-				CCFD199F27EACC53005DF0A6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "wRayon WatchKit Extension";
-			packageProductDependencies = (
-				50D009AA27EACFF90034E8CD /* MachineStatus */,
-				50D009AC27EACFFC0034E8CD /* MachineStatusView */,
-				50D009AE27EACFFF0034E8CD /* NSRemoteShell */,
-				50D009B027EAD00B0034E8CD /* RayonModule */,
-			);
-			productName = "wRayon WatchKit Extension";
-			productReference = CCFD19A127EACC53005DF0A6 /* wRayon WatchKit Extension.appex */;
-			productType = "com.apple.product-type.watchkit2-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -539,12 +440,6 @@
 				TargetAttributes = {
 					501FF78627CEFADD00380D59 = {
 						CreatedOnToolsVersion = 13.2.1;
-					};
-					CCFD199827EACC52005DF0A6 = {
-						CreatedOnToolsVersion = 13.3;
-					};
-					CCFD19A027EACC53005DF0A6 = {
-						CreatedOnToolsVersion = 13.3;
 					};
 				};
 			};
@@ -562,8 +457,6 @@
 			projectRoot = "";
 			targets = (
 				501FF78627CEFADD00380D59 /* mRayon */,
-				CCFD199827EACC52005DF0A6 /* wRayon */,
-				CCFD19A027EACC53005DF0A6 /* wRayon WatchKit Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -576,23 +469,6 @@
 				5082A1D427D0E10000C71C0F /* LICENSE in Resources */,
 				501FF78F27CEFADD00380D59 /* Assets.xcassets in Resources */,
 				5082A1D327D0E10000C71C0F /* EULA in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CCFD199727EACC52005DF0A6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CCFD199C27EACC53005DF0A6 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CCFD199F27EACC53005DF0A6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CCFD19B427EACC54005DF0A6 /* Preview Assets.xcassets in Resources */,
-				CCFD19B127EACC54005DF0A6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -653,32 +529,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CCFD199D27EACC53005DF0A6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CCFD19AB27EACC53005DF0A6 /* NotificationController.swift in Sources */,
-				CCFD19A927EACC53005DF0A6 /* ContentView.swift in Sources */,
-				CCFD19AF27EACC53005DF0A6 /* ComplicationController.swift in Sources */,
-				CCFD19A727EACC53005DF0A6 /* mRayonApp.swift in Sources */,
-				CCFD19AD27EACC53005DF0A6 /* NotificationView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		CCFD19A427EACC53005DF0A6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CCFD19A027EACC53005DF0A6 /* wRayon WatchKit Extension */;
-			targetProxy = CCFD19A327EACC53005DF0A6 /* PBXContainerItemProxy */;
-		};
-		CCFD19B827EACC54005DF0A6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CCFD199827EACC52005DF0A6 /* wRayon */;
-			targetProxy = CCFD19B727EACC54005DF0A6 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		501FF79327CEFADD00380D59 /* Debug */ = {
@@ -816,7 +667,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = GXZ23M5TP2;
 				ENABLE_PREVIEWS = YES;
@@ -839,7 +690,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Rayon iOS Development";
@@ -860,7 +711,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = GXZ23M5TP2;
 				ENABLE_PREVIEWS = YES;
@@ -883,139 +734,15 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Rayon iOS Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "QAQ Wiki iOS Distribution Wildcard";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "QAQ Wiki macOS Wildcard";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		CCFD19BB27EACC54005DF0A6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 44;
-				DEVELOPMENT_ASSET_PATHS = "\"wRayon WatchKit Extension/Preview Content\"";
-				DEVELOPMENT_TEAM = GXZ23M5TP2;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "wRayon WatchKit Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "wRayon WatchKit Extension";
-				INFOPLIST_KEY_CLKComplicationPrincipalClass = wRayon_WatchKit_Extension.ComplicationController;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 2.2;
-				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE_SPECIFIER = "Rayon watchOS Extension Development";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 8.0;
-			};
-			name = Debug;
-		};
-		CCFD19BC27EACC54005DF0A6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 44;
-				DEVELOPMENT_ASSET_PATHS = "\"wRayon WatchKit Extension/Preview Content\"";
-				DEVELOPMENT_TEAM = GXZ23M5TP2;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "wRayon WatchKit Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "wRayon WatchKit Extension";
-				INFOPLIST_KEY_CLKComplicationPrincipalClass = wRayon_WatchKit_Extension.ComplicationController;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 2.2;
-				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE_SPECIFIER = "Rayon watchOS Extension Distribution";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 8.0;
-			};
-			name = Release;
-		};
-		CCFD19BF27EACC54005DF0A6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 44;
-				DEVELOPMENT_TEAM = GXZ23M5TP2;
-				GENERATE_INFOPLIST_FILE = YES;
-				IBSC_MODULE = wRayon_WatchKit_Extension;
-				INFOPLIST_KEY_CFBundleDisplayName = wRayon;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = wiki.qaq.ray0n;
-				MARKETING_VERSION = 2.2;
-				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Rayon watchOS Development";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 8.0;
-			};
-			name = Debug;
-		};
-		CCFD19C027EACC54005DF0A6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 44;
-				DEVELOPMENT_TEAM = GXZ23M5TP2;
-				GENERATE_INFOPLIST_FILE = YES;
-				IBSC_MODULE = wRayon_WatchKit_Extension;
-				INFOPLIST_KEY_CFBundleDisplayName = wRayon;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = wiki.qaq.ray0n;
-				MARKETING_VERSION = 2.2;
-				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.ray0n.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Rayon watchOS Distribution";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Release;
 		};
@@ -1040,24 +767,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CCFD19BA27EACC54005DF0A6 /* Build configuration list for PBXNativeTarget "wRayon WatchKit Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CCFD19BB27EACC54005DF0A6 /* Debug */,
-				CCFD19BC27EACC54005DF0A6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CCFD19BE27EACC54005DF0A6 /* Build configuration list for PBXNativeTarget "wRayon" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CCFD19BF27EACC54005DF0A6 /* Debug */,
-				CCFD19C027EACC54005DF0A6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1077,9 +786,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Colorful;
 		};
-		501FF7A027CEFC9900380D59 /* CodeMirrorUI */ = {
+		50420730287D967300D62044 /* CodeEditorUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = CodeMirrorUI;
+			productName = CodeEditorUI;
 		};
 		5047BE9E27DECE48008887A7 /* SPIndicator */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1096,22 +805,6 @@
 		505E326827D2642700054573 /* MachineStatusView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MachineStatusView;
-		};
-		50D009AA27EACFF90034E8CD /* MachineStatus */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MachineStatus;
-		};
-		50D009AC27EACFFC0034E8CD /* MachineStatusView */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MachineStatusView;
-		};
-		50D009AE27EACFFF0034E8CD /* NSRemoteShell */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = NSRemoteShell;
-		};
-		50D009B027EAD00B0034E8CD /* RayonModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = RayonModule;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
