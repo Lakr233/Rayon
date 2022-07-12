@@ -29,7 +29,7 @@ The project has completed my requirements without serious defects and is now arc
 
 ## Contributor
 
-Made with love by [@Lakr233](https://twitter.com/Lakr233) along with his friends [@__oquery](https://twitter.com/__oquery) [@zlind0](https://github.com/zlind0) [@unixzii](https://twitter.com/unixzii) [@82flex](https://twitter.com/82flex) [@xnth97](https://twitter.com/xnth97) [@misakicoca](https://twitter.com/misakicoca)
+Made with love by [@Lakr233](https://twitter.com/Lakr233) along with his friends [@__oquery](https://twitter.com/__oquery) [@zlind0](https://github.com/zlind0) [@unixzii](https://twitter.com/unixzii) [@82flex](https://twitter.com/82flex) [@xnth97](https://twitter.com/xnth97) [@misakicoca](https://twitter.com/misakicoca) [@NyaaLyn](https://twitter.com/NyaaLyn)
 
 ---
 
