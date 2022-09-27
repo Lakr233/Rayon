@@ -4,7 +4,7 @@ A server monitor tool for linux based machines using remote proc file system wit
 
 The project has completed my requirements without serious defects and is now archived. If there are minor issues, please consider fixing them yourself. If there are serious problems, please consider writing me an email. (I do fix them)
 
-[![Download From App Store](./Resources/AppStore/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg)](https://apps.apple.com/app/rayon-remote/id1609781496)
+**The App Store Package is now sold to 3rd developer because our Developer Program has expired. It does NOT keep relation to this repository anymore.**
 
 ## Preview
 
